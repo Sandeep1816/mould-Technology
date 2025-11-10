@@ -15,9 +15,10 @@ import type { Post } from "../types/Post"
 import TrendingSection from "@/components/TrendingSection"
 
 export default async function Home() {
-  const res = await fetch("https://newsprk-backend.onrender.com/api/posts", {
-    cache: "no-store",
-  })
+// quick fix: ask for many posts
+const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000", {
+  cache: "no-store",
+})
   const data = await res.json()
   const posts: Post[] = data.data || data
 

@@ -16,6 +16,7 @@ export default function CreatePost() {
   const [categories, setCategories] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false); // 🆕 for image upload
 
   // 🧩 Fetch authors & categories once
   useEffect(() => {
@@ -54,16 +55,46 @@ export default function CreatePost() {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
+  // 🧩 🆕 Image Upload Handler
+  async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setMessage("⏫ Uploading image...");
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const res = await fetch("https://newsprk-backend.onrender.com/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (res.ok && data.imageUrl) {
+        setForm((prev) => ({ ...prev, imageUrl: data.imageUrl }));
+        setMessage("✅ Image uploaded successfully!");
+      } else {
+        throw new Error(data.error || "Upload failed");
+      }
+    } catch (err: any) {
+      console.error(err);
+      setMessage("❌ Image upload failed");
+    } finally {
+      setUploading(false);
+    }
+  }
+
   // 🧩 Submit post to backend
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setMessage("");
     setLoading(true);
 
-    // Optional: if your backend uses auth
     const token = localStorage.getItem("token");
 
-    // Auto-generate excerpt if not provided
     const excerpt =
       form.excerpt.trim() ||
       form.content.replace(/<[^>]+>/g, "").substring(0, 150) + "...";
@@ -141,16 +172,14 @@ export default function CreatePost() {
             />
           </div>
 
-          {/* Image URL */}
+          {/* 🆕 Image Upload */}
           <div>
-            <label className="block text-sm font-semibold mb-2">Image URL</label>
+            <label className="block text-sm font-semibold mb-2">Upload Image</label>
             <input
-              type="url"
-              name="imageUrl"
-              value={form.imageUrl}
-              onChange={handleChange}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-              placeholder="https://example.com/image.jpg"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="w-full p-2 border rounded-lg"
             />
           </div>
 
@@ -214,9 +243,6 @@ export default function CreatePost() {
               placeholder="Short summary or teaser for your post..."
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 resize-y"
             />
-            <p className="text-xs text-gray-400 mt-1">
-              📰 This appears as a short preview under the post title on listings.
-            </p>
           </div>
 
           {/* Content */}
@@ -231,22 +257,23 @@ export default function CreatePost() {
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 resize-y"
               required
             />
-            <p className="text-xs text-gray-400 mt-1">
-              ✍️ You can write multiple paragraphs — no limits.
-            </p>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || uploading}
             className={`w-full py-3 rounded-lg font-semibold text-white transition ${
-              loading
+              loading || uploading
                 ? "bg-indigo-300 cursor-not-allowed"
                 : "bg-indigo-600 hover:bg-indigo-700"
             }`}
           >
-            {loading ? "Creating..." : "🚀 Create Post"}
+            {loading
+              ? "Creating..."
+              : uploading
+              ? "Uploading Image..."
+              : "🚀 Create Post"}
           </button>
 
           {/* Message */}

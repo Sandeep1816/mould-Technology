@@ -26,7 +26,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
   useEffect(() => {
     async function fetchLatest() {
       try {
-        const res = await fetch("https://newsprk-backend.onrender.com/api/posts")
+        const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000")
         const data = await res.json()
         const all: Post[] = data.data || data
 
@@ -108,7 +108,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
             <div className="grid grid-cols-1 gap-4">
               {latestPosts.map((item) => (
                 <div key={item.id} className="flex gap-3 items-start">
-                  <div className="w-20 h-20 relative flex-shrink-0">
+                  <div className="w-20 h-20 relative shrink-0">
                     <Image
                       src={
                         item.imageUrl && item.imageUrl.startsWith("http")

@@ -27,7 +27,7 @@ export default function PostsList() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const res = await fetch("https://newsprk-backend.onrender.com/api/posts");
+        const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000");
         const data = await res.json();
         setPosts(data.data || data);
       } catch (err) {
