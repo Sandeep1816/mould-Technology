@@ -19,7 +19,7 @@ export default function LatestIssues({ posts: initialPosts = [] }: LatestIssuesP
     if (!initialPosts || initialPosts.length === 0) {
       async function fetchPosts() {
         try {
-          const res = await fetch("https://newsprk-backend.onrender.com/api/posts");
+          const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000");
           const data = await res.json();
           const allPosts: Post[] = data.data || data;
 
@@ -175,3 +175,4 @@ export default function LatestIssues({ posts: initialPosts = [] }: LatestIssuesP
     </section>
   );
 }
+
