@@ -63,7 +63,7 @@ const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=10
       <ManufacturingConnected posts={manufacturingPosts.slice(0, 4)} />
 
       {/* 📘 Basics */}
-      <BasicsSection posts={basicsPosts.slice(0, 3)} />
+      <BasicsSection  />
 
       <ShopTalkAd />
 
