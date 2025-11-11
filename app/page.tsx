@@ -65,7 +65,8 @@ const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=10
       {/* 📘 Basics */}
       <BasicsSection  />
 
-      <ShopTalkAd />
+      {/* <ShopTalkAd /> */}
+      <TrendingAd />
 
       {/* 🎥 Videos */}
       <VideosSection />
