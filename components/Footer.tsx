@@ -217,7 +217,7 @@ export default function Footer() {
           {/* Copyright & Bottom Links */}
           <div className="flex flex-col md:flex-row items-center justify-between text-xs text-gray-600 mb-8">
             <p>
-              © 2025 Gardner Business Media, Inc. | 6915 Valley Ave | Cincinnati, OH | 45244 USA | PH (513) 527-8800
+             © 2025 Maxx Business Media Pvt. Ltd | T9, Swastik Manandi Arcade, Subedar Chatram Rd, VV Giri Colony, Seshadripuram, Bengaluru, Karnataka 560020 | PH (091) 483 19993
             </p>
             <div className="flex gap-4 mt-4 md:mt-0">
               <Link href="#" className="hover:text-blue-600 transition">
