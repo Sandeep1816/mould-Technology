@@ -26,7 +26,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
   useEffect(() => {
     async function fetchLatest() {
       try {
-        const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`)
         const data = await res.json();
         const all: Post[] = data.data || data;
 
@@ -59,7 +59,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
     post.imageUrl && post.imageUrl.startsWith("http")
       ? post.imageUrl
       : post.imageUrl
-      ? `https://newsprk-backend.onrender.com${post.imageUrl}`
+      ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
       : "/modern-manufacturing-facility.png";
 
   const date = post.publishedAt
@@ -127,7 +127,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
                         item.imageUrl && item.imageUrl.startsWith("http")
                           ? item.imageUrl
                           : item.imageUrl
-                          ? `https://newsprk-backend.onrender.com${item.imageUrl}`
+                          ? `${process.env.NEXT_PUBLIC_API_URL}${item.imageUrl}`
                           : "/placeholder.svg"
                       }
                       alt={item.title}

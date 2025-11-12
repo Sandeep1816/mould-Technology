@@ -16,7 +16,7 @@ import TrendingSection from "@/components/TrendingSection"
 
 export default async function Home() {
 // quick fix: ask for many posts
-const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000", {
+const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`, {
   cache: "no-store",
 })
   const data = await res.json()

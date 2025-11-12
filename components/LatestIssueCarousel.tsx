@@ -47,7 +47,7 @@ export default function LatestIssueCarousel({ posts }: LatestIssueCarouselProps)
                 post.imageUrl && post.imageUrl.startsWith("http")
                   ? post.imageUrl
                   : post.imageUrl
-                    ? `https://newsprk-backend.onrender.com${post.imageUrl}`
+                    ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
                     : "/placeholder.svg"
 
               return (

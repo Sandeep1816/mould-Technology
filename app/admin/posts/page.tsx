@@ -27,7 +27,7 @@ export default function PostsList() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`);
         const data = await res.json();
         setPosts(data.data || data);
       } catch (err) {
@@ -48,7 +48,7 @@ export default function PostsList() {
 
     try {
       const res = await fetch(
-        `https://newsprk-backend.onrender.com/api/posts/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -82,7 +82,7 @@ export default function PostsList() {
         const fixedUrl = imageUrl?.startsWith("http")
           ? imageUrl
           : imageUrl
-          ? `https://newsprk-backend.onrender.com${imageUrl}`
+          ? `${process.env.NEXT_PUBLIC_API_URL}${imageUrl}`
           : null;
 
         return fixedUrl ? (

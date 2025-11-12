@@ -11,7 +11,7 @@ export default function ArticleCard({ post }: ArticleCardProps) {
     post.imageUrl && post.imageUrl.startsWith("http")
       ? post.imageUrl
       : post.imageUrl
-        ? `https://newsprk-backend.onrender.com${post.imageUrl}`
+        ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
         : "/modern-manufacturing-facility.png"
 
   const date = post.publishedAt

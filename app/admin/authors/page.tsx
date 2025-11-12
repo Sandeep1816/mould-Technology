@@ -18,7 +18,7 @@ export default function CreateAuthor() {
     setMessage("");
 
     try {
-      const res = await fetch("https://newsprk-backend.onrender.com/api/authors", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authors`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

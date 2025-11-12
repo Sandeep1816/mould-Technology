@@ -12,7 +12,7 @@ export default function TrendingSection() {
     async function fetchPosts() {
       try {
         const res = await fetch(
-          "https://newsprk-backend.onrender.com/api/posts?limit=1000"
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
         );
         const data = await res.json();
         const allPosts: Post[] = data.data || data;
@@ -77,7 +77,7 @@ export default function TrendingSection() {
                           post.imageUrl?.startsWith("http")
                             ? post.imageUrl
                             : post.imageUrl
-                            ? `https://newsprk-backend.onrender.com${post.imageUrl}`
+                            ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
                             : "/placeholder.jpg"
                         }
                         alt={post.title}

@@ -21,8 +21,8 @@ export default function CreatePost() {
   // 🧩 Fetch authors & categories once
   useEffect(() => {
     Promise.all([
-      fetch("https://newsprk-backend.onrender.com/api/authors").then((r) => r.json()),
-      fetch("https://newsprk-backend.onrender.com/api/categories").then((r) => r.json()),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authors`).then((r) => r.json()),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`).then((r) => r.json()),
     ])
       .then(([a, c]) => {
         setAuthors(a.data || a);
@@ -67,7 +67,7 @@ export default function CreatePost() {
       const formData = new FormData();
       formData.append("image", file);
 
-      const res = await fetch("https://newsprk-backend.onrender.com/api/upload", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
         method: "POST",
         body: formData,
       });
@@ -100,7 +100,7 @@ export default function CreatePost() {
       form.content.replace(/<[^>]+>/g, "").substring(0, 150) + "...";
 
     try {
-      const res = await fetch("https://newsprk-backend.onrender.com/api/posts", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

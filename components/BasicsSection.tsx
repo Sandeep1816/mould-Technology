@@ -10,7 +10,7 @@ export default function BasicsSection() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`);
         const data = await res.json();
         const allPosts: Post[] = data.data || data;
 
@@ -69,7 +69,7 @@ export default function BasicsSection() {
                       post.imageUrl?.startsWith("http")
                         ? post.imageUrl
                         : post.imageUrl
-                        ? `https://newsprk-backend.onrender.com${post.imageUrl}`
+                        ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
                         : "/placeholder.jpg"
                     }
                     alt={post.title}
@@ -164,7 +164,7 @@ export default function BasicsSection() {
                 {/* Ad 1 */}
                 <div className="border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300">
                   <img
-                    src="/ads/methods.jpg"
+                    src="/advertisement-banner.jpg"
                     alt="Advertisement 1"
                     className="w-full h-[180px] object-cover"
                   />
@@ -173,7 +173,7 @@ export default function BasicsSection() {
                 {/* Ad 2 */}
                 <div className="border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300">
                   <img
-                    src="/ads/yudo.jpg"
+                    src="/advertisement-banner.jpg"
                     alt="Advertisement 2"
                     className="w-full h-[180px] object-cover"
                   />
@@ -182,7 +182,7 @@ export default function BasicsSection() {
                 {/* Ad 3 */}
                 <div className="border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300">
                   <img
-                    src="/ads/progressive.jpg"
+                    src="/advertisement-banner.jpg"
                     alt="Advertisement 3"
                     className="w-full h-[180px] object-cover"
                   />

@@ -17,7 +17,7 @@ export default function CreateCategory() {
     setMessage("");
 
     try {
-      const res = await fetch("https://newsprk-backend.onrender.com/api/categories", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

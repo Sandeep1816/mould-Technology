@@ -25,9 +25,9 @@ export default function EditPost() {
     async function loadData() {
       try {
         const [postRes, authorRes, categoryRes] = await Promise.all([
-          fetch(`https://newsprk-backend.onrender.com/api/posts/${id}`),
-          fetch("https://newsprk-backend.onrender.com/api/authors"),
-          fetch("https://newsprk-backend.onrender.com/api/categories"),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authors`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`),
         ]);
 
         const [postData, authorData, categoryData] = await Promise.all([
@@ -73,7 +73,7 @@ export default function EditPost() {
     setMessage("");
 
     try {
-      const res = await fetch(`https://newsprk-backend.onrender.com/api/posts/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

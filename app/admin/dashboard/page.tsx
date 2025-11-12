@@ -27,9 +27,9 @@ export default function Dashboard() {
       try {
         // ✅ Fetch posts with limit to ensure full count
         const [p, c, a] = await Promise.all([
-          fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000"),
-          fetch("https://newsprk-backend.onrender.com/api/categories"),
-          fetch("https://newsprk-backend.onrender.com/api/authors"),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authors`),
         ]);
         const [pd, cd, ad] = await Promise.all([p.json(), c.json(), a.json()]);
 

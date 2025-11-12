@@ -21,7 +21,7 @@ export default function RelatedPostsCarousel() {
   useEffect(() => {
     async function fetchRelated() {
       try {
-        const res = await fetch("https://newsprk-backend.onrender.com/api/posts?limit=1000")
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`)
         const data = await res.json()
         const allPosts = Array.isArray(data.data) ? data.data : []
 
@@ -65,7 +65,7 @@ export default function RelatedPostsCarousel() {
               post.imageUrl && post.imageUrl.startsWith("http")
                 ? post.imageUrl
                 : post.imageUrl
-                  ? `https://newsprk-backend.onrender.com${post.imageUrl}`
+                  ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
                   : "/placeholder.svg"
 
             const date = post.publishedAt

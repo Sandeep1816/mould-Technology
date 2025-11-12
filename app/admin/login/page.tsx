@@ -14,7 +14,7 @@ export default function AdminLogin() {
     setError(""); setLoading(true);
 
     try {
-      const res = await fetch("https://newsprk-backend.onrender.com/api/auth/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
