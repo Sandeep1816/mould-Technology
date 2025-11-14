@@ -36,13 +36,11 @@ export default function SubscribePage() {
   return (
     <div className="w-full bg-white text-gray-900">
 
-      {/* ⭐ SECTION 1 — HERO AREA (Center Aligned Like Your Screenshot) */}
+      {/* ⭐ SECTION 1 — HERO AREA */}
       <div className="max-w-[1400px] mx-auto px-10 py-16 grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
 
-        {/* LEFT SIDE — LOGO + TEXT + DROPDOWN + CHECKBOXES */}
+        {/* LEFT AREA */}
         <div>
-          {/* <img src="/recycled-materials-manufacturing.jpg" className="w-64 mb-10 mx-auto md:mx-0" /> */}
-
           <h1 className="text-6xl font-semibold leading-tight mb-8">
             Subscribe to MoldMaking Technology
           </h1>
@@ -72,14 +70,14 @@ export default function SubscribePage() {
           </label>
         </div>
 
-        {/* RIGHT SIDE — MAGAZINE IMAGE (as in your screenshot) */}
+        {/* RIGHT SIDE IMAGE */}
         <div className="flex justify-center items-start pt-10">
           <img src="/recycled-materials-manufacturing.jpg" className="w-[450px]" />
         </div>
 
       </div>
 
-      {/* ⭐ SECTION 2 — FORM AREA (Very wide full-width form like real website) */}
+      {/* ⭐ SECTION 2 — FORM AREA */}
       <div className="w-full bg-white py-10">
         <div className="max-w-[1400px] mx-auto px-10">
 
@@ -88,11 +86,27 @@ export default function SubscribePage() {
           <Formik<SubscribeFormValues>
             initialValues={initialValues}
             validationSchema={SubscribeSchema}
-            onSubmit={(values) => console.log(values)}
+            onSubmit={async (values, { resetForm }) => {
+
+              const res = await fetch("/api/subscribe", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(values),
+              });
+
+              if (res.ok) {
+                resetForm();
+                // 🌟 NEW: Redirect to Thank You Page
+                window.location.href = "/subscribe/thankyou";
+              } else {
+                alert("❌ Something went wrong. Try again later.");
+              }
+            }}
           >
             {({ isSubmitting }) => (
               <Form className="space-y-8">
 
+                {/* Input Fields */}
                 {[
                   { name: "email", placeholder: "Email Address*" },
                   { name: "confirmEmail", placeholder: "Confirm Email Address*" },
@@ -114,9 +128,8 @@ export default function SubscribePage() {
                   </div>
                 ))}
 
-                <h2 className="text-4xl font-bold mt-12 mb-6">
-                  Company Information
-                </h2>
+                {/* Company Info */}
+                <h2 className="text-4xl font-bold mt-12 mb-6">Company Information</h2>
 
                 <div>
                   <Field
@@ -131,7 +144,7 @@ export default function SubscribePage() {
                   />
                 </div>
 
-                {/* SUBMIT BUTTON */}
+                {/* Submit Button */}
                 <div className="flex justify-center pt-10">
                   <button
                     type="submit"
