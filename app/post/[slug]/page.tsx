@@ -9,6 +9,7 @@ import ShareSection from "@/components/share-section"
 import RelatedPostsCarousel from "@/components/related-posts-carousel"
 import AdvertisementSection from "@/components/advertisement-section"
 import ContentGateModal from "@/components/content-gate-modal"
+import PostViewCounter from "@/components/PostViewCounter"
 
 type Author = {
   id: number
@@ -106,6 +107,9 @@ export default function PostDetailsPage() {
       />
 
       <main key={Array.isArray(slug) ? slug.join("-") : slug} className="bg-[#f9f9f9]">
+  {slugValue && <PostViewCounter slug={slugValue} />}
+
+
         {/* HERO SECTION */}
         <section className="bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto py-10 px-6">

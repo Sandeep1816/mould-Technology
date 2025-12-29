@@ -46,21 +46,22 @@ const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000
 
   return (
     <>
-      <AdBanner />
+     
       <Header />
+       <AdBanner />
 
       {/* 📰 Latest Category Hero */}
       {latestPost && <LatestHero post={latestPost} />}
+       <TrendingAd />
 
       {/* 🚗 Passion / Featured Story */}
       {/* {passionPost && <PassionOnWheels post={passionPost} />} */}
 
       <TrendingSection />
 
-      <TrendingAd />
+     
 
-      {/* 🏭 Manufacturing Section */}
-      <ManufacturingConnected posts={manufacturingPosts.slice(0, 4)} />
+    
 
       {/* 📘 Basics */}
       <BasicsSection  />
@@ -71,16 +72,19 @@ const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000
       {/* 🎥 Videos */}
       <VideosSection />
 
+        {/* 🏭 Manufacturing Section */}
+      <ManufacturingConnected posts={manufacturingPosts.slice(0, 4)} />
+
       <TrendingAd />
 
-      {/* 📖 Latest Issue */}
-      <LatestIssues />
+      {/* 📖 Latest Issue1 */}
+      {/* <LatestIssues /> */}
 
-      {/* 📰 News & Products */}
-      <NewsProductsSection
+      {/* 📰 News & Products 2*/}
+      {/* <NewsProductsSection
         newsPosts={newsPosts.slice(0, 6)}
         productPosts={productPosts.slice(0, 6)}
-      />
+      /> */}
 
       <Footer />
     </>

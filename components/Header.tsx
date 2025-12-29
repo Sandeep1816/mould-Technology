@@ -1,190 +1,198 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { Search, Menu, X, ChevronDown, ChevronRight } from "lucide-react";
-import { useState, useEffect } from "react";
+import Link from "next/link"
+import {
+  Search,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronRight,
+  Calendar,
+} from "lucide-react"
+import { useState, useEffect } from "react"
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openMega, setOpenMega] = useState<"topics" | "resources" | null>(null);
-  const [isSticky, setIsSticky] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [openMega, setOpenMega] = useState<"topics" | "resources" | null>(null)
+  const [isSticky, setIsSticky] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => setIsSticky(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const toggleMega = (menu: "topics" | "resources") => {
-    setOpenMega(openMega === menu ? null : menu);
-  };
+    const handleScroll = () => setIsSticky(window.scrollY > 5)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   return (
     <>
-      {/* HEADER */}
-      <header
-        className={`bg-[#004d73] text-white w-full z-50 transition-all duration-300 ${
-          isSticky ? "fixed top-0 shadow-md" : "relative"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="shrink-0">
-            <div className="text-lg font-black leading-tight text-white">
-              MoldMaking
-              <div className="text-xs tracking-widest">TECHNOLOGY.</div>
+      {/* ================= TOP LIVE NEWS BAR ================= */}
+      <div className="bg-[#0d0f12] text-white text-sm">
+        <div className="max-w-7xl mx-auto px-5 h-[46px] flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-2 text-red-500 font-semibold">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              LIVE NEWS
+            </span>
+            <span className="text-gray-300 hidden md:inline">
+              Global Warming Is Changing How Hurricanes Work
+            </span>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-2 bg-blue-600 px-3 py-1.5 rounded-full text-xs font-semibold">
+              <Calendar size={14} />
+              AUGUST 5, 2025
             </div>
+
+            <div className="flex items-center gap-3 text-gray-300">
+              <span className="hidden sm:inline text-xs font-semibold">
+                Follow Us:
+              </span>
+              <a href="#">f</a>
+              <a href="#">◎</a>
+              <a href="#">in</a>
+              <a href="#">𝕏</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ================= MAIN HEADER ================= */}
+      <header
+        className={`w-full z-50 transition-all duration-300 ${
+          isSticky ? "fixed top-0 shadow-lg" : "relative"
+        } bg-gradient-to-b from-[#0b0b0b] to-[#151515]`}
+      >
+        <div className="max-w-7xl mx-auto px-5 h-[72px] flex items-center justify-between">
+          {/* LOGO */}
+          <Link href="/" className="flex items-center gap-1">
+            <span className="text-3xl font-black text-blue-500">M</span>
+            <span className="text-2xl font-black text-white">ould</span>
           </Link>
 
-          <div className="flex-1" />
-
-          {/* NAVIGATION */}
-          <nav className="hidden lg:flex items-center gap-8">
-            <button
-              onClick={() => toggleMega("topics")}
-              className="flex items-center gap-1 text-sm font-bold hover:text-gray-200"
-            >
-              TOPICS
-              <ChevronDown
-                size={16}
-                className={`transition-transform duration-300 ${
-                  openMega === "topics" ? "rotate-180" : ""
-                }`}
-              />
+          {/* ================= NAV (HOVER BASED) ================= */}
+          <nav className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-gray-200">
+            <button className="flex items-center gap-1 hover:text-blue-500 transition">
+              Home <ChevronDown size={14} />
             </button>
 
             <button
-              onClick={() => toggleMega("resources")}
-              className="flex items-center gap-1 text-sm font-bold hover:text-gray-200"
+              onMouseEnter={() => setOpenMega("topics")}
+              className="flex items-center gap-1 hover:text-blue-500 transition"
             >
-              RESOURCES
-              <ChevronDown
-                size={16}
-                className={`transition-transform duration-300 ${
-                  openMega === "resources" ? "rotate-180" : ""
-                }`}
-              />
+              Technology <ChevronDown size={14} />
             </button>
 
-            <Link href="#" className="text-sm font-bold hover:text-gray-200">
-              MAGAZINE
-            </Link>
-            <Link href="#" className="text-sm font-bold hover:text-gray-200">
-              MMT CHATS
-            </Link>
-            <Link href="#" className="text-sm font-bold hover:text-gray-200">
-              LEADTIME LEADERS
+            <button className="flex items-center gap-1 hover:text-blue-500 transition">
+              Sports <ChevronDown size={14} />
+            </button>
+
+            <button className="flex items-center gap-1 hover:text-blue-500 transition">
+              Categories <ChevronDown size={14} />
+            </button>
+
+            <button
+              onMouseEnter={() => setOpenMega("resources")}
+              className="flex items-center gap-1 hover:text-blue-500 transition"
+            >
+              Pages <ChevronDown size={14} />
+            </button>
+
+            <Link href="#" className="hover:text-blue-500">
+              Contact
             </Link>
           </nav>
 
-          {/* Right Action Buttons */}
-          <div className="flex items-center gap-4 ml-6">
-          <Link href="/subscribe">
-           <button className="hidden md:block bg-red-600 hover:bg-red-700 text-white px-5 py-1.5 text-sm font-bold rounded">
-              SUBSCRIBE
-            </button>
-          
-          </Link>
+          {/* RIGHT */}
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center bg-[#1c1c1c] border border-[#2a2a2a] rounded-md px-3 h-10 w-[220px]">
+              <Search size={16} className="text-gray-400" />
+              <input
+                placeholder="Search..."
+                className="bg-transparent outline-none text-sm text-gray-300 ml-2 w-full"
+              />
+            </div>
 
-            <button className="text-white hover:text-gray-200">
-              <Search size={20} />
-            </button>
+            <Link href="/subscribe">
+              <button className="bg-blue-600 hover:bg-blue-700 transition text-white px-5 h-10 rounded-md text-sm font-semibold">
+                Sign In
+              </button>
+            </Link>
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden text-white hover:text-gray-200"
+              className="lg:hidden border border-[#2a2a2a] h-10 w-10 rounded-md flex items-center justify-center text-white"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
 
-        {/* SLIDING MEGA MENU */}
+        {/* ================= MEGA MENU (WHITE / HOVER) ================= */}
         <div
-          className={`overflow-hidden transition-[max-height] duration-500 bg-[#004d73] ${
-            openMega ? "max-h-[650px]" : "max-h-0"
+          onMouseLeave={() => setOpenMega(null)}
+          className={`absolute left-0 right-0 top-full flex justify-center transition-opacity duration-200 ${
+            openMega
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
           }`}
         >
-          {openMega && (
-            <div className="flex w-full shadow-lg border-t border-blue-800">
-              {/* LEFT SIDEBAR (Exact like screenshot) */}
-              <div className="w-72 bg-[#003c59] py-6 border-r border-blue-900">
-                {openMega === "topics" && (
-                  <div className="space-y-1">
-                    {["ENGINEER", "BUILD", "MAINTAIN", "MANAGE", "ALL TOPICS"].map(
-                      (item, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between py-4 px-6 text-lg font-semibold text-white hover:bg-[#004d73] cursor-pointer"
-                        >
-                          {item}
-                          <ChevronRight size={18} />
-                        </div>
-                      )
-                    )}
-                  </div>
-                )}
-
-                {openMega === "resources" && (
-                  <div className="space-y-1">
-                    {["WEBINARS", "VIDEOS", "EVENTS", "SUPPLIERS", "BASICS/101"].map(
-                      (item, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between py-4 px-6 text-lg font-semibold text-white hover:bg-[#004d73] cursor-pointer"
-                        >
-                          {item}
-                          <ChevronRight size={18} />
-                        </div>
-                      )
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* RIGHT CONTENT AREA */}
-              <div className="flex-1 p-8">
-                {/* TOP HEADING BAR EXACT LIKE SCREENSHOT */}
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold tracking-wide uppercase">
-                    {openMega === "topics" ? "ENGINEER" : "WEBINARS"}
-                  </h2>
-
-                  <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 text-sm font-bold flex items-center gap-1 rounded">
-                    SEE ALL <ChevronRight size={16} />
-                  </button>
-                </div>
-
-                {/* CONTENT CARDS GRID – EXACT 4-COLUMN */}
-                <div className="grid grid-cols-4 gap-8">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="max-w-xs">
-                      <div className="w-full h-40 bg-white"></div>
-
-                      <div className="text-xs text-blue-200 mt-3 tracking-wide">
-                        ON DEMAND
-                      </div>
-
-                      <div className="text-lg font-bold mt-1 leading-snug">
-                        Sample Webinar Title {i}
-                      </div>
-
-                      <div className="text-sm text-blue-100 mt-2 leading-relaxed">
-                        Short description text goes exactly like the example screenshot...
-                      </div>
+          <div
+            className={`max-w-7xl w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden transition-[max-height] duration-300 ${
+              openMega ? "max-h-[650px]" : "max-h-0"
+            }`}
+          >
+            {openMega && (
+              <div className="flex">
+                {/* LEFT */}
+                <div className="w-72 bg-gray-50 py-6 border-r border-gray-200">
+                  {(openMega === "topics"
+                    ? ["Engineer", "Build", "Maintain", "Manage", "All Topics"]
+                    : ["Webinars", "Videos", "Events", "Suppliers", "Basics / 101"]
+                  ).map((item, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between px-6 py-4 text-sm font-semibold text-gray-800 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {item}
+                      <ChevronRight size={16} />
                     </div>
                   ))}
                 </div>
+
+                {/* RIGHT */}
+                <div className="flex-1 p-8 bg-white text-gray-900">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold uppercase tracking-wide">
+                      {openMega === "topics" ? "Engineer" : "Webinars"}
+                    </h2>
+
+                    <button className="text-blue-600 font-semibold flex items-center gap-1">
+                      See All <ChevronRight size={14} />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-4 gap-8">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i}>
+                        <div className="h-36 bg-gray-200 rounded-md mb-3" />
+                        <div className="text-xs text-blue-600 font-bold">
+                          ON DEMAND
+                        </div>
+                        <div className="font-semibold mt-1">
+                          Sample Webinar Title {i}
+                        </div>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Short description exactly like Mould design.
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </header>
-
-      {/* Red Tagline */}
-      <div className="bg-red-700 text-white font-semibold text-xs px-3 py-1.5 max-w-max ml-5 mt-0 rounded-tr-md shadow-sm">
-        What's New and What Works in Mold Manufacturing
-      </div>
     </>
-  );
+  )
 }

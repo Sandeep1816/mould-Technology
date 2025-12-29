@@ -1,120 +1,143 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import type { Post } from "../types/Post";
+import Link from "next/link"
+import type { Post } from "@/types/Post"
 
-type ManufacturingConnectedProps = {
-  posts?: Post[];
-};
+type FeaturedPostsSectionProps = {
+  posts: Post[]          // pass at least 6 posts
+}
 
-export default function ManufacturingConnected({ posts = [] }: ManufacturingConnectedProps) {
-  const displayedPosts =
-    posts.length > 0
-      ? posts
-      : [
-          {
-            id: 1,
-            title: "Recycled, but also High-Quality, Efficient and Cost-Competitive",
-            imageUrl: "/recycled-materials-manufacturing.jpg",
-            slug: "recycled-high-quality-efficient",
-            excerpt:
-              "Recycling technology is improving fast — producing sustainable materials that meet industry-grade performance.",
-          },
-          {
-            id: 2,
-            title: "The Cyber Wake-Up Call for Manufacturing",
-            imageUrl: "/cybersecurity-business.jpg",
-            slug: "cyber-wake-up-call-for-manufacturing",
-            excerpt:
-              "As industrial systems get smarter, cybersecurity becomes the new frontline of manufacturing innovation.",
-          },
-          {
-            id: 3,
-            title: "AI's Achilles Heel",
-            imageUrl: "/artificial-intelligence-technology.png",
-            slug: "ais-achilles-heel",
-            excerpt:
-              "AI is transforming manufacturing, but its dependence on clean data and security protocols remains a challenge.",
-          },
-          {
-            id: 4,
-            title: "How to Address the Proficiency Gap in Manufacturing",
-            imageUrl: "/manufacturing-worker-training.jpg",
-            slug: "how-to-address-proficiency-gap",
-            excerpt:
-              "Closing the skills gap requires investment in people, technology, and continuous improvement strategies.",
-          },
-        ];
+export default function FeaturedPostsSection({
+  posts = [],
+}: FeaturedPostsSectionProps) {
+  if (!posts || posts.length < 2) return null
+
+  // split posts into rows (2 posts per row)
+  const rows = []
+  for (let i = 0; i < Math.min(posts.length, 6); i += 2) {
+    rows.push(posts.slice(i, i + 2))
+  }
+
+  const formatDate = (date?: string | null) =>
+    date
+      ? new Date(date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })
+      : ""
 
   return (
-    <section className="bg-[#001B44] py-16 px-4 font-['Roboto',system-ui,apple-system]">
+    <section className="bg-white py-14 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-10">
-          <h2
-            className="text-[32px] md:text-[36px] font-bold tracking-tight text-white mb-2 uppercase"
-            style={{ fontFamily: "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif" }}
-          >
-            Manufacturing Connected
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-3xl font-bold text-[#121213]">
+            Featured Post
           </h2>
-          <p
-            className="text-[16px] text-gray-300"
-            style={{ fontFamily: "Roboto, system-ui, apple-system, sans-serif" }}
+
+          <Link
+            href="/featured"
+            className="text-sm font-semibold text-[#121213] hover:underline flex items-center gap-1"
           >
-            Industry Moves Fast. We Make Sense of What's Next.
-          </p>
+            View All →
+          </Link>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {displayedPosts.map((post) => (
+        {/* ROWS */}
+        <div className="space-y-10">
+          {rows.map((rowPosts, rowIndex) => (
             <div
-              key={post.id}
-              className="bg-white rounded-md overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
+              key={rowIndex}
+              className="grid grid-cols-1 lg:grid-cols-3 gap-8"
             >
-              {/* Image */}
-              <div className="relative w-full h-48 overflow-hidden">
-                <img
-                  src={
-                    post.imageUrl?.startsWith("http")
-                      ? post.imageUrl
-                      : post.imageUrl
-                      ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
-                      : "/placeholder.svg"
-                  }
-                  alt={post.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
+              {/* 2 FEATURED POSTS */}
+              {rowPosts.map((post) => {
+                const imageUrl =
+                  post.imageUrl && post.imageUrl.startsWith("http")
+                    ? post.imageUrl
+                    : post.imageUrl
+                    ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
+                    : "/placeholder.svg"
 
-              {/* Text */}
-              <div className="p-4 flex flex-col flex-grow border-t border-gray-200">
-                <h3
-                  className="text-[16px] font-bold text-[#003366] mb-2 leading-snug hover:text-[#0077B6] transition"
-                  style={{ fontFamily: "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif" }}
-                >
-                  {post.title}
-                </h3>
+                return (
+                  <article
+                    key={post.id}
+                    className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition"
+                  >
+                    {/* Image */}
+                    <Link href={`/post/${post.slug}`}>
+                      <div className="relative h-[260px] overflow-hidden">
+                        <img
+                          src={imageUrl}
+                          alt={post.title}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                    </Link>
 
-                <p
-                  className="text-[14px] text-gray-700 mb-3 leading-snug flex-grow"
-                  style={{ fontFamily: "Roboto, system-ui, apple-system, sans-serif" }}
-                >
-                  {post.excerpt}
-                </p>
+                    {/* Content */}
+                    <div className="p-6">
+                      {/* Category */}
+                      {typeof post.category === "object" && post.category?.name && (
+                        <span className="inline-block mb-3 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
+                          {post.category.name}
+                        </span>
+                      )}
 
-                <Link
-                  href={`/post/${post.slug}`}
-                  className="text-[#D92B2B] font-bold text-[13px] flex items-center gap-1 hover:text-[#B71C1C] uppercase tracking-wide"
-                  style={{ fontFamily: "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif" }}
-                >
-                  READ MORE <span>›</span>
-                </Link>
+                      {/* Title */}
+                      <Link href={`/post/${post.slug}`}>
+                        <h3 className="text-[20px] font-bold text-[#121213] leading-snug mb-4 hover:text-blue-600 transition">
+                          {post.title}
+                        </h3>
+                      </Link>
+
+                      {/* Meta */}
+                      <div className="flex items-center gap-3 text-sm text-gray-500">
+                        {post.author?.name && (
+                          <span>By {post.author.name}</span>
+                        )}
+
+                        {typeof post.views === "number" && (
+                          <span className="flex items-center gap-1">
+                            ↗ {post.views.toLocaleString()} Views
+                          </span>
+                        )}
+
+                        {post.publishedAt && (
+                          <span>{formatDate(post.publishedAt)}</span>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                )
+              })}
+
+              {/* ADVERTISEMENT (RIGHT CARD) */}
+              <div className="rounded-xl overflow-hidden bg-gradient-to-br from-[#0F1C4D] to-[#1A2C6B] flex items-center justify-center">
+                <div className="text-center p-8">
+                  <img
+                    src="/nerio-ad-preview.png"
+                    alt="Advertisement"
+                    className="mx-auto mb-6 max-h-[240px]"
+                  />
+
+                  <h4 className="text-white text-lg font-semibold mb-4">
+                    Perfect WordPress Theme
+                  </h4>
+
+                  <Link
+                    href="#"
+                    className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition"
+                  >
+                    Buy Now Mould  →
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
     </section>
-  );
+  )
 }
