@@ -70,6 +70,8 @@ export default function LatestIssues({
               const tagClass =
                 slug?.includes("gaming")
                   ? "bg-[#0073FF]"
+                  : slug?.includes("latest-issue")
+                  ? "bg-[#E033E0]"
                   : slug?.includes("fashion")
                   ? "bg-[#E033E0]"
                   : "bg-[#F69C00]";
@@ -82,7 +84,7 @@ export default function LatestIssues({
                   {/* Image */}
                   <Link
                     href={`/post/${post.slug}`}
-                    className="relative w-[96px] h-[96px] rounded-[12px] overflow-hidden flex-shrink-0"
+                    className="text-white relative w-[96px] h-[96px] rounded-[12px] overflow-hidden flex-shrink-0"
                   >
                     <Image
                       src={
@@ -101,7 +103,7 @@ export default function LatestIssues({
                     {/* Tag */}
                     <Link
                       href={`/category/${slug}`}
-                      className={`${tagClass} text-white text-meta font-semibold px-4 py-[4px] rounded-full w-fit`}
+                      className={`${tagClass} text-white  font-small px-4 py-[4px] rounded-full rounded-tl-none  w-fit`}
                     >
                       {typeof post.category === "object"
                         ? post.category.name
