@@ -15,6 +15,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [openMega, setOpenMega] = useState<"topics" | "resources" | null>(null)
   const [isSticky, setIsSticky] = useState(false)
+  const [isSideOpen, setIsSideOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > 5)
@@ -39,33 +40,21 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center gap-2 bg-blue-600 px-3 py-1.5 rounded-full rounded-tl-none  text-white font-medium">
+            <div className="hidden md:flex items-center gap-2 bg-blue-600 px-3 py-1.5 rounded-full rounded-tl-none text-white font-medium">
               <Calendar size={14} />
               AUGUST 5, 2025
             </div>
 
-           <div className="flex items-center gap-3 header-top-social">
-  <span className="hidden sm:inline text-white  font-medium">
-    Follow Us:
-  </span>
+            <div className="flex items-center gap-3 header-top-social">
+              <span className="hidden sm:inline text-white font-medium">
+                Follow Us:
+              </span>
 
-  <a href="#" aria-label="Facebook">
-    <i className="ri-facebook-fill" />
-  </a>
-
-  <a href="#" aria-label="Instagram">
-    <i className="ri-instagram-line" />
-  </a>
-
-  <a href="#" aria-label="LinkedIn">
-    <i className="ri-linkedin-fill" />
-  </a>
-
-  <a href="#" aria-label="Twitter X">
-    <i className="ri-twitter-x-line" />
-  </a>
-</div>
-
+              <a href="#"><i className="ri-facebook-fill" /></a>
+              <a href="#"><i className="ri-instagram-line" /></a>
+              <a href="#"><i className="ri-linkedin-fill" /></a>
+              <a href="#"><i className="ri-twitter-x-line" /></a>
+            </div>
           </div>
         </div>
       </div>
@@ -77,40 +66,36 @@ export default function Header() {
         } bg-linear-to-b from-[#0b0b0b] to-[#151515]`}
       >
         <div className="max-w-full mx-auto px-5 h-20 flex items-center justify-between">
-          {/* LOGO (brand exception) */}
+          {/* LOGO */}
           <Link href="/" className="flex items-center gap-1">
-            <span className="text-[28px] font-bold text-blue-500 leading-none">
-              M
-            </span>
-            <span className="text-[24px] font-bold text-white leading-none">
-              ould
-            </span>
+            <span className="text-[28px] font-bold text-blue-500">M</span>
+            <span className="text-[24px] font-bold text-white">ould</span>
           </Link>
 
-          {/* ================= NAV ================= */}
+          {/* NAV */}
           <nav className="hidden lg:flex items-center gap-8 text-body font-medium text-gray-200">
-            <button className="flex items-center gap-1 hover:text-blue-500 transition">
+            <button className="flex items-center gap-1 hover:text-blue-500">
               Home <ChevronDown size={14} />
             </button>
 
             <button
               onMouseEnter={() => setOpenMega("topics")}
-              className="flex items-center gap-1 hover:text-blue-500 transition"
+              className="flex items-center gap-1 hover:text-blue-500"
             >
               Technology <ChevronDown size={14} />
             </button>
 
-            <button className="flex items-center gap-1 hover:text-blue-500 transition">
+            <button className="flex items-center gap-1 hover:text-blue-500">
               Sports <ChevronDown size={14} />
             </button>
 
-            <button className="flex items-center gap-1 hover:text-blue-500 transition">
+            <button className="flex items-center gap-1 hover:text-blue-500">
               Categories <ChevronDown size={14} />
             </button>
 
             <button
               onMouseEnter={() => setOpenMega("resources")}
-              className="flex items-center gap-1 hover:text-blue-500 transition"
+              className="flex items-center gap-1 hover:text-blue-500"
             >
               Pages <ChevronDown size={14} />
             </button>
@@ -126,16 +111,27 @@ export default function Header() {
               <Search size={16} className="text-gray-400" />
               <input
                 placeholder="Search..."
-                className="bg-transparent outline-none text-body text-gray-300 ml-2 w-full"
+                className="bg-transparent outline-none text-gray-300 ml-2 w-full"
               />
             </div>
 
             <Link href="/subscribe">
-              <button className="bg-blue-600 hover:bg-blue-700 transition text-white px-5 h-10 rounded-md text-body font-semibold">
+              <button className="bg-blue-600 hover:bg-blue-700 transition text-white px-5 h-10 rounded-md font-semibold">
                 Sign In
               </button>
             </Link>
 
+            {/* BAR ICON */}
+            <button
+              onClick={() => setIsSideOpen(true)}
+              className="hidden lg:flex flex-col justify-between w-6 h-5 cursor-pointer"
+            >
+              <span className="h-[2px] bg-white" />
+              <span className="h-[2px] bg-white" />
+              <span className="h-[2px] bg-white" />
+            </button>
+
+            {/* MOBILE MENU */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden border border-[#2a2a2a] h-10 w-10 rounded-md flex items-center justify-center text-white"
@@ -148,28 +144,21 @@ export default function Header() {
         {/* ================= MEGA MENU ================= */}
         <div
           onMouseLeave={() => setOpenMega(null)}
-          className={`absolute left-0 right-0 top-full flex justify-center transition-opacity duration-200 ${
-            openMega
-              ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none"
+          className={`absolute left-0 right-0 top-full flex justify-center transition-opacity ${
+            openMega ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         >
-          <div
-            className={`max-w-7xl w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden transition-[max-height] duration-300 ${
-              openMega ? "max-h-[650px]" : "max-h-0"
-            }`}
-          >
+          <div className="max-w-7xl w-full bg-white rounded-xl shadow-2xl border overflow-hidden">
             {openMega && (
               <div className="flex">
-                {/* LEFT */}
-                <div className="w-72 bg-gray-50 py-6 border-r border-gray-200">
+                <div className="w-72 bg-gray-50 py-6 border-r">
                   {(openMega === "topics"
                     ? ["Engineer", "Build", "Maintain", "Manage", "All Topics"]
                     : ["Webinars", "Videos", "Events", "Suppliers", "Basics / 101"]
-                  ).map((item, i) => (
+                  ).map((item) => (
                     <div
-                      key={i}
-                      className="flex items-center justify-between px-6 py-4 text-body font-medium text-gray-800 hover:bg-gray-100 cursor-pointer"
+                      key={item}
+                      className="flex items-center justify-between px-6 py-4 hover:bg-gray-100 cursor-pointer"
                     >
                       {item}
                       <ChevronRight size={16} />
@@ -177,30 +166,19 @@ export default function Header() {
                   ))}
                 </div>
 
-                {/* RIGHT */}
-                <div className="flex-1 p-8 bg-white text-gray-900">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-title font-semibold uppercase tracking-wide">
-                      {openMega === "topics" ? "Engineer" : "Webinars"}
-                    </h2>
-
-                    <button className="text-blue-600 font-medium flex items-center gap-1">
-                      See All <ChevronRight size={14} />
-                    </button>
-                  </div>
-
+                <div className="flex-1 p-8">
                   <div className="grid grid-cols-4 gap-8">
                     {[1, 2, 3, 4].map((i) => (
                       <div key={i}>
                         <div className="h-36 bg-gray-200 rounded-md mb-3" />
-                        <div className="text-meta text-blue-600 font-semibold">
+                        <div className="text-blue-600 font-semibold text-sm">
                           ON DEMAND
                         </div>
-                        <div className="font-semibold mt-1 text-body">
-                          Sample Webinar Title {i}
+                        <div className="font-semibold mt-1">
+                          Sample Webinar {i}
                         </div>
-                        <p className="text-body text-gray-600 mt-1">
-                          Short description exactly like Mould design.
+                        <p className="text-sm text-gray-600 mt-1">
+                          Short description exactly like mould design.
                         </p>
                       </div>
                     ))}
@@ -211,6 +189,73 @@ export default function Header() {
           </div>
         </div>
       </header>
+
+      {/* ================= SIDE PANEL ================= */}
+      <div
+        className={`fixed inset-0 z-[999] ${
+          isSideOpen ? "visible" : "invisible"
+        }`}
+      >
+        <div
+          onClick={() => setIsSideOpen(false)}
+          className={`absolute inset-0 bg-black/50 transition-opacity ${
+            isSideOpen ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        <aside
+          className={`absolute right-0 top-0 h-full w-[380px] bg-white shadow-2xl transform transition-transform duration-300 ${
+            isSideOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="flex items-center justify-between px-6 py-4 border-b">
+            <div className="text-2xl font-bold text-blue-600">Mould</div>
+            <button
+              onClick={() => setIsSideOpen(false)}
+              className="h-10 w-10 bg-blue-600 text-white rounded-md flex items-center justify-center"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          <div className="p-6 space-y-8 overflow-y-auto h-[calc(100%-64px)]">
+            <p className="text-gray-600 text-sm">
+              Nerio News Magazine brings you trusted timely and thought-provoking
+              stories from around the globe.
+            </p>
+
+            <div className="grid grid-cols-3 gap-3">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="h-20 bg-gray-200 rounded-md" />
+              ))}
+            </div>
+
+            <div>
+              <h4 className="text-lg font-bold mb-4">Contact Info</h4>
+              <ul className="space-y-3 text-sm text-gray-700">
+                <li>📍 374 William S Canning Blvd, Fall River MA, USA</li>
+                <li>📞 +123-4669-1234</li>
+                <li>✉️ support@company.com</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-bold mb-4">Follow Us</h4>
+              <div className="flex gap-3">
+                {["facebook", "twitter-x", "youtube", "linkedin"].map((i) => (
+                  <a
+                    key={i}
+                    href="#"
+                    className="h-10 w-10 border rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition"
+                  >
+                    <i className={`ri-${i}-fill`} />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
     </>
   )
 }
