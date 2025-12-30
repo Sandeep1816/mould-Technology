@@ -9,7 +9,9 @@ interface LatestIssuesProps {
   posts?: Post[];
 }
 
-export default function LatestIssues({ posts: initialPosts = [] }: LatestIssuesProps) {
+export default function LatestIssues({
+  posts: initialPosts = [],
+}: LatestIssuesProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
 
   useEffect(() => {
@@ -37,12 +39,11 @@ export default function LatestIssues({ posts: initialPosts = [] }: LatestIssuesP
   if (!posts.length) return null;
 
   return (
-    <section className="py-20 ">
+    <section className="py-20">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Outer wrapper */}
-        <div className="max-w-full relative bg-[#F9F9F9] rounded-[18px] px-8 py-10">
+        <div className="relative bg-[#F9F9F9] rounded-[18px] px-8 py-10">
 
-          {/* Decorative shapes (RS theme correct) */}
+          {/* Decorative shapes */}
           <Image
             src="/images/shape/flower-shape-02.png"
             alt=""
@@ -59,7 +60,7 @@ export default function LatestIssues({ posts: initialPosts = [] }: LatestIssuesP
           />
 
           {/* Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
             {posts.map((post) => {
               const slug =
                 typeof post.category === "object"
@@ -100,7 +101,7 @@ export default function LatestIssues({ posts: initialPosts = [] }: LatestIssuesP
                     {/* Tag */}
                     <Link
                       href={`/category/${slug}`}
-                      className={`${tagClass} text-white text-[12px] font-semibold px-4 py-[4px] rounded-full w-fit`}
+                      className={`${tagClass} text-white text-meta font-semibold px-4 py-[4px] rounded-full w-fit`}
                     >
                       {typeof post.category === "object"
                         ? post.category.name
@@ -108,14 +109,14 @@ export default function LatestIssues({ posts: initialPosts = [] }: LatestIssuesP
                     </Link>
 
                     {/* Title */}
-                    <h3 className="text-[18px] font-semibold leading-[1.35] text-[#121213] hover:text-[#0073FF] transition">
+                    <h3 className="text-title text-[#121213] hover:text-[#0073FF] transition">
                       <Link href={`/post/${post.slug}`}>
                         {post.title}
                       </Link>
                     </h3>
 
                     {/* Meta */}
-                    <div className="flex items-center gap-3 text-[14px] text-[#616C74]">
+                    <div className="flex items-center gap-3 text-meta text-[#616C74]">
                       <span>
                         By{" "}
                         <span className="font-medium">
@@ -138,9 +139,7 @@ export default function LatestIssues({ posts: initialPosts = [] }: LatestIssuesP
               );
             })}
           </div>
-        
 
-       
         </div>
       </div>
     </section>

@@ -1,60 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Oswald, Roboto } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import "remixicon/fonts/remixicon.css";
 
-const geist = Geist({ subsets: ["latin"] });
-const geistMono = Geist_Mono({ subsets: ["latin"] });
-const oswald = Oswald({
+const interTight = Inter_Tight({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-inter-tight",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
-  icons: {
-    icon: [
-      { url: "/icon-light-32x32.png", media: "(prefers-color-scheme: light)" },
-      { url: "/icon-dark-32x32.png", media: "(prefers-color-scheme: dark)" },
-      { url: "/icon.svg", type: "image/svg+xml" },
-       {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
-  },
+  title: "Mould Technology",
+  description: "Industrial & Manufacturing Technology News",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={geist.className}>
-      <body
-        className={`${geistMono.className} antialiased`}
-        style={{
-          ["--font-oswald" as any]: oswald.style.fontFamily,
-          ["--font-roboto" as any]: roboto.style.fontFamily,
-        }}
-      >
+    <html lang="en" className={interTight.variable}>
+      <body className="antialiased">
         {children}
         <Analytics />
       </body>

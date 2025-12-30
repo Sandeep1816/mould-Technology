@@ -25,28 +25,27 @@ export default function Header() {
   return (
     <>
       {/* ================= TOP LIVE NEWS BAR ================= */}
-      <div className="bg-[#0d0f12] text-white text-sm">
-        <div className="max-w-7xl mx-auto px-5 h-[46px] flex items-center justify-between">
+      <div className="bg-[#0d0f12] text-white">
+        <div className="max-w-7xl mx-auto px-5 h-[46px] flex items-center justify-between text-body">
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-2 text-red-500 font-semibold">
+            <span className="flex items-center gap-2 text-red-500 font-medium">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
               LIVE NEWS
             </span>
+
             <span className="text-gray-300 hidden md:inline">
               Global Warming Is Changing How Hurricanes Work
             </span>
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center gap-2 bg-blue-600 px-3 py-1.5 rounded-full text-xs font-semibold">
+            <div className="hidden md:flex items-center gap-2 bg-blue-600 px-3 py-1.5 rounded-full text-meta font-medium">
               <Calendar size={14} />
               AUGUST 5, 2025
             </div>
 
-            <div className="flex items-center gap-3 text-gray-300">
-              <span className="hidden sm:inline text-xs font-semibold">
-                Follow Us:
-              </span>
+            <div className="flex items-center gap-3 text-gray-300 text-meta">
+              <span className="hidden sm:inline font-medium">Follow Us:</span>
               <a href="#">f</a>
               <a href="#">◎</a>
               <a href="#">in</a>
@@ -63,14 +62,18 @@ export default function Header() {
         } bg-gradient-to-b from-[#0b0b0b] to-[#151515]`}
       >
         <div className="max-w-7xl mx-auto px-5 h-[72px] flex items-center justify-between">
-          {/* LOGO */}
+          {/* LOGO (brand exception) */}
           <Link href="/" className="flex items-center gap-1">
-            <span className="text-3xl font-black text-blue-500">M</span>
-            <span className="text-2xl font-black text-white">ould</span>
+            <span className="text-[28px] font-bold text-blue-500 leading-none">
+              M
+            </span>
+            <span className="text-[24px] font-bold text-white leading-none">
+              ould
+            </span>
           </Link>
 
-          {/* ================= NAV (HOVER BASED) ================= */}
-          <nav className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-gray-200">
+          {/* ================= NAV ================= */}
+          <nav className="hidden lg:flex items-center gap-8 text-body font-medium text-gray-200">
             <button className="flex items-center gap-1 hover:text-blue-500 transition">
               Home <ChevronDown size={14} />
             </button>
@@ -108,12 +111,12 @@ export default function Header() {
               <Search size={16} className="text-gray-400" />
               <input
                 placeholder="Search..."
-                className="bg-transparent outline-none text-sm text-gray-300 ml-2 w-full"
+                className="bg-transparent outline-none text-body text-gray-300 ml-2 w-full"
               />
             </div>
 
             <Link href="/subscribe">
-              <button className="bg-blue-600 hover:bg-blue-700 transition text-white px-5 h-10 rounded-md text-sm font-semibold">
+              <button className="bg-blue-600 hover:bg-blue-700 transition text-white px-5 h-10 rounded-md text-body font-semibold">
                 Sign In
               </button>
             </Link>
@@ -127,7 +130,7 @@ export default function Header() {
           </div>
         </div>
 
-        {/* ================= MEGA MENU (WHITE / HOVER) ================= */}
+        {/* ================= MEGA MENU ================= */}
         <div
           onMouseLeave={() => setOpenMega(null)}
           className={`absolute left-0 right-0 top-full flex justify-center transition-opacity duration-200 ${
@@ -151,7 +154,7 @@ export default function Header() {
                   ).map((item, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between px-6 py-4 text-sm font-semibold text-gray-800 hover:bg-gray-100 cursor-pointer"
+                      className="flex items-center justify-between px-6 py-4 text-body font-medium text-gray-800 hover:bg-gray-100 cursor-pointer"
                     >
                       {item}
                       <ChevronRight size={16} />
@@ -162,11 +165,11 @@ export default function Header() {
                 {/* RIGHT */}
                 <div className="flex-1 p-8 bg-white text-gray-900">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold uppercase tracking-wide">
+                    <h2 className="text-title font-semibold uppercase tracking-wide">
                       {openMega === "topics" ? "Engineer" : "Webinars"}
                     </h2>
 
-                    <button className="text-blue-600 font-semibold flex items-center gap-1">
+                    <button className="text-blue-600 font-medium flex items-center gap-1">
                       See All <ChevronRight size={14} />
                     </button>
                   </div>
@@ -175,13 +178,13 @@ export default function Header() {
                     {[1, 2, 3, 4].map((i) => (
                       <div key={i}>
                         <div className="h-36 bg-gray-200 rounded-md mb-3" />
-                        <div className="text-xs text-blue-600 font-bold">
+                        <div className="text-meta text-blue-600 font-semibold">
                           ON DEMAND
                         </div>
-                        <div className="font-semibold mt-1">
+                        <div className="font-semibold mt-1 text-body">
                           Sample Webinar Title {i}
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-body text-gray-600 mt-1">
                           Short description exactly like Mould design.
                         </p>
                       </div>
