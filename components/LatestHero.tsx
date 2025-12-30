@@ -104,6 +104,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
         </Link>
 
         {/* ================= RIGHT SIDEBAR ================= */}
+        
         <div className="space-y-6">
           {latestPosts.map((item) => {
             const thumb =

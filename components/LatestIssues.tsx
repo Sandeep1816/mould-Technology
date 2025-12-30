@@ -11,168 +11,138 @@ interface LatestIssuesProps {
 
 export default function LatestIssues({ posts: initialPosts = [] }: LatestIssuesProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoplay, setIsAutoplay] = useState(true);
 
-  // ✅ Fetch posts
   useEffect(() => {
-    if (!initialPosts || initialPosts.length === 0) {
-      async function fetchPosts() {
-        try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`);
-          const data = await res.json();
-          const allPosts: Post[] = data.data || data;
+    if (!initialPosts.length) {
+      (async () => {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
+        );
+        const data = await res.json();
+        const all: Post[] = data.data || data;
 
-          const latestIssuePosts = allPosts.filter((p) =>
-            typeof p.category === "object"
-              ? p.category?.slug?.toLowerCase().includes("latest-issue")
-              : String(p.category || "").toLowerCase().includes("latest-issue")
-          );
+        const filtered = all.filter((p) =>
+          typeof p.category === "object"
+            ? p.category?.slug?.includes("latest-issue")
+            : false
+        );
 
-          setPosts(latestIssuePosts.slice(0, 4));
-        } catch (err) {
-          console.error("Failed to load Latest Issue posts:", err);
-        }
-      }
-      fetchPosts();
+        setPosts(filtered.slice(0, 3));
+      })();
     } else {
-      setPosts(initialPosts.slice(0, 4));
+      setPosts(initialPosts.slice(0, 3));
     }
   }, [initialPosts]);
 
-  // ✅ Autoplay
-  useEffect(() => {
-    if (!isAutoplay || posts.length === 0) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % posts.length);
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [isAutoplay, posts]);
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + posts.length) % posts.length);
-    setIsAutoplay(false);
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % posts.length);
-    setIsAutoplay(false);
-  };
-
-  if (!posts || posts.length === 0)
-    return <div className="text-center py-10 text-gray-400">No Latest Issue posts available.</div>;
+  if (!posts.length) return null;
 
   return (
-    <section className="relative py-20 px-6 overflow-hidden">
-      {/* 🧱 Realistic background: metal photo + dark overlay + gradient */}
-      <div className="absolute inset-0">
-        <div
-          className="w-full h-full bg-cover bg-center"
-          style={{
-            backgroundImage: `
-              linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.55)),
-              url('/backgrounds/mould-factory-texture.jpg')
-            `,
-            backgroundBlendMode: "overlay",
-            filter: "grayscale(100%) brightness(0.7)",
-          }}
-        ></div>
-      </div>
+    <section className="py-20 ">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Outer wrapper */}
+        <div className="max-w-full relative bg-[#F9F9F9] rounded-[18px] px-8 py-10">
 
-      {/* 🔹 Foreground content */}
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <h2
-          className="text-center text-[36px] font-semibold mb-14 text-white"
-          style={{
-            fontFamily: "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif",
-            letterSpacing: "0.5px",
-          }}
-        >
-          Latest Issue
-        </h2>
+          {/* Decorative shapes (RS theme correct) */}
+          <Image
+            src="/images/shape/flower-shape-02.png"
+            alt=""
+            width={120}
+            height={120}
+            className="absolute bottom-0 left-2 opacity-40 pointer-events-none"
+          />
+          <Image
+            src="/images/shape/flower-shape-01.png"
+            alt=""
+            width={120}
+            height={120}
+            className="absolute top-0 right-0 opacity-40 pointer-events-none"
+          />
 
-        {/* 🔸 Carousel container */}
-        <div className="relative flex items-center">
-          {/* Left arrow */}
-          <button
-            onClick={handlePrev}
-            aria-label="Previous slide"
-            className="absolute -left-8 md:-left-12 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white w-10 h-10 rounded flex items-center justify-center shadow transition"
-          >
-            ‹
-          </button>
+          {/* Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
+            {posts.map((post) => {
+              const slug =
+                typeof post.category === "object"
+                  ? post.category?.slug
+                  : "";
 
-          {/* Slides */}
-          <div className="overflow-hidden w-full">
-            <div
-              className="flex gap-6 transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(-${currentIndex * 25.5}%)` }}
-            >
-              {posts.map((post) => (
+              const tagClass =
+                slug?.includes("gaming")
+                  ? "bg-[#0073FF]"
+                  : slug?.includes("fashion")
+                  ? "bg-[#E033E0]"
+                  : "bg-[#F69C00]";
+
+              return (
                 <div
                   key={post.id}
-                  className="flex-shrink-0 w-full md:w-1/4 lg:w-1/4 bg-white rounded-sm shadow-md hover:shadow-xl transition-all duration-300 flex flex-col"
+                  className="bg-white rounded-[14px] shadow-[0_6px_20px_rgba(0,0,0,0.04)] p-5 flex gap-4"
                 >
                   {/* Image */}
-                  <div className="relative w-full h-[220px] bg-gray-100 overflow-hidden">
+                  <Link
+                    href={`/post/${post.slug}`}
+                    className="relative w-[96px] h-[96px] rounded-[12px] overflow-hidden flex-shrink-0"
+                  >
                     <Image
                       src={
                         post.imageUrl?.startsWith("http")
                           ? post.imageUrl
-                          : post.imageUrl
-                          ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
-                          : "/placeholder.svg"
+                          : `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
                       }
                       alt={post.title}
                       fill
                       className="object-cover"
                     />
-                  </div>
+                  </Link>
 
                   {/* Content */}
-                  <div className="flex flex-col justify-between p-6 flex-grow text-center">
-                    <h3
-                      className="text-[20px] text-[#003049] leading-snug mb-6 font-normal hover:text-[#0077b6] transition-colors"
-                      style={{
-                        fontFamily: "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif",
-                      }}
+                  <div className="flex flex-col gap-2">
+                    {/* Tag */}
+                    <Link
+                      href={`/category/${slug}`}
+                      className={`${tagClass} text-white text-[12px] font-semibold px-4 py-[4px] rounded-full w-fit`}
                     >
-                      {post.title}
+                      {typeof post.category === "object"
+                        ? post.category.name
+                        : post.category}
+                    </Link>
+
+                    {/* Title */}
+                    <h3 className="text-[18px] font-semibold leading-[1.35] text-[#121213] hover:text-[#0073FF] transition">
+                      <Link href={`/post/${post.slug}`}>
+                        {post.title}
+                      </Link>
                     </h3>
 
-                    <Link
-                      href={`/post/${post.slug}`}
-                      className="text-[14px] text-[#0077b6] font-semibold uppercase hover:text-[#0096c7] transition-all tracking-wide"
-                      style={{
-                        fontFamily:
-                          "Roboto, system-ui, -apple-system, Helvetica, Arial, sans-serif",
-                      }}
-                    >
-                      {post.title.toLowerCase().includes("issue")
-                        ? "Digital Edition"
-                        : "Read"}{" "}
-                      <span className="ml-1">›</span>
-                    </Link>
+                    {/* Meta */}
+                    <div className="flex items-center gap-3 text-[14px] text-[#616C74]">
+                      <span>
+                        By{" "}
+                        <span className="font-medium">
+                          {post.author?.name || "rstheme"}
+                        </span>
+                      </span>
+
+                      <span className="flex items-center gap-1">
+                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                          <path
+                            d="M6.165 8H6.06c-.21-.02-.41-.11-.57-.25-.16-.14-.27-.33-.31-.54L3.84 1 2.46 4.2a.54.54 0 01-.46.3H.5a.5.5 0 010-1h1.17L2.93.6c.08-.2.22-.36.41-.46.18-.1.39-.14.6-.12.21.02.41.11.57.25.16.14.27.33.31.54L6.16 7l1.38-3.19A.5.5 0 018 3.5h1.5a.5.5 0 010 1H8.33L7.08 7.4c-.08.18-.2.33-.36.44-.16.11-.35.17-.56.16z"
+                            fill="#616C74"
+                          />
+                        </svg>
+                        <span>{post.views?.toLocaleString() || 0} Views</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
+        
 
-          {/* Right arrow */}
-          <button
-            onClick={handleNext}
-            aria-label="Next slide"
-            className="absolute -right-8 md:-right-12 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white w-10 h-10 rounded flex items-center justify-center shadow transition"
-          >
-            ›
-          </button>
+       
         </div>
       </div>
     </section>
   );
 }
-

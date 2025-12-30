@@ -23,7 +23,7 @@ export default function TrendingSection() {
             : String(p.category || "").toLowerCase().includes("trending")
         );
 
-        // ✅ Required for layout (3 small + 2 feature)
+        // 3 small + 2 feature posts
         setPosts(trendingPosts.slice(0, 5));
       } catch (err) {
         console.error("Failed to load Trending posts:", err);
@@ -32,7 +32,7 @@ export default function TrendingSection() {
     fetchPosts();
   }, []);
 
-  if (posts.length === 0) {
+  if (!posts.length) {
     return (
       <div className="text-center py-10 text-gray-500">
         No Trending posts available.
@@ -53,33 +53,39 @@ export default function TrendingSection() {
       ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
       : "/placeholder.jpg";
 
-  /* ---------------- AUTHOR META ---------------- */
+  /* ---------- META (VIEWS + DATE) ---------- */
   const Meta = ({ post }: { post?: Post }) => {
-    if (!post?.author) return null;
+    if (!post) return null;
 
     return (
-      <div className="flex items-center gap-3 mt-3">
-        <img
-          src={post.author.avatarUrl || "/avatar-placeholder.png"}
-          alt={post.author.name}
-          className="w-8 h-8 rounded-full border border-white/20 object-cover"
-        />
+      <div className="flex items-center gap-4 mt-2 text-[13px] text-gray-400">
+        {/* Views */}
+        <span className="flex items-center gap-1">
+          <svg
+            width="10"
+            height="8"
+            viewBox="0 0 10 8"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.165 8H6.06c-.21-.02-.41-.11-.57-.25-.16-.14-.27-.33-.31-.54L3.84 1 2.46 4.2a.54.54 0 01-.46.3H.5a.5.5 0 010-1h1.17L2.93.6c.08-.2.22-.36.41-.46.18-.1.39-.14.6-.12.21.02.41.11.57.25.16.14.27.33.31.54L6.16 7l1.38-3.19A.5.5 0 018 3.5h1.5a.5.5 0 010 1H8.33L7.08 7.4c-.08.18-.2.33-.36.44-.16.11-.35.17-.56.16z"
+              fill="#9CA3AF"
+            />
+          </svg>
+          <span>{post.views?.toLocaleString() || 0} Views</span>
+        </span>
 
-        <div className="leading-tight">
-          <p className="text-sm font-semibold text-white">
-            {post.author.name}
-          </p>
-
-          {post.publishedAt && (
-            <p className="text-[11px] text-gray-400">
-              {new Date(post.publishedAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </p>
-          )}
-        </div>
+        {/* Date */}
+        {post.publishedAt && (
+          <span>
+            {new Date(post.publishedAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </span>
+        )}
       </div>
     );
   };
@@ -90,7 +96,9 @@ export default function TrendingSection() {
 
         {/* HEADER */}
         <div className="flex items-center justify-between">
-          <h2 className="text-white text-3xl font-semibold">Trending News</h2>
+          <h2 className="text-white text-3xl font-semibold">
+            Trending News
+          </h2>
           <Link
             href="/trending"
             className="text-sm text-gray-300 hover:text-white"
@@ -99,39 +107,43 @@ export default function TrendingSection() {
           </Link>
         </div>
 
-        {/* SMALL POSTS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[s1, s2, s3].map(
-            (post, index) =>
-              post && (
-                <div
-                  key={index}
-                  className="flex items-start gap-4 border-b border-white/10 pb-6"
-                >
-                  <Image
-                    src={imageUrl(post)}
-                    alt={post.title}
-                    width={90}
-                    height={90}
-                    className="rounded-lg object-cover"
-                  />
+        {/* TOP 3 SMALL POSTS (CONTINUOUS LINES) */}
+        <div className="relative py-8">
+          {/* TOP LINE */}
+          <span className="absolute top-0 left-0 w-full h-px bg-white/10" />
+          {/* BOTTOM LINE */}
+          <span className="absolute bottom-0 left-0 w-full h-px bg-white/10" />
 
-                  <div>
-                    <span className="inline-block mb-2 text-xs font-bold px-3 py-1 rounded bg-orange-500">
-                      {typeof post.category === "object"
-                        ? post.category?.name
-                        : post.category}
-                    </span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[s1, s2, s3].map(
+              (post, index) =>
+                post && (
+                  <div key={index} className="flex items-start gap-4">
+                    <Image
+                      src={imageUrl(post)}
+                      alt={post.title}
+                      width={90}
+                      height={90}
+                      className="rounded-lg object-cover"
+                    />
 
-                    <h3 className=" text-white text-base font-semibold leading-snug line-clamp-2">
-                      {post.title}
-                    </h3>
+                    <div>
+                      <span className="inline-block mb-2 text-xs font-bold px-3 py-1 rounded bg-orange-500">
+                        {typeof post.category === "object"
+                          ? post.category?.name
+                          : post.category}
+                      </span>
 
-                    <Meta post={post} />
+                      <h3 className="text-white text-base font-semibold leading-snug line-clamp-2">
+                        {post.title}
+                      </h3>
+
+                      <Meta post={post} />
+                    </div>
                   </div>
-                </div>
-              )
-          )}
+                )
+            )}
+          </div>
         </div>
 
         {/* FEATURE POSTS */}

@@ -48,7 +48,9 @@ const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000
     <>
      
       <Header />
-       <AdBanner />
+       {/* <AdBanner /> */}
+        {/* 📖 Latest Issue1 */}
+      <LatestIssues />
 
       {/* 📰 Latest Category Hero */}
       {latestPost && <LatestHero post={latestPost} />}
@@ -77,8 +79,7 @@ const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000
 
       <TrendingAd />
 
-      {/* 📖 Latest Issue1 */}
-      {/* <LatestIssues /> */}
+     
 
       {/* 📰 News & Products 2*/}
       {/* <NewsProductsSection
