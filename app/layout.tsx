@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter_Tight } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import "remixicon/fonts/remixicon.css";
+
 import "./globals.css";
 
 const interTight = Inter_Tight({

@@ -55,7 +55,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
     : "Today"
 
   return (
-    <section className="max-w-7xl mx-auto px-6 mt-8">
+    <section className="max-w-7xl mx-auto px-6 mt-4">
       <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-8 items-start">
         {/* ================= LEFT FEATURED CARD ================= */}
         <Link
@@ -69,7 +69,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
             className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
 
           <div className="absolute bottom-0 p-6 text-white max-w-[90%]">
             {typeof post.category === "object" && post.category?.name && (

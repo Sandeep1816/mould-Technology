@@ -39,7 +39,7 @@ export default function LatestIssues({
   if (!posts.length) return null;
 
   return (
-    <section className="py-20">
+    <section className="py-10">
       <div className="max-w-7xl mx-auto px-6">
         <div className="relative bg-[#F9F9F9] rounded-[18px] px-8 py-10">
 

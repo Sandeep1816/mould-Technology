@@ -148,3 +148,25 @@
   line-height: var(--lh-title);
   font-weight: var(--fw-semibold);
 }
+
+
+.header-top-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: #ffffff;
+  opacity: 0.85;
+  transition: all 0.25s ease;
+}
+
+.header-top-social a:hover {
+  opacity: 1;
+  color: #3b82f6; /* blue hover like RS theme */
+}
+
+.header-top-social i {
+  font-size: 16px;
+  line-height: 1;
+}

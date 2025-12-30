@@ -26,7 +26,7 @@ export default function Header() {
     <>
       {/* ================= TOP LIVE NEWS BAR ================= */}
       <div className="bg-[#0d0f12] text-white">
-        <div className="max-w-7xl mx-auto px-5 h-[46px] flex items-center justify-between text-body">
+        <div className="max-w-full mx-auto px-5 h-14 flex items-center justify-between text-body">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-2 text-red-500 font-medium">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
@@ -39,18 +39,33 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center gap-2 bg-blue-600 px-3 py-1.5 rounded-full text-meta font-medium">
+            <div className="hidden md:flex items-center gap-2 bg-blue-600 px-3 py-1.5 rounded-full rounded-tl-none  text-white font-medium">
               <Calendar size={14} />
               AUGUST 5, 2025
             </div>
 
-            <div className="flex items-center gap-3 text-gray-300 text-meta">
-              <span className="hidden sm:inline font-medium">Follow Us:</span>
-              <a href="#">f</a>
-              <a href="#">◎</a>
-              <a href="#">in</a>
-              <a href="#">𝕏</a>
-            </div>
+           <div className="flex items-center gap-3 header-top-social">
+  <span className="hidden sm:inline text-white  font-medium">
+    Follow Us:
+  </span>
+
+  <a href="#" aria-label="Facebook">
+    <i className="ri-facebook-fill" />
+  </a>
+
+  <a href="#" aria-label="Instagram">
+    <i className="ri-instagram-line" />
+  </a>
+
+  <a href="#" aria-label="LinkedIn">
+    <i className="ri-linkedin-fill" />
+  </a>
+
+  <a href="#" aria-label="Twitter X">
+    <i className="ri-twitter-x-line" />
+  </a>
+</div>
+
           </div>
         </div>
       </div>
@@ -59,9 +74,9 @@ export default function Header() {
       <header
         className={`w-full z-50 transition-all duration-300 ${
           isSticky ? "fixed top-0 shadow-lg" : "relative"
-        } bg-gradient-to-b from-[#0b0b0b] to-[#151515]`}
+        } bg-linear-to-b from-[#0b0b0b] to-[#151515]`}
       >
-        <div className="max-w-7xl mx-auto px-5 h-[72px] flex items-center justify-between">
+        <div className="max-w-full mx-auto px-5 h-20 flex items-center justify-between">
           {/* LOGO (brand exception) */}
           <Link href="/" className="flex items-center gap-1">
             <span className="text-[28px] font-bold text-blue-500 leading-none">
