@@ -16,7 +16,7 @@ function ExploreCategories() {
   ];
 
   return (
-    <div className="bg-white rounded-xl border p-6">
+    <div className="bg-white rounded-xl border p-7">
       <h3 className="text-xl font-semibold mb-6">Explore Categories</h3>
 
       <div className="space-y-3">
@@ -59,7 +59,7 @@ function PopularNewsSidebar() {
       : "/placeholder.jpg";
 
   return (
-    <div className="bg-white rounded-xl border p-6">
+    <div className="bg-white rounded-xl border p-7">
       <h3 className="text-xl font-semibold mb-6">Popular News</h3>
 
       <div className="space-y-6">
@@ -97,49 +97,18 @@ function PopularNewsSidebar() {
   );
 }
 
-/* ✅ FOLLOW US – EXACT NERIO DESIGN */
 function FollowUsWidget() {
   const socials = [
-    {
-      name: "Facebook",
-      followers: "88.2k Followers",
-      bg: "bg-[#2463D3]",
-      icon: "ri-facebook-fill",
-    },
-    {
-      name: "Twitter - X",
-      followers: "48.6k Followers",
-      bg: "bg-black",
-      icon: "ri-twitter-x-fill",
-    },
-    {
-      name: "Dribbble",
-      followers: "39.5k Followers",
-      bg: "bg-[#F43F8C]",
-      icon: "ri-dribbble-fill",
-    },
-    {
-      name: "Pinterest",
-      followers: "28.2k Followers",
-      bg: "bg-[#B7081B]",
-      icon: "ri-pinterest-fill",
-    },
-    {
-      name: "LinkedIn",
-      followers: "30.3k Followers",
-      bg: "bg-[#0077B5]",
-      icon: "ri-linkedin-fill",
-    },
-    {
-      name: "Instagram",
-      followers: "24.5k Followers",
-      bg: "bg-[#E1306C]",
-      icon: "ri-instagram-line",
-    },
+    { name: "Facebook", followers: "88.2k Followers", bg: "bg-[#2463D3]", icon: "ri-facebook-fill" },
+    { name: "Twitter - X", followers: "48.6k Followers", bg: "bg-black", icon: "ri-twitter-x-fill" },
+    { name: "Dribbble", followers: "39.5k Followers", bg: "bg-[#F43F8C]", icon: "ri-dribbble-fill" },
+    { name: "Pinterest", followers: "28.2k Followers", bg: "bg-[#B7081B]", icon: "ri-pinterest-fill" },
+    { name: "LinkedIn", followers: "30.3k Followers", bg: "bg-[#0077B5]", icon: "ri-linkedin-fill" },
+    { name: "Instagram", followers: "24.5k Followers", bg: "bg-[#E1306C]", icon: "ri-instagram-line" },
   ];
 
   return (
-    <div className="bg-white rounded-xl border p-6">
+    <div className="bg-white rounded-xl border p-7">
       <h3 className="text-xl font-semibold mb-6">Follow Us</h3>
 
       <div className="space-y-3">
@@ -152,9 +121,7 @@ function FollowUsWidget() {
               <i className={`${s.icon} text-lg`} />
               {s.name}
             </div>
-            <span className="text-sm font-medium">
-              {s.followers}
-            </span>
+            <span className="text-sm font-medium">{s.followers}</span>
           </div>
         ))}
       </div>
@@ -190,10 +157,10 @@ export default function BasicsSection() {
   if (!posts.length) return null;
 
   return (
-    <section className="bg-white py-12">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="bg-white py-14">
+      <div className="max-w-[1400px] mx-auto px-6">
         {/* HEADER */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-10">
           <h2 className="text-[34px] font-semibold tracking-tight text-[#111] font-oswald">
             Trending Stories
           </h2>
@@ -206,9 +173,10 @@ export default function BasicsSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
+        {/* ✅ EXACT LAYOUT */}
+        <div className="grid grid-cols-1 lg:[grid-template-columns:2.2fr_1.4fr] gap-12">
           {/* LEFT CONTENT */}
-          <div className="lg:col-span-3 space-y-10">
+          <div className="space-y-10">
             {posts.map((post) => (
               <article
                 key={post.id}
@@ -216,7 +184,7 @@ export default function BasicsSection() {
               >
                 <Link
                   href={`/post/${post.slug}`}
-                  className="w-[280px] h-[180px] flex-shrink-0 overflow-hidden rounded-md bg-gray-100"
+                  className="w-[280px] h-[180px] flex-shrink-0 overflow-hidden rounded-lg bg-gray-100"
                 >
                   <img
                     src={
@@ -232,67 +200,35 @@ export default function BasicsSection() {
                 </Link>
 
                 <div className="flex flex-col">
-                  {post.category && (
-                    <span className="inline-block mb-2 text-[11px] font-bold uppercase tracking-widest bg-[#0077b6] text-white px-3 py-1 w-fit">
-                      {typeof post.category === "object"
-                        ? post.category.name
-                        : post.category}
-                    </span>
-                  )}
+                  <span className="inline-block mb-2 text-[11px] font-bold uppercase bg-[#0077b6] text-white px-3 py-1 w-fit">
+                    {typeof post.category === "object"
+                      ? post.category?.name
+                      : post.category}
+                  </span>
 
-                  <Link href={`/post/${post.slug}`}>
-                    <h3 className="text-[26px] leading-snug font-semibold text-[#111] hover:text-[#0077b6] transition">
-                      {post.title}
-                    </h3>
-                  </Link>
+                  <h3 className="text-[26px] leading-snug font-semibold text-[#111]">
+                    {post.title}
+                  </h3>
 
                   {post.excerpt && (
                     <p className="mt-3 text-[15px] text-gray-600 line-clamp-3">
                       {post.excerpt}
                     </p>
                   )}
-
-                  <div className="mt-4 flex items-center gap-4 text-[13px] text-gray-500">
-                    <span>
-                      By{" "}
-                      <strong className="text-gray-700">
-                        {post.author?.name}
-                      </strong>
-                    </span>
-                    <span>•</span>
-                    {post.views && (
-                      <span>{post.views.toLocaleString()} Views</span>
-                    )}
-                    <span>•</span>
-                    {post.publishedAt && (
-                      <span>
-                        {new Date(post.publishedAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          }
-                        )}
-                      </span>
-                    )}
-                  </div>
                 </div>
               </article>
             ))}
 
-            {/* ✅ LOAD MORE NEWS */}
-            <div className="flex justify-center pt-4">
-              <button className="flex items-center gap-2 px-6 py-3 rounded-md border bg-white hover:bg-gray-100 transition text-sm font-medium">
-                Load More News
-                <span className="text-lg">↻</span>
+            <div className="flex justify-center pt-6">
+              <button className="flex items-center gap-2 px-7 py-3 rounded-md border bg-white hover:bg-gray-100 transition text-sm font-medium">
+                Load More News ↻
               </button>
             </div>
           </div>
 
           {/* RIGHT SIDEBAR */}
-          <aside className="lg:col-span-1">
-            <div className="sticky top-24 space-y-8">
+          <aside>
+            <div className="sticky top-24 space-y-10">
               <ExploreCategories />
               <PopularNewsSidebar />
               <FollowUsWidget />

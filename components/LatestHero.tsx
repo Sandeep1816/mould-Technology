@@ -55,7 +55,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
     : "Today"
 
   return (
-    <section className="max-w-7xl mx-auto px-6 mt-4">
+    <section className="max-w-7xl mx-auto px-4 mt-4">
       <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-8 items-start">
         {/* ================= LEFT FEATURED CARD ================= */}
         <Link

@@ -179,10 +179,10 @@ export default function FeaturedPostsSection({
           </Link>
         </div>
 
-        {/* 🔥 GRID WIDTH ADJUSTED HERE */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
-          {/* LEFT CONTENT (slightly reduced width) */}
-          <div className="lg:col-span-3 space-y-10">
+        {/* ✅ CORRECT GRID: 2 + 1 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* LEFT CONTENT */}
+          <div className="lg:col-span-2 space-y-10">
             {rows.map((rowPosts, rowIndex) => (
               <div
                 key={rowIndex}
@@ -225,7 +225,7 @@ export default function FeaturedPostsSection({
                           </h3>
                         </Link>
 
-                        <div className="flex items-center gap-3 text-sm text-gray-500">
+                        <div className="flex flex-wrap gap-3 text-sm text-gray-500">
                           {post.author?.name && (
                             <span>By {post.author.name}</span>
                           )}
@@ -246,8 +246,8 @@ export default function FeaturedPostsSection({
             ))}
           </div>
 
-          {/* RIGHT SIDEBAR (slightly wider) */}
-          <aside className="lg:col-span-2">
+          {/* RIGHT SIDEBAR */}
+          <aside className="lg:col-span-1">
             <div className="sticky top-24 space-y-8">
               <ExploreCategories />
               <PopularNewsSidebar />
@@ -259,3 +259,4 @@ export default function FeaturedPostsSection({
     </section>
   );
 }
+
