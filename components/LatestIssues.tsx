@@ -1,56 +1,52 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import type { Post } from "@/types/Post";
+import Image from "next/image"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import type { Post } from "@/types/Post"
 
 interface LatestIssuesProps {
-  posts?: Post[];
+  posts?: Post[]
 }
 
 export default function LatestIssues({
   posts: initialPosts = [],
 }: LatestIssuesProps) {
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [posts, setPosts] = useState<Post[]>(initialPosts)
 
   useEffect(() => {
     if (!initialPosts.length) {
-      (async () => {
+      ;(async () => {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
-        );
-        const data = await res.json();
-        const all: Post[] = data.data || data;
+        )
+        const data = await res.json()
+        const all: Post[] = data.data || data
 
         const filtered = all.filter((p) =>
           typeof p.category === "object"
             ? p.category?.slug?.includes("latest-issue")
             : false
-        );
+        )
 
-        setPosts(filtered.slice(0, 3));
-      })();
+        setPosts(filtered.slice(0, 3))
+      })()
     } else {
-      setPosts(initialPosts.slice(0, 3));
+      setPosts(initialPosts.slice(0, 3))
     }
-  }, [initialPosts]);
+  }, [initialPosts])
 
-  if (!posts.length) return null;
+  if (!posts.length) return null
 
   return (
-    <section className="py-8 max-w-full">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="relative bg-[#F9F9F9] rounded-[18px] px-5 py-6">
+    /* rs-feature-area pt-40 */
+    <section className="pt-[40px] w-full">
+      {/* bootstrap container */}
+      <div className="max-w-[1320px] mx-auto px-[12px]">
+        {/* feature-wrapper */}
+        <div className="relative bg-[#F7F7F7] rounded-[18px] px-[24px] py-[28px]">
 
-          {/* Decorative shapes */}
-          <Image
-            src="/images/shape/flower-shape-02.png"
-            alt=""
-            width={120}
-            height={120}
-            className="absolute bottom-0 left-2 opacity-40 pointer-events-none"
-          />
+          {/* shapes */}
           <Image
             src="/images/shape/flower-shape-01.png"
             alt=""
@@ -58,92 +54,88 @@ export default function LatestIssues({
             height={120}
             className="absolute top-0 right-0 opacity-40 pointer-events-none"
           />
+          <Image
+            src="/images/shape/flower-shape-02.png"
+            alt=""
+            width={120}
+            height={120}
+            className="absolute bottom-0 left-2 opacity-40 pointer-events-none"
+          />
 
-          {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
+          {/* ✅ RS FLEX LAYOUT (KEY FIX) */}
+          <div className="flex flex-wrap gap-y-6 gap-x-6 relative z-10">
             {posts.map((post) => {
               const slug =
                 typeof post.category === "object"
                   ? post.category?.slug
-                  : "";
+                  : ""
 
               const tagClass =
                 slug?.includes("gaming")
                   ? "bg-[#0073FF]"
-                  : slug?.includes("latest-issue")
-                  ? "bg-[#E033E0]"
                   : slug?.includes("fashion")
                   ? "bg-[#E033E0]"
-                  : "bg-[#F69C00]";
+                  : "bg-[#F69C00]"
 
               return (
                 <div
                   key={post.id}
-                  className="bg-white rounded-[14px] shadow-[0_6px_20px_rgba(0,0,0,0.04)] p-5 flex gap-4"
+                  /* 🔑 EXACT WIDTHS LIKE BOOTSTRAP */
+                  className="w-full md:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)]"
                 >
-                  {/* Image */}
-                  <Link
-                    href={`/post/${post.slug}`}
-                    className="text-white relative w-[96px] h-[96px] rounded-[12px] overflow-hidden flex-shrink-0"
-                  >
-                    <Image
-                      src={
-                        post.imageUrl?.startsWith("http")
-                          ? post.imageUrl
-                          : `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
-                      }
-                      alt={post.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </Link>
-
-                  {/* Content */}
-                  <div className="flex flex-col gap-2">
-                    {/* Tag */}
+                  <div className="flex gap-5 bg-white rounded-[14px] p-5 h-full">
+                    {/* thumb */}
                     <Link
-                      href={`/category/${slug}`}
-                      className={`${tagClass} text-white  font-small px-4 py-[4px] rounded-full rounded-tl-none  w-fit`}
+                      href={`/post/${post.slug}`}
+                      className="relative w-[96px] h-[96px] rounded-[12px] overflow-hidden flex-shrink-0"
                     >
-                      {typeof post.category === "object"
-                        ? post.category.name
-                        : post.category}
+                      <Image
+                        src={
+                          post.imageUrl?.startsWith("http")
+                            ? post.imageUrl
+                            : `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
+                        }
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                      />
                     </Link>
 
-                    {/* Title */}
-                    <h3 className="text-title text-[#121213] hover:text-[#0073FF] transition">
-                      <Link href={`/post/${post.slug}`}>
-                        {post.title}
+                    {/* content */}
+                    <div className="flex flex-col gap-2">
+                      <Link
+                        href={`/category/${slug}`}
+                        className={`${tagClass} text-white px-4 py-[4px] rounded-full rounded-tl-none w-fit text-xs font-medium`}
+                      >
+                        {typeof post.category === "object"
+                          ? post.category.name
+                          : post.category}
                       </Link>
-                    </h3>
 
-                    {/* Meta */}
-                    <div className="flex items-center gap-3 text-meta text-[#616C74]">
-                      <span>
-                        By{" "}
-                        <span className="font-medium">
-                          {post.author?.name || "rstheme"}
+                      <h6 className="text-[18px] leading-snug font-semibold text-[#121213] underline hover:text-[#0073FF] transition">
+                        <Link href={`/post/${post.slug}`}>
+                          {post.title}
+                        </Link>
+                      </h6>
+
+                      <div className="flex items-center gap-4 text-[13px] text-[#616C74]">
+                        <span>
+                          By{" "}
+                          <span className="font-medium">
+                            {post.author?.name || "rstheme"}
+                          </span>
                         </span>
-                      </span>
-
-                      <span className="flex items-center gap-1">
-                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                          <path
-                            d="M6.165 8H6.06c-.21-.02-.41-.11-.57-.25-.16-.14-.27-.33-.31-.54L3.84 1 2.46 4.2a.54.54 0 01-.46.3H.5a.5.5 0 010-1h1.17L2.93.6c.08-.2.22-.36.41-.46.18-.1.39-.14.6-.12.21.02.41.11.57.25.16.14.27.33.31.54L6.16 7l1.38-3.19A.5.5 0 018 3.5h1.5a.5.5 0 010 1H8.33L7.08 7.4c-.08.18-.2.33-.36.44-.16.11-.35.17-.56.16z"
-                            fill="#616C74"
-                          />
-                        </svg>
                         <span>{post.views?.toLocaleString() || 0} Views</span>
-                      </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
 
         </div>
       </div>
     </section>
-  );
+  )
 }

@@ -1,13 +1,21 @@
 export default function TrendingAd() {
   return (
-    <section className="mt-12 mb-12 bg-gray-100 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <p className="text-center text-gray-500 text-sm mb-4">Advertisement</p>
-        <img
-          src="/trending-ad.jpg"
-          alt="Trending Advertisement"
-          className=" w-full max-w-7xl mx-auto h-65 object-cover rounded"
-        />
+    /* 🔹 section-space = 80px top & bottom */
+    <section className="py-[80px] w-full bg-[#F7F7F7]">
+      {/* 🔹 Nerio container */}
+      <div className="max-w-[1320px] mx-auto px-[12px]">
+        <p className="text-center text-[#616C74] text-sm mb-4">
+          Advertisement
+        </p>
+
+        {/* 🔹 Banner wrapper (no extra max-widths) */}
+        <div className="rounded-xl overflow-hidden">
+          <img
+            src="/trending-ad.jpg"
+            alt="Trending Advertisement"
+            className="w-full h-[218px] object-cover"
+          />
+        </div>
       </div>
     </section>
   )

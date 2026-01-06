@@ -16,23 +16,26 @@ function ExploreCategories() {
   ];
 
   return (
-    <div className="bg-white rounded-xl border p-7">
-      <h3 className="text-xl font-semibold mb-6">Explore Categories</h3>
+    <div className="bg-white border rounded-lg p-6">
+      <h5 className="text-[18px] font-semibold mb-5 text-[#121213]">
+        Explore Categories
+      </h5>
 
-      <div className="space-y-3">
+      <ul className="space-y-3">
         {categories.map((cat) => (
-          <Link
-            key={cat.name}
-            href={`/category/${cat.name.toLowerCase()}`}
-            className="flex items-center justify-between px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition"
-          >
-            <span className="font-medium">
-              {cat.name} ({cat.count})
-            </span>
-            <span className="text-lg">→</span>
-          </Link>
+          <li key={cat.name}>
+            <Link
+              href={`/category/${cat.name.toLowerCase()}`}
+              className="flex items-center justify-between px-4 py-3 rounded-md bg-[#f5f5f5] hover:bg-[#ededed] transition"
+            >
+              <span className="text-[15px] font-medium text-[#121213]">
+                {cat.name} ({cat.count})
+              </span>
+              <span className="text-lg">→</span>
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
@@ -59,10 +62,12 @@ function PopularNewsSidebar() {
       : "/placeholder.jpg";
 
   return (
-    <div className="bg-white rounded-xl border p-7">
-      <h3 className="text-xl font-semibold mb-6">Popular News</h3>
+    <div className="bg-white border rounded-lg p-6">
+      <h5 className="text-[18px] font-semibold mb-5 text-[#121213]">
+        Popular News
+      </h5>
 
-      <div className="space-y-6">
+      <div className="space-y-5">
         {posts.slice(0, 3).map((post) => (
           <Link
             key={post.id}
@@ -72,21 +77,21 @@ function PopularNewsSidebar() {
             <img
               src={imageUrl(post)}
               alt={post.title}
-              className="w-[80px] h-[80px] rounded-lg object-cover flex-shrink-0"
+              className="w-[80px] h-[80px] rounded-md object-cover"
             />
 
             <div>
-              <span className="inline-block mb-1 text-[11px] font-bold uppercase bg-green-500 text-white px-2 py-1 rounded">
+              <span className="inline-block mb-1 text-[11px] font-bold uppercase bg-[#54bd05] text-white px-2 py-[2px] rounded">
                 {typeof post.category === "object"
                   ? post.category?.name
                   : post.category}
               </span>
 
-              <h4 className="text-sm font-semibold leading-snug line-clamp-2">
+              <h6 className="text-[14px] font-semibold leading-snug text-[#121213] line-clamp-2">
                 {post.title}
-              </h4>
+              </h6>
 
-              <div className="text-xs text-gray-400 mt-1">
+              <div className="text-[12px] text-[#9a9a9a] mt-1">
                 By {post.author?.name} · {post.views?.toLocaleString()} Views
               </div>
             </div>
@@ -99,32 +104,36 @@ function PopularNewsSidebar() {
 
 function FollowUsWidget() {
   const socials = [
-    { name: "Facebook", followers: "88.2k Followers", bg: "bg-[#2463D3]", icon: "ri-facebook-fill" },
-    { name: "Twitter - X", followers: "48.6k Followers", bg: "bg-black", icon: "ri-twitter-x-fill" },
-    { name: "Dribbble", followers: "39.5k Followers", bg: "bg-[#F43F8C]", icon: "ri-dribbble-fill" },
-    { name: "Pinterest", followers: "28.2k Followers", bg: "bg-[#B7081B]", icon: "ri-pinterest-fill" },
-    { name: "LinkedIn", followers: "30.3k Followers", bg: "bg-[#0077B5]", icon: "ri-linkedin-fill" },
-    { name: "Instagram", followers: "24.5k Followers", bg: "bg-[#E1306C]", icon: "ri-instagram-line" },
+    { name: "Facebook", followers: "88.2k Followers", bg: "#2463D3", icon: "ri-facebook-fill" },
+    { name: "Twitter - X", followers: "48.6k Followers", bg: "#000000", icon: "ri-twitter-x-fill" },
+    { name: "Dribbble", followers: "39.5k Followers", bg: "#EA4C89", icon: "ri-dribbble-fill" },
+    { name: "Pinterest", followers: "28.2k Followers", bg: "#B7081B", icon: "ri-pinterest-fill" },
+    { name: "LinkedIn", followers: "30.3k Followers", bg: "#0077B5", icon: "ri-linkedin-fill" },
+    { name: "Instagram", followers: "24.5k Followers", bg: "#E1306C", icon: "ri-instagram-line" },
   ];
 
   return (
-    <div className="bg-white rounded-xl border p-7">
-      <h3 className="text-xl font-semibold mb-6">Follow Us</h3>
+    <div className="bg-white border rounded-lg p-6">
+      <h5 className="text-[18px] font-semibold mb-5 text-[#121213]">
+        Follow Us
+      </h5>
 
-      <div className="space-y-3">
+      <ul className="space-y-3">
         {socials.map((s) => (
-          <div
-            key={s.name}
-            className={`${s.bg} text-white rounded-lg px-4 py-3 flex items-center justify-between`}
-          >
-            <div className="flex items-center gap-3 font-semibold">
-              <i className={`${s.icon} text-lg`} />
-              {s.name}
+          <li key={s.name}>
+            <div
+              className="rounded-md px-4 py-3 flex items-center justify-between text-white"
+              style={{ backgroundColor: s.bg }}
+            >
+              <div className="flex items-center gap-3 font-medium">
+                <i className={`${s.icon} text-lg`} />
+                {s.name}
+              </div>
+              <span className="text-[13px]">{s.followers}</span>
             </div>
-            <span className="text-sm font-medium">{s.followers}</span>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
@@ -157,78 +166,70 @@ export default function BasicsSection() {
   if (!posts.length) return null;
 
   return (
-    <section className="bg-white py-14">
-      <div className="max-w-[1400px] mx-auto px-6">
+    <section className="bg-[#f7f7f7] pt-[70px] pb-[80px]">
+      <div className="max-w-[1320px] mx-auto px-[15px]">
         {/* HEADER */}
-        <div className="flex items-center justify-between mb-10">
-          <h2 className="text-[34px] font-semibold tracking-tight text-[#111] font-oswald">
+        <div className="flex items-center justify-between mb-12">
+          <h2 className="text-[36px] font-semibold text-[#121213]">
             Trending Stories
           </h2>
 
           <Link
             href="/basics"
-            className="text-sm font-semibold uppercase tracking-wide text-[#0077b6] hover:underline"
+            className="text-[14px] font-semibold uppercase text-[#0073ff]"
           >
             View All →
           </Link>
         </div>
 
-        {/* ✅ EXACT LAYOUT */}
-        <div className="grid grid-cols-1 lg:[grid-template-columns:2.2fr_1.4fr] gap-12">
-          {/* LEFT CONTENT */}
+        {/* GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-[8fr_4fr] gap-10">
+          {/* LEFT */}
           <div className="space-y-10">
             {posts.map((post) => (
               <article
                 key={post.id}
-                className="flex gap-6 border-b pb-10 last:border-b-0"
+                className="flex gap-6 pb-10 border-b border-[#e5e5e5]"
               >
                 <Link
                   href={`/post/${post.slug}`}
-                  className="w-[280px] h-[180px] flex-shrink-0 overflow-hidden rounded-lg bg-gray-100"
+                  className="w-[280px] h-[180px] shrink-0 overflow-hidden rounded-md"
                 >
                   <img
                     src={
                       post.imageUrl?.startsWith("http")
                         ? post.imageUrl
-                        : post.imageUrl
-                        ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
-                        : "/placeholder.jpg"
+                        : `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
                     }
                     alt={post.title}
-                    className="w-full h-full object-cover hover:scale-105 transition"
+                    className="w-full h-full object-cover"
                   />
                 </Link>
 
-                <div className="flex flex-col">
-                  <span className="inline-block mb-2 text-[11px] font-bold uppercase bg-[#0077b6] text-white px-3 py-1 w-fit">
+                <div>
+                  <span className="inline-block mb-2 text-[11px] font-bold uppercase bg-[#0073ff] text-white px-3 py-[2px]">
                     {typeof post.category === "object"
                       ? post.category?.name
                       : post.category}
                   </span>
 
-                  <h3 className="text-[26px] leading-snug font-semibold text-[#111]">
+                  <h3 className="text-[24px] font-semibold text-[#121213] leading-snug">
                     {post.title}
                   </h3>
 
                   {post.excerpt && (
-                    <p className="mt-3 text-[15px] text-gray-600 line-clamp-3">
+                    <p className="mt-3 text-[15px] text-[#616c74] leading-relaxed">
                       {post.excerpt}
                     </p>
                   )}
                 </div>
               </article>
             ))}
-
-            <div className="flex justify-center pt-6">
-              <button className="flex items-center gap-2 px-7 py-3 rounded-md border bg-white hover:bg-gray-100 transition text-sm font-medium">
-                Load More News ↻
-              </button>
-            </div>
           </div>
 
-          {/* RIGHT SIDEBAR */}
+          {/* RIGHT */}
           <aside>
-            <div className="sticky top-24 space-y-10">
+            <div className="sticky top-[90px] space-y-8">
               <ExploreCategories />
               <PopularNewsSidebar />
               <FollowUsWidget />

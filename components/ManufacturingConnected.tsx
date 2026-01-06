@@ -6,7 +6,6 @@ import type { Post } from "@/types/Post";
 
 /* ================= RIGHT SIDEBAR ================= */
 
-/* 1️⃣ EXPLORE CATEGORIES */
 function ExploreCategories() {
   const categories = [
     { name: "Gaming", count: 24 },
@@ -17,7 +16,7 @@ function ExploreCategories() {
   ];
 
   return (
-    <div className="bg-white rounded-xl border p-6">
+    <div className="bg-white border rounded-xl p-6">
       <h3 className="text-xl font-semibold mb-6">Explore Categories</h3>
 
       <div className="space-y-3">
@@ -38,7 +37,6 @@ function ExploreCategories() {
   );
 }
 
-/* 2️⃣ POPULAR NEWS */
 function PopularNewsSidebar() {
   const [posts, setPosts] = useState<Post[]>([]);
 
@@ -61,20 +59,16 @@ function PopularNewsSidebar() {
       : "/placeholder.jpg";
 
   return (
-    <div className="bg-white rounded-xl border p-6">
+    <div className="bg-white border rounded-xl p-6">
       <h3 className="text-xl font-semibold mb-6">Popular News</h3>
 
       <div className="space-y-6">
         {posts.slice(0, 4).map((post) => (
-          <Link
-            key={post.id}
-            href={`/post/${post.slug}`}
-            className="flex gap-4"
-          >
+          <Link key={post.id} href={`/post/${post.slug}`} className="flex gap-4">
             <img
               src={imageUrl(post)}
               alt={post.title}
-              className="w-[80px] h-[80px] rounded-lg object-cover flex-shrink-0"
+              className="w-[80px] h-[80px] rounded-lg object-cover shrink-0"
             />
 
             <div>
@@ -99,27 +93,14 @@ function PopularNewsSidebar() {
   );
 }
 
-/* 3️⃣ TAGS */
 function TagsWidget() {
   const tags = [
-    "Gaming",
-    "Travel",
-    "Food",
-    "Sports",
-    "Social",
-    "Marketing",
-    "Trip",
-    "Makeup",
-    "Technology",
-    "Branding",
-    "Beauty",
-    "Printing",
-    "Business",
-    "Politics",
+    "Gaming","Travel","Food","Sports","Social","Marketing","Trip","Makeup",
+    "Technology","Branding","Beauty","Printing","Business","Politics",
   ];
 
   return (
-    <div className="bg-white rounded-xl border p-6">
+    <div className="bg-white border rounded-xl p-6">
       <h3 className="text-xl font-semibold mb-6">Tags</h3>
 
       <div className="flex flex-wrap gap-3">
@@ -143,9 +124,7 @@ type FeaturedPostsSectionProps = {
   posts: Post[];
 };
 
-export default function FeaturedPostsSection({
-  posts = [],
-}: FeaturedPostsSectionProps) {
+export default function FeaturedPostsSection({ posts }: FeaturedPostsSectionProps) {
   if (!posts || posts.length < 2) return null;
 
   const rows: Post[][] = [];
@@ -163,11 +142,14 @@ export default function FeaturedPostsSection({
       : "";
 
   return (
-    <section className="bg-white py-14 px-6">
-      <div className="max-w-7xl mx-auto">
+    /* ✅ EXACT NERIO SECTION SPACING */
+    <section className="bg-white pt-[70px] pb-[80px]">
+      {/* ✅ EXACT BOOTSTRAP CONTAINER */}
+      <div className="max-w-[1320px] mx-auto px-[15px]">
+
         {/* HEADER */}
         <div className="flex items-center justify-between mb-10">
-          <h2 className="text-3xl font-bold text-[#121213]">
+          <h2 className="text-[36px] font-semibold text-[#121213]">
             Featured Post
           </h2>
 
@@ -179,18 +161,15 @@ export default function FeaturedPostsSection({
           </Link>
         </div>
 
-        {/* ✅ CORRECT GRID: 2 + 1 */}
+        {/* GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* LEFT CONTENT */}
+          {/* LEFT */}
           <div className="lg:col-span-2 space-y-10">
-            {rows.map((rowPosts, rowIndex) => (
-              <div
-                key={rowIndex}
-                className="grid grid-cols-1 md:grid-cols-2 gap-8"
-              >
-                {rowPosts.map((post) => {
-                  const imageUrl =
-                    post.imageUrl && post.imageUrl.startsWith("http")
+            {rows.map((row, i) => (
+              <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {row.map((post) => {
+                  const img =
+                    post.imageUrl?.startsWith("http")
                       ? post.imageUrl
                       : post.imageUrl
                       ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
@@ -199,40 +178,33 @@ export default function FeaturedPostsSection({
                   return (
                     <article
                       key={post.id}
-                      className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition"
+                      className="border rounded-xl overflow-hidden hover:shadow-md transition"
                     >
                       <Link href={`/post/${post.slug}`}>
-                        <div className="relative h-[260px] overflow-hidden">
+                        <div className="h-[260px] overflow-hidden">
                           <img
-                            src={imageUrl}
+                            src={img}
                             alt={post.title}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover hover:scale-105 transition"
                           />
                         </div>
                       </Link>
 
                       <div className="p-6">
-                        {typeof post.category === "object" &&
-                          post.category?.name && (
-                            <span className="inline-block mb-3 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
-                              {post.category.name}
-                            </span>
-                          )}
+                        {typeof post.category === "object" && post.category?.name && (
+                          <span className="inline-block mb-3 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
+                            {post.category.name}
+                          </span>
+                        )}
 
-                        <Link href={`/post/${post.slug}`}>
-                          <h3 className="text-[20px] font-bold text-[#121213] leading-snug mb-4 hover:text-blue-600 transition">
-                            {post.title}
-                          </h3>
-                        </Link>
+                        <h3 className="text-[20px] font-bold leading-snug mb-4">
+                          {post.title}
+                        </h3>
 
                         <div className="flex flex-wrap gap-3 text-sm text-gray-500">
-                          {post.author?.name && (
-                            <span>By {post.author.name}</span>
-                          )}
+                          {post.author?.name && <span>By {post.author.name}</span>}
                           {typeof post.views === "number" && (
-                            <span>
-                              ↗ {post.views.toLocaleString()} Views
-                            </span>
+                            <span>{post.views.toLocaleString()} Views</span>
                           )}
                           {post.publishedAt && (
                             <span>{formatDate(post.publishedAt)}</span>
@@ -259,4 +231,3 @@ export default function FeaturedPostsSection({
     </section>
   );
 }
-

@@ -1,92 +1,112 @@
-import Link from "next/link";
+import Link from "next/link"
+import Image from "next/image"
 import {
   Facebook,
   Instagram,
-  Twitter,
   Linkedin,
+  Twitter,
   Youtube,
-} from "lucide-react";
-import FooterRecentPosts from "@/components/FooterRecentPosts";
+} from "lucide-react"
+import FooterRecentPosts from "@/components/FooterRecentPosts"
 
 export default function Footer() {
   return (
-    <footer className="relative w-full bg-gradient-to-b from-[#0b0b0b] to-[#050505] text-gray-300">
-      <div className="max-w-7xl mx-auto px-6 pt-20 pb-14">
+    <footer className="relative bg-[#121213] text-[#BEBEBE]">
+      {/* ================= FOOTER TOP ================= */}
+      <div className="pt-[70px] pb-[80px]">
+        {/* BOOTSTRAP CONTAINER */}
+        <div className="max-w-[1320px] mx-auto px-[15px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 
-        {/* MAIN GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-14">
+            {/* ================= BRAND ================= */}
+            <div>
+              <Link href="/" className="inline-block mb-6">
+                <Image
+                  src="/logo-white.png"
+                  alt="Logo"
+                  width={140}
+                  height={40}
+                />
+              </Link>
 
-          {/* BRAND */}
-          <div className="lg:col-span-1">
-            <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-1">
-              Mou<span className="text-blue-500">l</span>d
-            </h2>
+              <p className="text-sm leading-relaxed text-[#BEBEBE] mb-6 max-w-xs">
+                We love to bring to life as a developer and I aim the today do
+                this using music whatever front end tools necessary.
+              </p>
 
-            <p className="text-sm leading-relaxed text-gray-400 max-w-xs mb-6">
-              We love to bring to life as a developer and aim the today do this
-              using music whatever front end tools necessary.
-            </p>
+              {/* SOCIAL ICONS */}
+              <div className="flex items-center gap-4">
+                {[Facebook, Instagram, Twitter, Linkedin, Youtube].map(
+                  (Icon, i) => (
+                    <Link
+                      key={i}
+                      href="#"
+                      className="w-9 h-9 flex items-center justify-center border border-white/20 rounded hover:bg-white/10 transition"
+                    >
+                      <Icon size={16} />
+                    </Link>
+                  )
+                )}
+              </div>
 
-            <div className="flex gap-3">
-              {[Facebook, Instagram, Twitter, Linkedin, Youtube].map(
-                (Icon, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="w-10 h-10 rounded-md bg-white/10 flex items-center justify-center hover:bg-white/20 transition"
-                  >
-                    <Icon size={18} />
-                  </a>
-                )
-              )}
+              {/* APP STORE BUTTONS */}
+              <div className="flex gap-3 mt-6">
+                <Image
+                  src="/google-play.png"
+                  alt="Google Play"
+                  width={120}
+                  height={36}
+                />
+                <Image
+                  src="/apple-store.png"
+                  alt="Apple Store"
+                  width={120}
+                  height={36}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* TOP CATEGORIES */}
-          <div>
-            <h3 className="text-white text-lg font-semibold mb-6 relative">
-              Top Categories
-              <span className="block w-10 h-[2px] bg-white mt-2" />
-            </h3>
+            {/* ================= TOP CATEGORIES ================= */}
+            <div>
+              <h5 className="text-white text-lg font-semibold mb-6">
+                Top Categories
+              </h5>
 
-            <ul className="space-y-3 text-sm">
-              {[
-                "Entertainment",
-                "Architecture",
-                "Technology",
-                "Menial Health",
-                "Music News",
-                "Food & Dining",
-                "Government",
-                "Marketing",
-              ].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="hover:text-white transition">
-                    • {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+              <ul className="space-y-3 text-sm">
+                {[
+                  "Entertainment",
+                  "Architecture",
+                  "Technology",
+                  "Menial Health",
+                  "Music News",
+                  "Food & Dining",
+                  "Government",
+                  "Marketing",
+                ].map((item) => (
+                  <li key={item}>
+                    <Link href="#" className="hover:text-white transition">
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* RECENT POSTS */}
-          <div>
-            <h3 className="text-white text-lg font-semibold mb-6 relative">
-              Recent Post
-              <span className="block w-10 h-[2px] bg-white mt-2" />
-            </h3>
+            {/* ================= RECENT POSTS ================= */}
+            <div>
+              <h5 className="text-white text-lg font-semibold mb-6">
+                Recent Post
+              </h5>
 
-            <FooterRecentPosts />
-          </div>
+              <FooterRecentPosts />
+            </div>
 
-          {/* TAGS */}
-          <div>
-            <h3 className="text-white text-lg font-semibold mb-6 relative">
-              Tags
-              <span className="block w-10 h-[2px] bg-white mt-2" />
-            </h3>
+            {/* ================= TAGS ================= */}
+            <div>
+              <h5 className="text-white text-lg font-semibold mb-6">
+                Tags
+              </h5>
 
-            <div className="border border-white/10 rounded-xl p-6">
               <div className="flex flex-wrap gap-3">
                 {[
                   "Gaming",
@@ -107,7 +127,7 @@ export default function Footer() {
                   <Link
                     key={tag}
                     href="#"
-                    className="px-4 py-2 text-sm rounded-md bg-white/5 border border-white/10 hover:bg-white/10 transition"
+                    className="px-4 py-2 text-sm border border-white/20 rounded hover:bg-white/10 transition"
                   >
                     {tag}
                   </Link>
@@ -116,37 +136,42 @@ export default function Footer() {
             </div>
           </div>
         </div>
-
-        {/* DIVIDER */}
-        <div className="border-t border-white/10 my-14" />
-
-        {/* BOTTOM BAR */}
-        <div className="grid grid-cols-1 md:grid-cols-3 items-center text-xs text-gray-400 gap-6">
-
-          <div className="text-left">
-            <Link href="#" className="hover:text-white">
-              Terms & Agreements
-            </Link>
-          </div>
-
-          <div className="text-center">
-            Copyright © 2026 Nerio. Designed by{" "}
-            <span className="text-blue-500 cursor-pointer">RSTheme</span>.
-          </div>
-
-          <div className="text-right">
-            <Link href="#" className="hover:text-white">
-              Privacy policy
-            </Link>
-          </div>
-
-        </div>
       </div>
 
-      {/* SCROLL TO TOP BUTTON (visual match) */}
-      <button className="fixed bottom-6 right-6 w-10 h-10 rounded-md bg-blue-600 text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition">
-        ↑
-      </button>
+      {/* ================= COPYRIGHT BAR ================= */}
+      <div className="border-t border-white/10">
+        <div className="max-w-[1320px] mx-auto px-[15px] py-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 items-center text-sm gap-4">
+
+            <div className="text-center md:text-left">
+              <Link href="#" className="hover:text-white">
+                Terms & Agreements
+              </Link>
+            </div>
+
+            <div className="text-center">
+              <p className="underline underline-offset-4">
+                Copyright © 2026 Nerio. Designed by{" "}
+                <Link
+                  href="https://rstheme.com"
+                  target="_blank"
+                  className="text-white"
+                >
+                  RSTheme
+                </Link>
+                .
+              </p>
+            </div>
+
+            <div className="text-center md:text-right">
+              <Link href="#" className="hover:text-white">
+                Privacy policy
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </footer>
-  );
+  )
 }
