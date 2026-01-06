@@ -22,7 +22,7 @@ export default function Footer() {
             <div>
               <Link href="/" className="inline-block mb-6">
                 <Image
-                  src="/logo-white.png"
+                  src="/images/maxx.png"
                   alt="Logo"
                   width={140}
                   height={40}
@@ -52,13 +52,13 @@ export default function Footer() {
               {/* APP STORE BUTTONS */}
               <div className="flex gap-3 mt-6">
                 <Image
-                  src="/google-play.png"
+                  src="/images/google-play.png"
                   alt="Google Play"
                   width={120}
                   height={36}
                 />
                 <Image
-                  src="/apple-store.png"
+                  src="/images/apple-store.png"
                   alt="Apple Store"
                   width={120}
                   height={36}
