@@ -30,7 +30,7 @@ export default function Header() {
   return (
     <>
       {/* ================= TOP BAR ================= */}
-      <div className="w-full bg-[#121213] text-white">
+      <div className="w-full bg-[#171A1E] text-white">
         <div className={`${container} h-[52px] flex items-center justify-between`}>
           {/* LEFT */}
           <div className="flex items-center gap-4 text-sm">
