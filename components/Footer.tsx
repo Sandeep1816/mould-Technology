@@ -19,7 +19,7 @@ export default function Footer() {
           {/* BRAND */}
           <div className="lg:col-span-1">
             <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-1">
-              Ner<span className="text-blue-500">i</span>o
+              Mou<span className="text-blue-500">l</span>d
             </h2>
 
             <p className="text-sm leading-relaxed text-gray-400 max-w-xs mb-6">
