@@ -13,6 +13,7 @@ type Post = {
   title: string;
   slug: string;
   imageUrl?: string;
+  badge?: string; // ✅ NEW
   category?: { name: string };
   author?: { name: string };
   publishedAt?: string;
@@ -27,7 +28,9 @@ export default function PostsList() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
+        );
         const data = await res.json();
         setPosts(data.data || data);
       } catch (err) {
@@ -70,10 +73,11 @@ export default function PostsList() {
     }
   }
 
-  // 🧩 Table Setup with TanStack
+  /* ================= TABLE SETUP ================= */
   const columnHelper = createColumnHelper<Post>();
 
   const columns = [
+    /* IMAGE */
     columnHelper.display({
       id: "image",
       header: "Image",
@@ -97,34 +101,55 @@ export default function PostsList() {
       },
     }),
 
+    /* TITLE */
     columnHelper.accessor("title", {
       header: "Title",
-      cell: (info) => <span className="font-medium">{info.getValue()}</span>,
+      cell: (info) => (
+        <span className="font-medium">{info.getValue()}</span>
+      ),
     }),
 
+    /* BADGE ✅ */
+    columnHelper.display({
+      id: "badge",
+      header: "Badge",
+      cell: (info) => {
+        const badge = info.row.original.badge;
+        return badge ? (
+          <span className="inline-block bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+            {badge}
+          </span>
+        ) : (
+          <span className="text-gray-400 text-xs">—</span>
+        );
+      },
+    }),
+
+    /* CATEGORY */
     columnHelper.display({
       id: "category",
       header: "Category",
       cell: (info) => info.row.original.category?.name || "-",
     }),
 
+    /* AUTHOR */
     columnHelper.display({
       id: "author",
       header: "Author",
       cell: (info) => info.row.original.author?.name || "-",
     }),
 
+    /* PUBLISHED */
     columnHelper.display({
       id: "publishedAt",
       header: "Published",
       cell: (info) => {
         const date = info.row.original.publishedAt;
-        return date
-          ? new Date(date).toLocaleDateString()
-          : "—";
+        return date ? new Date(date).toLocaleDateString() : "—";
       },
     }),
 
+    /* ACTIONS */
     columnHelper.display({
       id: "actions",
       header: "Actions",
@@ -155,18 +180,21 @@ export default function PostsList() {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (loading)
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-600">
         Loading posts...
       </div>
     );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto bg-white shadow-md rounded-2xl p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-indigo-700">All Posts</h1>
+          <h1 className="text-2xl font-bold text-indigo-700">
+            All Posts
+          </h1>
           <button
             onClick={() => router.push("/admin/posts/create")}
             className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
@@ -178,7 +206,9 @@ export default function PostsList() {
         {message && (
           <p
             className={`text-center text-sm font-medium mb-4 ${
-              message.startsWith("✅") ? "text-green-600" : "text-red-600"
+              message.startsWith("✅")
+                ? "text-green-600"
+                : "text-red-600"
             }`}
           >
             {message}
@@ -215,7 +245,10 @@ export default function PostsList() {
                   >
                     {row.getVisibleCells().map((cell) => (
                       <td key={cell.id} className="px-4 py-3 border">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </td>
                     ))}
                   </tr>

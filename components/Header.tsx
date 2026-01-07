@@ -62,8 +62,8 @@ export default function Header() {
           <div className="grid grid-cols-[auto_1fr_auto] items-center h-full gap-10">
             {/* LOGO */}
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-3xl font-bold text-[#0073FF]">N</span>
-              <span className="text-xl font-bold text-white">erio</span>
+              <span className="text-3xl font-bold text-[#0073FF]">M</span>
+              <span className="text-xl font-bold text-white">ould</span>
             </Link>
 
             {/* DESKTOP MENU */}
@@ -85,11 +85,11 @@ export default function Header() {
               </button>
 
               <button className="flex items-center gap-1 hover:text-[#0073FF]">
-                Categories <ChevronDown size={14} />
+                Directory <ChevronDown size={14} />
               </button>
 
               <button className="flex items-center gap-1 hover:text-[#0073FF]">
-                Pages <ChevronDown size={14} />
+                Events <ChevronDown size={14} />
               </button>
 
               <Link href="/contact" className="hover:text-[#0073FF]">
