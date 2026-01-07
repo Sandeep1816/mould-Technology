@@ -47,7 +47,7 @@ const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000
   return (
     <>
      
-      <Header />
+      {/* <Header /> */}
        {/* <AdBanner /> */}
         {/* 📖 Latest Issue1 */}
       <LatestIssues />
@@ -87,7 +87,7 @@ const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000
         productPosts={productPosts.slice(0, 6)}
       /> */}
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }

@@ -4,6 +4,8 @@ import { Analytics } from "@vercel/analytics/next";
 import "remixicon/fonts/remixicon.css";
 
 import "./globals.css";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -24,10 +26,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={interTight.variable}>
+      <Header />
       <body className="antialiased">
         {children}
         <Analytics />
       </body>
+      <Footer />
     </html>
   );
 }
