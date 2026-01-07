@@ -21,13 +21,18 @@ export default function RelatedPostsCarousel() {
   useEffect(() => {
     async function fetchRelated() {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`)
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
+        )
         const data = await res.json()
         const allPosts = Array.isArray(data.data) ? data.data : []
 
-        // Get the latest posts with categories
         const filtered = allPosts
-          .sort((a: Post, b: Post) => new Date(b.publishedAt || "").getTime() - new Date(a.publishedAt || "").getTime())
+          .sort(
+            (a: Post, b: Post) =>
+              new Date(b.publishedAt || "").getTime() -
+              new Date(a.publishedAt || "").getTime()
+          )
           .slice(0, 4)
 
         setPosts(filtered)
@@ -43,30 +48,32 @@ export default function RelatedPostsCarousel() {
 
   if (loading) {
     return (
-      <section className="bg-white border-b border-gray-200 py-12 px-6">
-        <div className="max-w-6xl mx-auto text-center text-gray-500">Loading related content...</div>
+      <section className="bg-white border-b border-gray-200 py-16 px-6 md:px-10 lg:px-[80px]">
+        <div className="text-center text-gray-500 text-[16px]">
+          Loading related content...
+        </div>
       </section>
     )
   }
 
   return (
-    <section className="bg-white border-b border-gray-200 py-12 px-6">
-      <div className="max-w-6xl mx-auto">
+    <section className="bg-white border-b border-gray-200 py-16 px-6 md:px-10 lg:px-[80px] text-[16px]">
+      <div className="max-w-full mx-auto">
         <h2
-          className="text-2xl md:text-3xl font-bold text-[#003049] mb-8 text-center"
+          className="text-3xl md:text-4xl font-bold text-[#003049] mb-10 text-center"
           style={{ fontFamily: "Oswald, sans-serif" }}
         >
           Related Content
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {posts.map((post) => {
             const imageUrl =
-              post.imageUrl && post.imageUrl.startsWith("http")
+              post.imageUrl?.startsWith("http")
                 ? post.imageUrl
                 : post.imageUrl
-                  ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
-                  : "/placeholder.svg"
+                ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
+                : "/placeholder.svg"
 
             const date = post.publishedAt
               ? new Date(post.publishedAt).toLocaleDateString("en-US", {
@@ -76,18 +83,21 @@ export default function RelatedPostsCarousel() {
                 })
               : "Today"
 
-            const categoryName = typeof post.category === "object" ? post.category?.name || "LATEST" : "LATEST"
+            const categoryName =
+              typeof post.category === "object"
+                ? post.category?.name || "LATEST"
+                : "LATEST"
 
             return (
               <Link
                 key={post.id}
                 href={`/post/${post.slug}`}
-                className="group flex flex-col bg-white border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="group flex flex-col bg-white border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
                 {/* Image */}
-                <div className="relative w-full h-48 overflow-hidden bg-gray-200">
+                <div className="relative w-full h-[220px] overflow-hidden bg-gray-200">
                   <Image
-                    src={imageUrl || "/placeholder.svg"}
+                    src={imageUrl}
                     alt={post.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -95,35 +105,39 @@ export default function RelatedPostsCarousel() {
                 </div>
 
                 {/* Content */}
-                <div className="p-4 flex flex-col flex-1">
-                  {/* Category Badge */}
-                  <div className="mb-2">
-                    <span
-                      className="inline-block bg-[#0077b6] text-white text-xs font-bold px-3 py-1 rounded-none uppercase tracking-widest"
-                      style={{ fontFamily: "Oswald, sans-serif" }}
-                    >
-                      {categoryName}
-                    </span>
-                  </div>
+                <div className="p-6 flex flex-col flex-1">
+                  {/* Category */}
+                  <span
+                    className="inline-block mb-3 bg-[#0077b6] text-white text-xs font-bold px-3 py-1 uppercase tracking-widest"
+                    style={{ fontFamily: "Oswald, sans-serif" }}
+                  >
+                    {categoryName}
+                  </span>
 
                   {/* Date */}
-                  <p className="text-gray-500 text-xs uppercase tracking-widest mb-2">{date}</p>
+                  <p className="text-gray-500 text-sm uppercase tracking-widest mb-3">
+                    {date}
+                  </p>
 
                   {/* Title */}
                   <h3
-                    className="text-base font-bold text-[#003049] mb-3 line-clamp-2 group-hover:text-[#0077b6] transition-colors"
+                    className="text-[18px] font-bold text-[#003049] mb-4 line-clamp-2 group-hover:text-[#0077b6] transition-colors"
                     style={{ fontFamily: "Oswald, sans-serif" }}
                   >
                     {post.title}
                   </h3>
 
                   {/* Excerpt */}
-                  {post.excerpt && <p className="text-gray-700 text-sm line-clamp-2 mb-4 flex-1">{post.excerpt}</p>}
+                  {post.excerpt && (
+                    <p className="text-[#444] text-[16px] line-clamp-2 mb-6 flex-1 leading-relaxed">
+                      {post.excerpt}
+                    </p>
+                  )}
 
-                  {/* Read More Link */}
-                  <div className="text-[#d62839] font-bold text-sm uppercase tracking-widest group-hover:text-[#003049] transition-colors">
-                    READ MORE &gt;
-                  </div>
+                  {/* Read More */}
+                  <span className="text-[#d62839] font-bold text-sm uppercase tracking-widest group-hover:text-[#003049] transition-colors">
+                    READ MORE →
+                  </span>
                 </div>
               </Link>
             )

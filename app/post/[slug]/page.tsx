@@ -1,15 +1,15 @@
-
 "use client"
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
-import Link from "next/link"
 import Image from "next/image"
+
 import ShareSection from "@/components/share-section"
 import RelatedPostsCarousel from "@/components/related-posts-carousel"
-import AdvertisementSection from "@/components/advertisement-section"
 import ContentGateModal from "@/components/content-gate-modal"
 import PostViewCounter from "@/components/PostViewCounter"
+import Loader from "@/components/Loader"
+import RightSidebar from "@/components/RightSidebar"
 
 type Author = {
   id: number
@@ -41,33 +41,25 @@ export default function PostDetailsPage() {
   const slugValue = Array.isArray(slug) ? slug[0] : slug
 
   const [post, setPost] = useState<Post | null>(null)
-  const [relatedPosts, setRelatedPosts] = useState<Post[]>([])
-  const [showGate, setShowGate] = useState(true)
+  const [showGate, setShowGate] = useState(false)
   const [userSubmitted, setUserSubmitted] = useState(false)
 
+  /* ================= FETCH POST ================= */
   useEffect(() => {
     async function fetchPost() {
       setPost(null)
-      setRelatedPosts([])
 
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`)
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
+        )
         const data = await res.json()
         const allPosts = Array.isArray(data.data) ? data.data : []
 
         const postData = allPosts.find((p: Post) => p.slug === slugValue)
-
-        if (!postData) {
-          console.error("No post found for slug:", slugValue)
-          return
-        }
+        if (!postData) return
 
         setPost(postData)
-
-        const related = allPosts.filter(
-          (p: Post) => p.category?.slug === postData.category?.slug && p.slug !== slugValue,
-        )
-        setRelatedPosts(related.slice(0, 3))
       } catch (err) {
         console.error("Failed to load post:", err)
       }
@@ -76,19 +68,31 @@ export default function PostDetailsPage() {
     if (slugValue) fetchPost()
   }, [slugValue])
 
+  /* ================= CONTENT GATE TIMER ================= */
+  useEffect(() => {
+    if (userSubmitted) return
+
+    const timer = setTimeout(() => {
+      setShowGate(true)
+    }, 9000)
+
+    return () => clearTimeout(timer)
+  }, [userSubmitted])
+
   const handleGateSubmit = (formData: any) => {
     console.log("Form submitted:", formData)
     setUserSubmitted(true)
+    setShowGate(false)
   }
 
-  if (!post) return <div className="py-16 text-center text-gray-500">Loading article...</div>
+  if (!post) return <Loader />
 
   const imageUrl =
-    post.imageUrl && post.imageUrl.startsWith("http")
+    post.imageUrl?.startsWith("http")
       ? post.imageUrl
       : post.imageUrl
-        ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
-        : "/placeholder.svg"
+      ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
+      : "/placeholder.svg"
 
   const date = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString("en-US", {
@@ -100,113 +104,78 @@ export default function PostDetailsPage() {
 
   return (
     <>
+      {/* ================= CONTENT GATE ================= */}
       <ContentGateModal
         isOpen={showGate && !userSubmitted}
         onClose={() => setShowGate(false)}
         onSubmit={handleGateSubmit}
       />
 
-      <main key={Array.isArray(slug) ? slug.join("-") : slug} className="bg-[#f9f9f9]">
-  {slugValue && <PostViewCounter slug={slugValue} />}
+      <main className="bg-[#f9f9f9] text-[16px]">
+        {slugValue && <PostViewCounter slug={slugValue} />}
 
-
-        {/* HERO SECTION */}
+        {/* ================= HERO ================= */}
         <section className="bg-white border-b border-gray-200">
-          <div className="max-w-6xl mx-auto py-10 px-6">
-            <p className="text-gray-500 text-sm mb-3 uppercase tracking-widest">Published {date}</p>
+          <div className="max-w-full mx-auto py-10 px-6 md:px-10 lg:px-[80px]">
+            <p className="text-gray-500 text-sm mb-3 uppercase tracking-widest">
+              Published {date}
+            </p>
 
-            <h1
-              className="text-3xl md:text-4xl font-bold text-[#003049] leading-tight mb-4"
-              style={{ fontFamily: "Oswald, sans-serif" }}
-            >
+            <h1 className="text-3xl md:text-4xl font-bold text-[#003049] mb-4">
               {post.title}
             </h1>
 
-            {post.excerpt && <p className="text-gray-700 text-lg mb-6 leading-relaxed max-w-3xl">{post.excerpt}</p>}
+            {post.excerpt && (
+              <p className="text-gray-700 text-[16px] mb-6 max-w-3xl leading-relaxed">
+                {post.excerpt}
+              </p>
+            )}
 
-            <div className="w-full max-h-[420px] overflow-hidden rounded-lg border border-gray-300">
-              <img src={imageUrl || "/placeholder.svg"} alt={post.title} className="w-full h-full object-cover" />
+            <div className="w-full max-h-[420px] overflow-hidden rounded-lg border">
+              <img
+                src={imageUrl}
+                alt={post.title}
+                className="w-full h-full object-cover"
+              />
             </div>
 
-            {/* Author info */}
             {post.author && (
               <div className="flex items-center gap-3 mt-6">
                 <img
                   src={post.author.avatarUrl || "/avatar-placeholder.png"}
+                  className="w-10 h-10 rounded-full border"
                   alt={post.author.name}
-                  className="w-10 h-10 rounded-full border border-gray-300"
                 />
                 <div>
-                  <p className="text-sm font-semibold text-[#003049]">{post.author.name}</p>
-                  <p className="text-xs text-gray-500">{post.author.bio}</p>
+                  <p className="text-sm font-semibold">
+                    {post.author.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {post.author.bio}
+                  </p>
                 </div>
               </div>
             )}
           </div>
         </section>
 
-        {/* MAIN CONTENT */}
-        <section className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-10 py-10 px-6">
-          {/* LEFT: Article */}
-          <article className="lg:col-span-3">
+        {/* ================= CONTENT + SIDEBAR ================= */}
+        <section className="max-w-full mx-auto grid grid-cols-1 lg:grid-cols-[8fr_4fr] gap-10 py-10 px-6 md:px-10 lg:px-[80px]">
+          {/* LEFT CONTENT */}
+          <article>
             <div
-              className="prose prose-lg max-w-none text-gray-800 space-y-6"
-              style={{ fontFamily: "Roboto, sans-serif" }}
+              className="prose max-w-none text-[16px] leading-relaxed"
               dangerouslySetInnerHTML={{ __html: post.content || "" }}
             />
 
             <ShareSection />
           </article>
 
-          {/* RIGHT: Related + Ads */}
-          <aside className="space-y-8">
-            {/* Related posts */}
-            <div>
-              <h3
-                className="text-lg font-semibold text-[#003049] mb-4 border-b border-gray-300 pb-2 uppercase"
-                style={{ fontFamily: "Oswald, sans-serif" }}
-              >
-                Read Next
-              </h3>
-
-              <div className="space-y-5">
-                {relatedPosts.map((item) => (
-                  <Link
-                    key={item.id}
-                    href={`/post/${item.slug}`}
-                    className="flex items-center gap-3 group hover:bg-gray-50 p-2 rounded transition"
-                  >
-                    <div className="relative w-20 h-16 shrink-0 overflow-hidden rounded">
-                      <Image
-                        src={
-                          item.imageUrl?.startsWith("http")
-                            ? item.imageUrl
-                            : item.imageUrl
-                              ? `${process.env.NEXT_PUBLIC_API_URL}${item.imageUrl}`
-                              : "/placeholder.svg"
-                        }
-                        alt={item.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <p
-                      className="text-sm text-[#003049] leading-snug group-hover:text-[#0077b6] transition line-clamp-2"
-                      style={{ fontFamily: "Oswald, sans-serif" }}
-                    >
-                      {item.title}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Ads */}
-            <AdvertisementSection />
-          </aside>
+          {/* RIGHT SIDEBAR */}
+          <RightSidebar />
         </section>
 
-        {/* RELATED CONTENT CAROUSEL */}
+        {/* ================= RELATED CAROUSEL ================= */}
         <RelatedPostsCarousel />
       </main>
     </>
