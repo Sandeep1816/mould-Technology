@@ -1,0 +1,26 @@
+"use client"
+
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+
+export default function RecruiterLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const router = useRouter()
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+
+    if (!user || user.role !== "recruiter") {
+      router.push("/login")
+    }
+  }, [])
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {children}
+    </div>
+  )
+}

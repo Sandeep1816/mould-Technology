@@ -26,12 +26,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={interTight.variable}>
-      <Header />
+      
       <body className="antialiased">
+        <Header />
         {children}
         <Analytics />
+         <Footer />
       </body>
-      <Footer />
+     
     </html>
   );
 }
