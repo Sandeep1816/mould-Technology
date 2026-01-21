@@ -10,6 +10,7 @@ import {
   ArrowRight,
 } from "lucide-react"
 import { useState, useEffect } from "react"
+import Image from "next/image"
 
 type MegaType = "technology" | "sports" | null
 type MobileDrop = "technology" | "sports" | "categories" | "pages" | null
@@ -39,7 +40,7 @@ export default function Header() {
               Live News
             </span>
             <span className="text-[#BEBEBE] hidden md:block">
-              Global Warming Is Changing How Hurricanes Work
+              New Ideas. Proven Practices in Mold Manufacturing
             </span>
           </div>
 
@@ -55,18 +56,28 @@ export default function Header() {
       {/* ================= HEADER ================= */}
       <header
         className={`w-full z-50 transition-all ${
-          isSticky ? "fixed top-0 bg-[#121213] shadow-lg" : "relative bg-[#121213]"
+          isSticky ? "fixed top-0 bg-[#0A2B57] shadow-lg" : "relative bg-[#0A2B57]"
         }`}
       >
-        <div className={`${container} h-[80px]`}>
-          <div className="grid grid-cols-[auto_1fr_auto] items-center h-full gap-10">
-            {/* LOGO */}
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-3xl font-bold text-[#0073FF]">M</span>
-              <span className="text-xl font-bold text-white">ould</span>
+        <div className={`${container} h-[90px]`}>
+          {/* ✅ GRID UPDATED ONLY FOR LOGO SPACE */}
+          <div className="grid grid-cols-[280px_1fr_auto] items-center h-full gap-10">
+
+            {/* ================= LOGO ================= */}
+            <Link href="/" className="flex items-center">
+              <div className="w-[260px]">
+                <Image
+                  src="/images/moldinglogo2.png"
+                  alt="Logo"
+                  width={260}
+                  height={110}
+                  priority
+                  className="w-full h-auto object-contain"
+                />
+              </div>
             </Link>
 
-            {/* DESKTOP MENU */}
+            {/* ================= DESKTOP MENU ================= */}
             <nav className="hidden lg:flex items-center justify-center gap-8 text-white font-medium">
               <Link href="/" className="hover:text-[#0073FF]">Home</Link>
 
@@ -97,7 +108,7 @@ export default function Header() {
               </Link>
             </nav>
 
-            {/* ACTIONS */}
+            {/* ================= ACTIONS ================= */}
             <div className="flex items-center gap-4">
               <Link
                 href="/login"
@@ -120,7 +131,6 @@ export default function Header() {
         {isMenuOpen && (
           <div className="lg:hidden bg-[#121213] border-t border-white/10">
             <div className="px-6 py-6 space-y-4 text-white">
-
               <Link href="/" className="block">Home</Link>
 
               {["technology", "sports", "categories", "pages"].map((item) => (
@@ -162,173 +172,110 @@ export default function Header() {
           </div>
         )}
 
-{/* ================= DESKTOP MEGA MENU ================= */}
-<div
-  onMouseLeave={() => setOpenMega(null)}
-  className={`absolute left-0 right-0 top-full bg-white transition-all duration-200 ${
-    openMega ? "opacity-100 visible" : "opacity-0 invisible"
-  }`}
->
-  <div className={`${container} py-10 rounded-b-xl`}>
+        {/* ================= DESKTOP MEGA MENU ================= */}
+        <div
+          onMouseLeave={() => setOpenMega(null)}
+          className={`absolute left-0 right-0 top-full bg-white transition-all duration-200 ${
+            openMega ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
+        >
+          <div className={`${container} py-10 rounded-b-xl`}>
 
-    {/* ================= SPORTS ================= */}
-    {openMega === "sports" && (
-      <>
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-black">Sports</h3>
+            {/* ================= SPORTS ================= */}
+            {openMega === "sports" && (
+              <>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold text-black">Sports</h3>
 
-          <Link
-            href="/sports"
-            className="flex items-center gap-1 text-sm font-semibold text-black hover:underline"
-          >
-            View All <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-4 gap-6">
-          {[
-            "Local Team Clinches The National Championship.",
-            "Soccer League Playoffs Heat Up With Surprise Upsets",
-            "Rising Star Dominates Tennis Unbeaten Streak",
-            "Soccer Legend Announces From International Play",
-          ].map((title, i) => (
-            <div key={i} className="space-y-3">
-              <img
-                src={`https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?auto=format&fit=crop&w=800&q=80`}
-                alt="sports"
-                className="h-[160px] w-full rounded-xl object-cover"
-              />
-
-              <h4 className="font-semibold text-[15px] leading-snug text-black">
-                {title}
-              </h4>
-
-              <p className="text-xs text-gray-500">
-                By rstheme · 5,385 Views
-              </p>
-            </div>
-          ))}
-        </div>
-      </>
-    )}
-
-    {/* ================= TECHNOLOGY ================= */}
-    {openMega === "technology" && (
-      <div className="grid grid-cols-3 gap-10">
-
-        {/* FEATURED */}
-        <div>
-          <h3 className="text-xl font-bold mb-4 text-black">
-            Technology
-          </h3>
-
-          <img
-            src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80"
-            alt="technology"
-            className="rounded-xl mb-4"
-          />
-
-          <p className="text-gray-600 text-sm leading-relaxed">
-            In today’s fast-paced digital world, Artificial Intelligence is
-            empowering developers.
-          </p>
-        </div>
-
-        {/* LATEST NEWS */}
-        <div>
-          <h4 className="font-semibold mb-4 text-black">
-            Latest News
-          </h4>
-
-          <div className="space-y-5">
-            {[
-              {
-                tag: "TECHNOLOGY",
-                color: "bg-blue-600",
-                title: "New Tech Startups Are Pushing Creating",
-              },
-              {
-                tag: "TECH",
-                color: "bg-green-600",
-                title: "Green Tech Solutions Fighting Climate Change",
-              },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4">
-                <img
-                  src="https://images.unsplash.com/photo-1581091215367-59ab6c3c3f33?auto=format&fit=crop&w=300&q=80"
-                  className="w-20 h-20 rounded-lg object-cover"
-                />
-
-                <div>
-                  <span
-                    className={`inline-block mb-1 text-xs px-2 py-0.5 rounded text-white ${item.color}`}
+                  <Link
+                    href="/sports"
+                    className="flex items-center gap-1 text-sm font-semibold text-black hover:underline"
                   >
-                    {item.tag}
-                  </span>
+                    View All <ArrowRight size={14} />
+                  </Link>
+                </div>
 
-                  <h5 className="font-semibold text-sm text-black leading-snug">
-                    {item.title}
-                  </h5>
+                <div className="grid grid-cols-4 gap-6">
+                  {[
+                    "Local Team Clinches The National Championship.",
+                    "Soccer League Playoffs Heat Up With Surprise Upsets",
+                    "Rising Star Dominates Tennis Unbeaten Streak",
+                    "Soccer Legend Announces From International Play",
+                  ].map((title, i) => (
+                    <div key={i} className="space-y-3">
+                      <img
+                        src="https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?auto=format&fit=crop&w=800&q=80"
+                        className="h-[160px] w-full rounded-xl object-cover"
+                      />
+                      <h4 className="font-semibold text-[15px] text-black">
+                        {title}
+                      </h4>
+                      <p className="text-xs text-gray-500">
+                        By rstheme · 5,385 Views
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
 
-                  <p className="text-xs text-gray-500">
-                    By rstheme · 5,385 Views
+            {/* ================= TECHNOLOGY ================= */}
+            {openMega === "technology" && (
+              <div className="grid grid-cols-3 gap-10">
+                {/* FEATURED */}
+                <div>
+                  <h3 className="text-xl font-bold mb-4 text-black">Technology</h3>
+                  <img
+                    src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80"
+                    className="rounded-xl mb-4"
+                  />
+                  <p className="text-gray-600 text-sm">
+                    In today’s fast-paced digital world, Artificial Intelligence is empowering developers.
                   </p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
 
-        {/* TRENDING NEWS */}
-        <div>
-          <h4 className="font-semibold mb-4 text-black">
-            Trending News
-          </h4>
-
-          <div className="space-y-5">
-            {[
-              {
-                tag: "AI",
-                color: "bg-pink-500",
-                title: "Reen Tech Sustainable The Future Difference",
-              },
-              {
-                tag: "TECH",
-                color: "bg-orange-500",
-                title: "Grassroots Movements The Changing Artificial",
-              },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4">
-                <img
-                  src="https://images.unsplash.com/photo-1526378722484-cc5c510ff4c8?auto=format&fit=crop&w=300&q=80"
-                  className="w-20 h-20 rounded-lg object-cover"
-                />
-
+                {/* LATEST */}
                 <div>
-                  <span
-                    className={`inline-block mb-1 text-xs px-2 py-0.5 rounded text-white ${item.color}`}
-                  >
-                    {item.tag}
-                  </span>
+                  <h4 className="font-semibold mb-4 text-black">Latest News</h4>
+                  <div className="space-y-5">
+                    {["New Tech Startups Are Pushing Creating", "Green Tech Solutions Fighting Climate Change"].map((t, i) => (
+                      <div key={i} className="flex gap-4">
+                        <img
+                          src="https://images.unsplash.com/photo-1581091215367-59ab6c3c3f33?auto=format&fit=crop&w=300&q=80"
+                          className="w-20 h-20 rounded-lg object-cover"
+                        />
+                        <div>
+                          <h5 className="font-semibold text-sm text-black">{t}</h5>
+                          <p className="text-xs text-gray-500">By rstheme · 5,385 Views</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-                  <h5 className="font-semibold text-sm text-black leading-snug">
-                    {item.title}
-                  </h5>
-
-                  <p className="text-xs text-gray-500">
-                    By rstheme · 5,385 Views
-                  </p>
+                {/* TRENDING */}
+                <div>
+                  <h4 className="font-semibold mb-4 text-black">Trending News</h4>
+                  <div className="space-y-5">
+                    {["Reen Tech Sustainable The Future Difference", "Grassroots Movements The Changing Artificial"].map((t, i) => (
+                      <div key={i} className="flex gap-4">
+                        <img
+                          src="https://images.unsplash.com/photo-1526378722484-cc5c510ff4c8?auto=format&fit=crop&w=300&q=80"
+                          className="w-20 h-20 rounded-lg object-cover"
+                        />
+                        <div>
+                          <h5 className="font-semibold text-sm text-black">{t}</h5>
+                          <p className="text-xs text-gray-500">By rstheme · 5,385 Views</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            ))}
+            )}
+
           </div>
         </div>
-
-      </div>
-    )}
-  </div>
-</div>
-
       </header>
     </>
   )

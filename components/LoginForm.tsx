@@ -44,7 +44,7 @@ export default function LoginForm() {
       } else if (data.user.role === "recruiter") {
         router.push("/recruiter/jobs")
       } else {
-        router.push("/jobs")
+        router.push("/candidate/feed")
       }
     } catch (err) {
       setError("Something went wrong. Try again.")
