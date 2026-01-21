@@ -96,20 +96,33 @@ export default function CandidateFeedPage() {
               className="bg-white rounded-lg shadow-sm p-5"
             >
               {/* HEADER */}
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                  <Briefcase size={18} className="text-blue-600" />
-                </div>
+             {job.company?.slug ? (
+  <Link
+    href={`/company/${job.company.slug}`}
+    className="flex items-center gap-3 mb-3 group"
+  >
+    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+      <Briefcase size={18} className="text-blue-600" />
+    </div>
 
-                <div>
-                  <p className="font-semibold text-sm">
-                    {job.company?.name || "Company"}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Hiring · {job.employmentType || "Full-time"}
-                  </p>
-                </div>
-              </div>
+    <div>
+      <p className="font-semibold text-sm group-hover:underline">
+        {job.company.name}
+      </p>
+      <p className="text-xs text-gray-500">
+        Hiring · {job.employmentType || "Full-time"}
+      </p>
+    </div>
+  </Link>
+) : (
+  <div className="flex items-center gap-3 mb-3">
+    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+      <Briefcase size={18} className="text-blue-600" />
+    </div>
+    <p className="font-semibold text-sm">Company</p>
+  </div>
+)}
+
 
               {/* TITLE */}
               <h2 className="font-semibold mb-1">

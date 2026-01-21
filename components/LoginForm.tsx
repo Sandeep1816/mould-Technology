@@ -42,7 +42,7 @@ export default function LoginForm() {
       if (data.user.role === "admin") {
         router.push("/admin/dashboard")
       } else if (data.user.role === "recruiter") {
-        router.push("/recruiter/jobs")
+        router.push("/recruiter/dashboard")
       } else {
         router.push("/candidate/feed")
       }

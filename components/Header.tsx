@@ -15,11 +15,34 @@ import Image from "next/image"
 type MegaType = "technology" | "sports" | null
 type MobileDrop = "technology" | "sports" | "categories" | "pages" | null
 
+type User = {
+  id: number
+  email: string
+  role: "admin" | "recruiter" | "candidate"
+}
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [openMega, setOpenMega] = useState<MegaType>(null)
   const [mobileDrop, setMobileDrop] = useState<MobileDrop>(null)
   const [isSticky, setIsSticky] = useState(false)
+
+  /* ================= AUTH ================= */
+  const [user, setUser] = useState<User | null>(null)
+  const [openUserMenu, setOpenUserMenu] = useState(false)
+
+  useEffect(() => {
+    const stored = localStorage.getItem("user")
+    if (stored) {
+      setUser(JSON.parse(stored))
+    }
+  }, [])
+
+  function handleLogout() {
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    window.location.href = "/login"
+  }
 
   useEffect(() => {
     const onScroll = () => setIsSticky(window.scrollY > 5)
@@ -32,7 +55,7 @@ export default function Header() {
   return (
     <>
       {/* ================= TOP BAR ================= */}
-      <div className="w-full bg-[#171A1E] text-white">
+      <div className="w-full bg-[#0A2B57] text-white">
         <div className={`${container} h-[52px] flex items-center justify-between`}>
           <div className="flex items-center gap-4 text-sm">
             <span className="flex items-center gap-2 text-red-500 font-medium">
@@ -60,7 +83,6 @@ export default function Header() {
         }`}
       >
         <div className={`${container} h-[90px]`}>
-          {/* ✅ GRID UPDATED ONLY FOR LOGO SPACE */}
           <div className="grid grid-cols-[280px_1fr_auto] items-center h-full gap-10">
 
             {/* ================= LOGO ================= */}
@@ -108,14 +130,64 @@ export default function Header() {
               </Link>
             </nav>
 
-            {/* ================= ACTIONS ================= */}
-            <div className="flex items-center gap-4">
-              <Link
-                href="/login"
-                className="hidden md:flex h-10 px-5 bg-[#0073FF] text-white rounded-md text-sm font-semibold items-center"
-              >
-                Sign In
-              </Link>
+            {/* ================= AUTH ACTIONS ================= */}
+            <div className="flex items-center gap-4 relative">
+
+              {!user && (
+                <Link
+                  href="/login"
+                  className="hidden md:flex h-10 px-5 bg-[#0073FF] text-white rounded-md text-sm font-semibold items-center"
+                >
+                  Sign In
+                </Link>
+              )}
+
+              {user && (
+                <div className="relative">
+                  <button
+                    onClick={() => setOpenUserMenu(!openUserMenu)}
+                    className="flex items-center gap-3 bg-white/10 px-3 py-2 rounded-md text-white"
+                  >
+                    <img
+                      src="https://i.pravatar.cc/40"
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <div className="hidden md:block text-left">
+                      <p className="text-sm font-semibold">
+                        {user.email.split("@")[0]}
+                      </p>
+                      <p className="text-xs text-gray-300 capitalize">
+                        {user.role}
+                      </p>
+                    </div>
+                    <ChevronDown size={14} />
+                  </button>
+
+                  {openUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg text-black z-50 overflow-hidden">
+                      <Link
+                        href={
+                          user.role === "recruiter"
+                            ? "/recruiter/dashboard"
+                            : user.role === "admin"
+                            ? "/admin/dashboard"
+                            : "/candidate/feed"
+                        }
+                        className="block px-4 py-3 hover:bg-gray-100 text-sm"
+                      >
+                        Dashboard
+                      </Link>
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -132,42 +204,25 @@ export default function Header() {
           <div className="lg:hidden bg-[#121213] border-t border-white/10">
             <div className="px-6 py-6 space-y-4 text-white">
               <Link href="/" className="block">Home</Link>
-
-              {["technology", "sports", "categories", "pages"].map((item) => (
-                <div key={item}>
-                  <button
-                    onClick={() =>
-                      setMobileDrop(mobileDrop === item ? null : item as MobileDrop)
-                    }
-                    className="flex justify-between w-full items-center"
-                  >
-                    <span className="capitalize">{item}</span>
-                    <ChevronDown
-                      size={16}
-                      className={`transition ${
-                        mobileDrop === item ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {mobileDrop === item && (
-                    <div className="mt-2 ml-4 space-y-2 text-sm text-gray-300">
-                      <Link href="#">Sub Item 1</Link>
-                      <Link href="#">Sub Item 2</Link>
-                      <Link href="#">Sub Item 3</Link>
-                    </div>
-                  )}
-                </div>
-              ))}
-
               <Link href="/contact" className="block">Contact</Link>
 
-              <Link
-                href="/login"
-                className="block text-center bg-[#0073FF] py-2 rounded-md mt-4"
-              >
-                Sign In
-              </Link>
+              {!user && (
+                <Link
+                  href="/login"
+                  className="block text-center bg-[#0073FF] py-2 rounded-md mt-4"
+                >
+                  Sign In
+                </Link>
+              )}
+
+              {user && (
+                <button
+                  onClick={handleLogout}
+                  className="block w-full bg-red-600 py-2 rounded-md mt-4"
+                >
+                  Logout
+                </button>
+              )}
             </div>
           </div>
         )}
