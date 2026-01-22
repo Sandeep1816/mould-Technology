@@ -59,8 +59,9 @@ export default function RecruiterDashboard() {
         const token = localStorage.getItem("token")
 
         /* ===== DASHBOARD DATA ===== */
-        const dashboardRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/recruiter/dashboard`,
+       const dashboardRes = await fetch(
+  `${process.env.NEXT_PUBLIC_API_URL}/api/recruiters/dashboard`,
+
           {
             headers: { Authorization: `Bearer ${token}` },
           }

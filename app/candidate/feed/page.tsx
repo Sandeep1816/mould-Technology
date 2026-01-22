@@ -63,12 +63,14 @@ export default function CandidateFeedPage() {
   }
 
   return (
-    /* PAGE WRAPPER — NO SCROLL */
-    <div className="bg-[#f3f2ef] h-screen overflow-hidden">
-      <div className="max-w-[1200px] mx-auto px-4 py-6 grid grid-cols-12 gap-6 h-full">
+    /* PAGE WRAPPER
+       Mobile → normal scroll
+       Desktop → feed-only scroll */
+    <div className="bg-[#f3f2ef] min-h-screen lg:h-screen lg:overflow-hidden scrollbar-hide">
+      <div className="max-w-[1200px] mx-auto px-4 py-6 grid grid-cols-12 gap-6 lg:h-full">
 
         {/* ================= LEFT SIDEBAR ================= */}
-        <aside className="col-span-12 lg:col-span-3 space-y-4 sticky top-6 self-start">
+        <aside className="col-span-12 lg:col-span-3 space-y-4 lg:sticky lg:top-6 self-start">
 
           {/* PROFILE CARD */}
           <div className="bg-white rounded-lg overflow-hidden shadow-sm">
@@ -106,10 +108,8 @@ export default function CandidateFeedPage() {
           </div>
         </aside>
 
-        {/* ================= FEED (SCROLLABLE) ================= */}
-        <main className="col-span-12 lg:col-span-6 space-y-4 overflow-y-auto scrollbar-hide h-full pr-2">
-
-
+        {/* ================= FEED ================= */}
+        <main className="col-span-12 lg:col-span-6 space-y-4 lg:overflow-y-auto scrollbar-hide lg:h-full pr-2">
 
           {/* SEARCH BAR */}
           <div className="bg-white rounded-lg shadow-sm p-4">
@@ -217,7 +217,7 @@ export default function CandidateFeedPage() {
         </main>
 
         {/* ================= RIGHT SIDEBAR ================= */}
-        <aside className="col-span-12 lg:col-span-3 space-y-4 sticky top-6 self-start">
+        <aside className="col-span-12 lg:col-span-3 space-y-4 lg:sticky lg:top-6 self-start">
 
           <div className="bg-white rounded-lg shadow-sm p-4">
             <h4 className="font-semibold mb-3">

@@ -11,7 +11,7 @@ import FooterRecentPosts from "@/components/FooterRecentPosts"
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#121213] text-[#BEBEBE]">
+    <footer className="relative bg-[#0A2B57] text-[#BEBEBE]">
       {/* ================= FOOTER TOP ================= */}
       <div className="pt-[70px] pb-[80px]">
         {/* BOOTSTRAP CONTAINER */}
@@ -151,14 +151,14 @@ export default function Footer() {
 
             <div className="text-center">
               <p className="underline underline-offset-4">
-                Copyright © 2026 Nerio. Designed by{" "}
-                <Link
+                Copyright © 2026 Molding Trends{" "}
+                {/* <Link
                   href="https://rstheme.com"
                   target="_blank"
                   className="text-white"
                 >
                   RSTheme
-                </Link>
+                </Link> */}
                 .
               </p>
             </div>
