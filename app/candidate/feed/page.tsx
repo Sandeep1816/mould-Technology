@@ -8,19 +8,54 @@ import {
   Users,
 } from "lucide-react"
 import Link from "next/link"
+import { useCandidateGuard } from "@/lib/useCandidateGuard"
+
+type Job = {
+  id: number
+  title: string
+  slug: string
+  description: string
+  location: string
+  employmentType?: string
+  company?: {
+    name: string
+    slug: string
+  }
+}
 
 export default function CandidateFeedPage() {
-  const [jobs, setJobs] = useState<any[]>([])
+  // 🔐 Redirects if not candidate / not logged in
+  useCandidateGuard()
+
+  const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) setJobs(data)
-        else if (Array.isArray(data.jobs)) setJobs(data.jobs)
-      })
-      .finally(() => setLoading(false))
+    async function loadJobs() {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/jobs`,
+          { cache: "no-store" }
+        )
+
+        const data = await res.json()
+
+        if (Array.isArray(data)) {
+          setJobs(data)
+        } else if (Array.isArray(data.jobs)) {
+          setJobs(data.jobs)
+        } else {
+          setJobs([])
+        }
+      } catch (err) {
+        console.error("Failed to load jobs", err)
+        setJobs([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadJobs()
   }, [])
 
   if (loading) {
@@ -41,6 +76,7 @@ export default function CandidateFeedPage() {
               <img
                 src="https://i.pravatar.cc/100"
                 className="w-16 h-16 rounded-full border-2 border-white"
+                alt="Profile"
               />
               <h3 className="font-semibold mt-2">
                 Candidate
@@ -74,12 +110,13 @@ export default function CandidateFeedPage() {
         {/* ================= FEED ================= */}
         <main className="col-span-12 lg:col-span-6 space-y-4">
 
-          {/* START POST (STATIC UI) */}
+          {/* SEARCH BAR (UI ONLY) */}
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex items-center gap-3">
               <img
                 src="https://i.pravatar.cc/40"
                 className="w-10 h-10 rounded-full"
+                alt="User"
               />
               <input
                 disabled
@@ -89,42 +126,48 @@ export default function CandidateFeedPage() {
             </div>
           </div>
 
+          {/* EMPTY STATE */}
+          {jobs.length === 0 && (
+            <div className="bg-white rounded-lg shadow-sm p-6 text-sm text-gray-500">
+              No jobs available right now.
+            </div>
+          )}
+
           {/* JOB POSTS */}
           {jobs.map((job) => (
             <div
               key={job.id}
               className="bg-white rounded-lg shadow-sm p-5"
             >
-              {/* HEADER */}
-             {job.company?.slug ? (
-  <Link
-    href={`/company/${job.company.slug}`}
-    className="flex items-center gap-3 mb-3 group"
-  >
-    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-      <Briefcase size={18} className="text-blue-600" />
-    </div>
+              {/* COMPANY HEADER */}
+              {job.company?.slug ? (
+                <Link
+                  href={`/company/${job.company.slug}`}
+                  className="flex items-center gap-3 mb-3 group"
+                >
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <Briefcase size={18} className="text-blue-600" />
+                  </div>
 
-    <div>
-      <p className="font-semibold text-sm group-hover:underline">
-        {job.company.name}
-      </p>
-      <p className="text-xs text-gray-500">
-        Hiring · {job.employmentType || "Full-time"}
-      </p>
-    </div>
-  </Link>
-) : (
-  <div className="flex items-center gap-3 mb-3">
-    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-      <Briefcase size={18} className="text-blue-600" />
-    </div>
-    <p className="font-semibold text-sm">Company</p>
-  </div>
-)}
+                  <div>
+                    <p className="font-semibold text-sm group-hover:underline">
+                      {job.company.name}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Hiring · {job.employmentType || "Full-time"}
+                    </p>
+                  </div>
+                </Link>
+              ) : (
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <Briefcase size={18} className="text-blue-600" />
+                  </div>
+                  <p className="font-semibold text-sm">Company</p>
+                </div>
+              )}
 
-
-              {/* TITLE */}
+              {/* JOB TITLE */}
               <h2 className="font-semibold mb-1">
                 {job.title}
               </h2>
@@ -175,7 +218,6 @@ export default function CandidateFeedPage() {
         {/* ================= RIGHT SIDEBAR ================= */}
         <aside className="col-span-12 lg:col-span-3 space-y-4">
 
-          {/* NEWS */}
           <div className="bg-white rounded-lg shadow-sm p-4">
             <h4 className="font-semibold mb-3">
               Job Market News

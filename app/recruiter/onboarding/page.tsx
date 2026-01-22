@@ -16,10 +16,16 @@ export default function RecruiterOnboardingPage() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}")
-    if (user.role !== "recruiter") {
+
+    if (!user || user.role !== "recruiter") {
       router.push("/login")
     }
-  }, [])
+
+    // If already onboarded, skip
+    if (user?.isOnboarded && user?.companyId) {
+      router.push("/recruiter/dashboard")
+    }
+  }, [router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -28,7 +34,10 @@ export default function RecruiterOnboardingPage() {
 
     try {
       const token = localStorage.getItem("token")
-      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      if (!token) {
+        router.push("/login")
+        return
+      }
 
       // 1️⃣ Create company
       const companyRes = await fetch(
@@ -47,14 +56,15 @@ export default function RecruiterOnboardingPage() {
         }
       )
 
+      const company = await companyRes.json()
+
       if (!companyRes.ok) {
-        const data = await companyRes.json()
-        setError(data.error || "Failed to create company")
+        setError(company.error || "Failed to create company")
         return
       }
 
-      // 2️⃣ Update recruiter profile
-      await fetch(
+      // 2️⃣ Update recruiter profile + link company
+      const profileRes = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/recruiters/profile`,
         {
           method: "PUT",
@@ -65,14 +75,28 @@ export default function RecruiterOnboardingPage() {
           body: JSON.stringify({
             fullName,
             headline,
+            companyId: company.id, // ✅ CRITICAL
           }),
         }
       )
 
-      // 3️⃣ Redirect to recruiter dashboard
+      if (!profileRes.ok) {
+        setError("Failed to update recruiter profile")
+        return
+      }
+
+      // 3️⃣ Update localStorage user
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      const updatedUser = {
+        ...user,
+        companyId: company.id,
+        isOnboarded: true,
+      }
+      localStorage.setItem("user", JSON.stringify(updatedUser))
+
       router.push("/recruiter/dashboard")
     } catch (err) {
-      setError("Something went wrong")
+      setError("Something went wrong. Please try again.")
     } finally {
       setLoading(false)
     }

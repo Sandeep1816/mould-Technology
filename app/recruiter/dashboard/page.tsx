@@ -8,6 +8,7 @@ import {
   Clock,
   TrendingUp,
   Bell,
+  MapPin,
 } from "lucide-react"
 import { useRecruiterGuard } from "@/lib/useRecruiterGuard"
 
@@ -17,6 +18,14 @@ type RecentJob = {
   id: number
   title: string
   applications?: number
+}
+
+type Recruiter = {
+  username: string
+  fullName?: string
+  headline?: string
+  location?: string
+  avatarUrl?: string
 }
 
 type DashboardData = {
@@ -29,63 +38,69 @@ type DashboardData = {
 /* ================= PAGE ================= */
 
 export default function RecruiterDashboard() {
-  // ✅ HOOKS MUST ALWAYS RUN
+  // ⚠️ HOOKS MUST ALWAYS RUN
   const allowed = useRecruiterGuard()
 
-  const [data, setData] = useState<DashboardData>({
+  const [dashboard, setDashboard] = useState<DashboardData>({
     jobsCount: 0,
     applicationsCount: 0,
     shortlistedCount: 0,
     recentJobs: [],
   })
 
+  const [recruiter, setRecruiter] = useState<Recruiter | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!allowed) return
 
-    async function loadDashboard() {
+    async function loadAll() {
       try {
         const token = localStorage.getItem("token")
 
-        const res = await fetch(
+        /* ===== DASHBOARD DATA ===== */
+        const dashboardRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/recruiter/dashboard`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         )
 
-        if (!res.ok) throw new Error("Failed to load dashboard")
+        const dashboardData = await dashboardRes.json()
 
-        const result = await res.json()
-
-        setData({
-          jobsCount: result.jobsCount ?? 0,
-          applicationsCount: result.applicationsCount ?? 0,
-          shortlistedCount: result.shortlistedCount ?? 0,
-          recentJobs: result.recentJobs ?? [],
+        setDashboard({
+          jobsCount: dashboardData.jobsCount ?? 0,
+          applicationsCount: dashboardData.applicationsCount ?? 0,
+          shortlistedCount: dashboardData.shortlistedCount ?? 0,
+          recentJobs: dashboardData.recentJobs ?? [],
         })
+
+        /* ===== RECRUITER PROFILE ===== */
+        const profileRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/recruiters/me`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+
+        const recruiterData = await profileRes.json()
+        setRecruiter(recruiterData)
       } catch (err) {
-        console.error("Dashboard error:", err)
+        console.error("Dashboard load error:", err)
       } finally {
         setLoading(false)
       }
     }
 
-    loadDashboard()
+    loadAll()
   }, [allowed])
 
   /* ================= RENDER GUARDS ================= */
 
-  if (!allowed) {
-    return null // redirect handled inside useRecruiterGuard
-  }
+  if (!allowed) return null
+  if (loading) return <div className="p-10">Loading dashboard...</div>
 
-  if (loading) {
-    return <div className="p-10">Loading dashboard...</div>
-  }
+  /* ================= UI ================= */
 
   return (
     <div className="min-h-screen bg-[#f6f8fc] px-6 py-10">
@@ -97,7 +112,7 @@ export default function RecruiterDashboard() {
           {/* HEADER */}
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-900">
-              Recruiter Dashboard
+              Welcome{recruiter?.fullName ? `, ${recruiter.fullName}` : ""}
             </h1>
             <span className="text-sm text-gray-500">
               {new Date().toDateString()}
@@ -108,19 +123,19 @@ export default function RecruiterDashboard() {
           <div className="grid md:grid-cols-3 gap-6">
             <KpiCard
               title="Applications"
-              value={data.applicationsCount}
+              value={dashboard.applicationsCount}
               icon={<Users />}
               color="bg-purple-500"
             />
             <KpiCard
               title="Shortlisted"
-              value={data.shortlistedCount}
+              value={dashboard.shortlistedCount}
               icon={<TrendingUp />}
               color="bg-cyan-500"
             />
             <KpiCard
               title="Active Jobs"
-              value={data.jobsCount}
+              value={dashboard.jobsCount}
               icon={<Clock />}
               color="bg-orange-400"
             />
@@ -132,34 +147,22 @@ export default function RecruiterDashboard() {
               href="/recruiter/jobs"
               className="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                  <Briefcase className="text-blue-600" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold">My Jobs</h2>
-                  <p className="text-sm text-gray-500">
-                    View and manage your posted jobs
-                  </p>
-                </div>
-              </div>
+              <ActionCard
+                icon={<Briefcase className="text-blue-600" />}
+                title="My Jobs"
+                desc="View and manage your posted jobs"
+              />
             </Link>
 
             <Link
               href="/recruiter/jobs/new"
               className="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                  <TrendingUp className="text-green-600" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold">Post a Job</h2>
-                  <p className="text-sm text-gray-500">
-                    Create a new job listing
-                  </p>
-                </div>
-              </div>
+              <ActionCard
+                icon={<TrendingUp className="text-green-600" />}
+                title="Post a Job"
+                desc="Create a new job listing"
+              />
             </Link>
           </div>
 
@@ -169,14 +172,12 @@ export default function RecruiterDashboard() {
               Recent Job Posts
             </h2>
 
-            {data.recentJobs.length === 0 ? (
-              <p className="text-sm text-gray-500">
-                No recent jobs found
-              </p>
+            {dashboard.recentJobs.length === 0 ? (
+              <p className="text-sm text-gray-500">No recent jobs found</p>
             ) : (
               <table className="w-full text-sm">
                 <tbody className="divide-y">
-                  {data.recentJobs.map((job) => (
+                  {dashboard.recentJobs.map((job) => (
                     <tr key={job.id}>
                       <td className="py-3 font-medium">{job.title}</td>
                       <td className="py-3 text-right">
@@ -192,17 +193,42 @@ export default function RecruiterDashboard() {
 
         {/* ================= SIDEBAR ================= */}
         <aside className="col-span-12 xl:col-span-3 space-y-6">
+
+          {/* PROFILE CARD */}
           <div className="bg-white rounded-2xl shadow p-6 text-center">
             <img
-              src="https://i.pravatar.cc/100"
+              src={recruiter?.avatarUrl || "https://i.pravatar.cc/100"}
               className="w-20 h-20 rounded-full mx-auto mb-3"
             />
-            <h3 className="font-semibold">Recruiter</h3>
-            <p className="text-sm text-gray-500">
-              Hiring Manager
-            </p>
+
+            <h3 className="font-semibold">
+              {recruiter?.fullName || recruiter?.username}
+            </h3>
+
+            {recruiter?.headline && (
+              <p className="text-sm text-gray-500">
+                {recruiter.headline}
+              </p>
+            )}
+
+            {recruiter?.location && (
+              <p className="text-xs text-gray-400 flex items-center justify-center gap-1 mt-1">
+                <MapPin size={12} />
+                {recruiter.location}
+              </p>
+            )}
+
+            {recruiter?.username && (
+              <Link
+                href={`/recruiter/${recruiter.username}`}
+                className="inline-block mt-4 text-sm text-blue-600 hover:underline"
+              >
+                View Public Profile
+              </Link>
+            )}
           </div>
 
+          {/* ACTIVITY */}
           <div className="bg-white rounded-2xl shadow p-6">
             <h3 className="font-semibold mb-4 flex items-center gap-2">
               <Bell size={16} /> Activity
@@ -219,7 +245,7 @@ export default function RecruiterDashboard() {
   )
 }
 
-/* ================= COMPONENT ================= */
+/* ================= COMPONENTS ================= */
 
 function KpiCard({
   title,
@@ -242,6 +268,28 @@ function KpiCard({
         className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${color}`}
       >
         {icon}
+      </div>
+    </div>
+  )
+}
+
+function ActionCard({
+  icon,
+  title,
+  desc,
+}: {
+  icon: React.ReactNode
+  title: string
+  desc: string
+}) {
+  return (
+    <div className="flex items-center gap-4">
+      <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+        {icon}
+      </div>
+      <div>
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <p className="text-sm text-gray-500">{desc}</p>
       </div>
     </div>
   )

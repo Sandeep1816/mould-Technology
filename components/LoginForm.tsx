@@ -38,14 +38,21 @@ export default function LoginForm() {
       localStorage.setItem("token", data.token)
       localStorage.setItem("user", JSON.stringify(data.user))
 
-      // 🔁 Redirect by role
-      if (data.user.role === "admin") {
-        router.push("/admin/dashboard")
-      } else if (data.user.role === "recruiter") {
-        router.push("/recruiter/dashboard")
-      } else {
-        router.push("/candidate/feed")
-      }
+     // 🔁 Redirect by role
+if (data.user.role === "admin") {
+  router.push("/admin/dashboard")
+} 
+else if (data.user.role === "recruiter") {
+  router.push("/recruiter/dashboard")
+} 
+else if (data.user.role === "candidate") {
+  if (!data.user.isOnboarded) {
+    router.push("/candidate/onboarding")
+  } else {
+    router.push("/candidate/feed")
+  }
+}
+
     } catch (err) {
       setError("Something went wrong. Try again.")
     } finally {
