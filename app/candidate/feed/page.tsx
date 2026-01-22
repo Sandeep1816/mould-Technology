@@ -24,7 +24,7 @@ type Job = {
 }
 
 export default function CandidateFeedPage() {
-  // 🔐 Redirects if not candidate / not logged in
+  // 🔐 Redirect if not candidate
   useCandidateGuard()
 
   const [jobs, setJobs] = useState<Job[]>([])
@@ -63,11 +63,12 @@ export default function CandidateFeedPage() {
   }
 
   return (
-    <div className="bg-[#f3f2ef] min-h-screen">
-      <div className="max-w-[1200px] mx-auto px-4 py-6 grid grid-cols-12 gap-6">
+    /* PAGE WRAPPER — NO SCROLL */
+    <div className="bg-[#f3f2ef] h-screen overflow-hidden">
+      <div className="max-w-[1200px] mx-auto px-4 py-6 grid grid-cols-12 gap-6 h-full">
 
         {/* ================= LEFT SIDEBAR ================= */}
-        <aside className="col-span-12 lg:col-span-3 space-y-4">
+        <aside className="col-span-12 lg:col-span-3 space-y-4 sticky top-6 self-start">
 
           {/* PROFILE CARD */}
           <div className="bg-white rounded-lg overflow-hidden shadow-sm">
@@ -78,9 +79,7 @@ export default function CandidateFeedPage() {
                 className="w-16 h-16 rounded-full border-2 border-white"
                 alt="Profile"
               />
-              <h3 className="font-semibold mt-2">
-                Candidate
-              </h3>
+              <h3 className="font-semibold mt-2">Candidate</h3>
               <p className="text-xs text-gray-500">
                 Aspiring Professional
               </p>
@@ -107,10 +106,12 @@ export default function CandidateFeedPage() {
           </div>
         </aside>
 
-        {/* ================= FEED ================= */}
-        <main className="col-span-12 lg:col-span-6 space-y-4">
+        {/* ================= FEED (SCROLLABLE) ================= */}
+        <main className="col-span-12 lg:col-span-6 space-y-4 overflow-y-auto scrollbar-hide h-full pr-2">
 
-          {/* SEARCH BAR (UI ONLY) */}
+
+
+          {/* SEARCH BAR */}
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex items-center gap-3">
               <img
@@ -216,7 +217,7 @@ export default function CandidateFeedPage() {
         </main>
 
         {/* ================= RIGHT SIDEBAR ================= */}
-        <aside className="col-span-12 lg:col-span-3 space-y-4">
+        <aside className="col-span-12 lg:col-span-3 space-y-4 sticky top-6 self-start">
 
           <div className="bg-white rounded-lg shadow-sm p-4">
             <h4 className="font-semibold mb-3">
