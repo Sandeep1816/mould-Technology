@@ -16,6 +16,7 @@ export type Post = {
   title: string
   slug: string
   excerpt?: string | null     // ✅ correct
+  badge?: string | null
   content: string
   imageUrl?: string | null
   publishedAt?: string | null

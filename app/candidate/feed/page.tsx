@@ -81,7 +81,7 @@ export default function CandidateFeedPage() {
                 className="w-16 h-16 rounded-full border-2 border-white"
                 alt="Profile"
               />
-              <h3 className="font-semibold mt-2">Candidate</h3>
+              <h3 className="font-semibold mt-2">Candidate{}</h3>
               <p className="text-xs text-gray-500">
                 Aspiring Professional
               </p>
@@ -103,7 +103,12 @@ export default function CandidateFeedPage() {
           <div className="bg-white rounded-lg shadow-sm p-4 text-sm space-y-2">
             <p className="font-medium">Quick links</p>
             <p className="text-gray-600">Saved jobs</p>
-            <p className="text-gray-600">My applications</p>
+            <Link
+  href="/candidate/applications"
+  className="text-gray-600 hover:underline block"
+>
+  My applications
+</Link>
             <p className="text-gray-600">Job alerts</p>
           </div>
         </aside>

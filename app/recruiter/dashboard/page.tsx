@@ -235,9 +235,19 @@ export default function RecruiterDashboard() {
               <Bell size={16} /> Activity
             </h3>
             <ul className="text-sm space-y-3 text-gray-600">
-              <li>New applications received</li>
+     <Link
+  href="/recruiter/jobs"
+  className="flex items-center gap-1 text-sm text-gray-600 hover:underline"
+>
+  <Users size={14} />
+  View Applicants
+</Link>
+
+
+              {/* <li>New applications received</li> */}
               <li>Job post nearing expiry</li>
               <li>Candidates shortlisted</li>
+
             </ul>
           </div>
         </aside>
