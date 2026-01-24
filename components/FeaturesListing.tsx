@@ -1,25 +1,28 @@
 "use client"
 
 import Link from "next/link"
-import { Post } from "@/types/Post"
+import type { Post } from "@/types/Post"
 
 type Props = {
   posts: Post[]
 }
 
-export default function ProductsListing({ posts }: Props) {
+export default function FeaturesListing({ posts }: Props) {
   return (
     <section className="max-w-7xl mx-auto px-6 py-10">
-      {/* Page Title */}
+      {/* PAGE TITLE */}
       <h1
         className="text-[36px] font-bold text-[#003B5C] mb-10"
-        style={{ fontFamily: "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif" }}
+        style={{
+          fontFamily:
+            "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif",
+        }}
       >
-        Products
+        Features
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10">
-        {/* LEFT – PRODUCT LIST */}
+        {/* LEFT – FEATURE LIST */}
         <div className="space-y-10">
           {posts.map((post) => {
             const imageUrl =
@@ -46,37 +49,48 @@ export default function ProductsListing({ posts }: Props) {
                 <img
                   src={imageUrl}
                   alt={post.title}
-                  className="w-full h-[180px] object-contain border"
+                  className="w-full h-[180px] object-contain border bg-white"
                 />
 
                 {/* CONTENT */}
                 <div>
                   {/* BADGE + DATE */}
                   <div className="flex items-center gap-3 mb-2">
-                    {post.badge && (
-                      <span className="bg-gray-700 text-white text-xs px-2 py-1 font-bold uppercase">
-                        {post.badge}
-                      </span>
-                    )}
-                    <span className="text-xs text-gray-500">{date}</span>
+                    <span className="bg-gray-700 text-white text-xs px-2 py-1 font-bold uppercase">
+                      {post.badge || "Feature"}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {date}
+                    </span>
                   </div>
 
+                  {/* TITLE */}
                   <h2
                     className="text-[22px] font-bold text-gray-900 leading-snug mb-3"
-                    style={{ fontFamily: "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif" }}
+                    style={{
+                      fontFamily:
+                        "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
                   >
                     {post.title}
                   </h2>
 
+                  {/* EXCERPT */}
                   <p className="text-gray-600 text-[15px] leading-relaxed mb-4">
                     {post.excerpt ||
-                      post.content?.substring(0, 160) + "..."}
+                      post.content
+                        ?.replace(/<[^>]+>/g, "")
+                        .substring(0, 160) + "..."}
                   </p>
 
+                  {/* CTA */}
                   <Link
                     href={`/post/${post.slug}`}
                     className="text-[#0072BC] font-bold text-sm uppercase hover:underline"
-                    style={{ fontFamily: "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif" }}
+                    style={{
+                      fontFamily:
+                        "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif",
+                    }}
                   >
                     Read More →
                   </Link>
@@ -84,9 +98,15 @@ export default function ProductsListing({ posts }: Props) {
               </article>
             )
           })}
+
+          {!posts.length && (
+            <p className="text-gray-500">
+              No feature articles available.
+            </p>
+          )}
         </div>
 
-        {/* RIGHT – ADS (UNCHANGED) */}
+        {/* RIGHT – ADS (SAME AS PRODUCTS) */}
         <aside className="space-y-6 sticky top-24 h-fit">
           <img src="/advertisement-banner.jpg" className="w-full border" />
           <img src="/advertisement-banner.jpg" className="w-full border" />

@@ -2,11 +2,9 @@
 
 import Link from "next/link"
 import {
-  Search,
   Menu,
   X,
   ChevronDown,
-  Calendar,
   ArrowRight,
 } from "lucide-react"
 import { useState, useEffect } from "react"
@@ -45,7 +43,7 @@ export default function Header() {
   }
 
   useEffect(() => {
-    const onScroll = () => setIsSticky(window.scrollY > 5)
+    const onScroll = () => setIsSticky(window.scrollY > 10)
     window.addEventListener("scroll", onScroll)
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
@@ -54,40 +52,27 @@ export default function Header() {
 
   return (
     <>
-      {/* ================= TOP BAR ================= */}
-      <div className="w-full bg-[#0A2B57] text-white">
-        <div className={`${container} h-[52px] flex items-center justify-between`}>
-          <div className="flex items-center gap-4 text-sm">
-            <span className="flex items-center gap-2 text-red-500 font-medium">
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              Live News
-            </span>
-            <span className="text-[#BEBEBE] hidden md:block">
-              New Ideas. Proven Practices in Mold Manufacturing
-            </span>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center gap-2 text-sm text-[#BEBEBE]">
-              <Calendar size={14} />
-              AUGUST 5, 2025
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* ================= HEADER ================= */}
       <header
-        className={`w-full z-50 transition-all ${
-          isSticky ? "fixed top-0 bg-[#0A2B57] shadow-lg" : "relative bg-[#0A2B57]"
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+          isSticky ? "bg-[#0A2B57] shadow-lg" : "bg-[#0A2B57]"
         }`}
       >
-        <div className={`${container} h-[90px]`}>
+        {/* HEIGHT SHRINKS ON SCROLL */}
+        <div
+          className={`${container} ${
+            isSticky ? "h-[96px]" : "h-[142px]"
+          } transition-all duration-300`}
+        >
           <div className="grid grid-cols-[280px_1fr_auto] items-center h-full gap-10">
 
             {/* ================= LOGO ================= */}
             <Link href="/" className="flex items-center">
-              <div className="w-[260px]">
+              <div
+                className={`transition-all duration-300 ${
+                  isSticky ? "w-[200px]" : "w-[260px]"
+                }`}
+              >
                 <Image
                   src="/images/moldinglogo2.png"
                   alt="Logo"
@@ -130,7 +115,7 @@ export default function Header() {
               </Link>
             </nav>
 
-            {/* ================= AUTH ACTIONS ================= */}
+            {/* ================= AUTH ACTIONS (UNCHANGED) ================= */}
             <div className="flex items-center gap-4 relative">
 
               {!user && (
@@ -241,7 +226,6 @@ export default function Header() {
               <>
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-bold text-black">Sports</h3>
-
                   <Link
                     href="/sports"
                     className="flex items-center gap-1 text-sm font-semibold text-black hover:underline"
@@ -251,19 +235,14 @@ export default function Header() {
                 </div>
 
                 <div className="grid grid-cols-4 gap-6">
-                  {[
-                    "Local Team Clinches The National Championship.",
-                    "Soccer League Playoffs Heat Up With Surprise Upsets",
-                    "Rising Star Dominates Tennis Unbeaten Streak",
-                    "Soccer Legend Announces From International Play",
-                  ].map((title, i) => (
+                  {[1,2,3,4].map((i) => (
                     <div key={i} className="space-y-3">
                       <img
-                        src="https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?auto=format&fit=crop&w=800&q=80"
+                        src="https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf"
                         className="h-[160px] w-full rounded-xl object-cover"
                       />
                       <h4 className="font-semibold text-[15px] text-black">
-                        {title}
+                        Sample Sports Headline
                       </h4>
                       <p className="text-xs text-gray-500">
                         By rstheme · 5,385 Views
@@ -277,11 +256,10 @@ export default function Header() {
             {/* ================= TECHNOLOGY ================= */}
             {openMega === "technology" && (
               <div className="grid grid-cols-3 gap-10">
-                {/* FEATURED */}
                 <div>
                   <h3 className="text-xl font-bold mb-4 text-black">Technology</h3>
                   <img
-                    src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80"
+                    src="https://images.unsplash.com/photo-1518770660439-4636190af475"
                     className="rounded-xl mb-4"
                   />
                   <p className="text-gray-600 text-sm">
@@ -289,38 +267,44 @@ export default function Header() {
                   </p>
                 </div>
 
-                {/* LATEST */}
                 <div>
                   <h4 className="font-semibold mb-4 text-black">Latest News</h4>
                   <div className="space-y-5">
-                    {["New Tech Startups Are Pushing Creating", "Green Tech Solutions Fighting Climate Change"].map((t, i) => (
+                    {[1,2].map((i) => (
                       <div key={i} className="flex gap-4">
                         <img
-                          src="https://images.unsplash.com/photo-1581091215367-59ab6c3c3f33?auto=format&fit=crop&w=300&q=80"
+                          src="https://images.unsplash.com/photo-1581091215367-59ab6c3c3f33"
                           className="w-20 h-20 rounded-lg object-cover"
                         />
                         <div>
-                          <h5 className="font-semibold text-sm text-black">{t}</h5>
-                          <p className="text-xs text-gray-500">By rstheme · 5,385 Views</p>
+                          <h5 className="font-semibold text-sm text-black">
+                            Latest tech article headline
+                          </h5>
+                          <p className="text-xs text-gray-500">
+                            By rstheme · 5,385 Views
+                          </p>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* TRENDING */}
                 <div>
                   <h4 className="font-semibold mb-4 text-black">Trending News</h4>
                   <div className="space-y-5">
-                    {["Reen Tech Sustainable The Future Difference", "Grassroots Movements The Changing Artificial"].map((t, i) => (
+                    {[1,2].map((i) => (
                       <div key={i} className="flex gap-4">
                         <img
-                          src="https://images.unsplash.com/photo-1526378722484-cc5c510ff4c8?auto=format&fit=crop&w=300&q=80"
+                          src="https://images.unsplash.com/photo-1526378722484-cc5c510ff4c8"
                           className="w-20 h-20 rounded-lg object-cover"
                         />
                         <div>
-                          <h5 className="font-semibold text-sm text-black">{t}</h5>
-                          <p className="text-xs text-gray-500">By rstheme · 5,385 Views</p>
+                          <h5 className="font-semibold text-sm text-black">
+                            Trending tech article
+                          </h5>
+                          <p className="text-xs text-gray-500">
+                            By rstheme · 5,385 Views
+                          </p>
                         </div>
                       </div>
                     ))}

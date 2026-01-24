@@ -51,9 +51,9 @@ export default function ArticlesIssueGrid({ posts }: { posts: Post[] }) {
 
         {/* ADS */}
         <aside className="space-y-6">
-          <img src="/ads/ad1.jpg" className="w-full border" />
-          <img src="/ads/ad2.jpg" className="w-full border" />
-          <img src="/ads/ad3.jpg" className="w-full border" />
+          <img src="/advertisement-banner.jpg" className="w-full border" />
+          <img src="/advertisement-banner.jpg" className="w-full border" />
+          <img src="/advertisement-banner.jpg" className="w-full border" />
         </aside>
       </div>
     </section>
