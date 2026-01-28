@@ -16,10 +16,18 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+
   images: {
-    domains: ['source.unsplash.com', 'randomuser.me'],
-    unoptimized: true,
+    unoptimized: true, // OK for dev & external images
+    domains: [
+      "images.unsplash.com",   // ✅ REQUIRED
+      "source.unsplash.com",
+      "upload.wikimedia.org",
+      "placehold.co",
+      "randomuser.me",
+    ],
   },
 }
 
 export default nextConfig
+

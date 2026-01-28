@@ -193,3 +193,14 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+.input {
+  @apply w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black;
+}
+
+.label {
+  @apply block text-sm font-medium mb-1;
+}
+
+.error {
+  @apply text-red-600 text-sm mt-1;
+}

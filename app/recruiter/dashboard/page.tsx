@@ -28,11 +28,21 @@ type Recruiter = {
   avatarUrl?: string
 }
 
+type Directory = {
+  id: number
+  name: string
+  slug: string
+  status: "PENDING" | "APPROVED" | "REJECTED"
+  isLiveEditable: boolean
+}
+
+
 type DashboardData = {
   jobsCount: number
   applicationsCount: number
   shortlistedCount: number
   recentJobs: RecentJob[]
+  directories?: Directory[]
 }
 
 /* ================= PAGE ================= */
@@ -190,6 +200,73 @@ export default function RecruiterDashboard() {
               </table>
             )}
           </div>
+
+          {/* ================= DIRECTORIES ================= */}
+<div className="bg-white rounded-2xl shadow p-6">
+  <div className="flex items-center justify-between mb-4">
+    <h2 className="font-semibold text-lg">My Directories</h2>
+
+    <Link
+      href="/recruiter/directories/new"
+      className="text-sm bg-black text-white px-4 py-2 rounded"
+    >
+      + Add Directory
+    </Link>
+  </div>
+
+  {!dashboard.directories || dashboard.directories.length === 0 ? (
+    <p className="text-sm text-gray-500">
+      You haven’t added any directories yet.
+    </p>
+  ) : (
+    <table className="w-full text-sm">
+      <tbody className="divide-y">
+        {dashboard.directories.map((dir) => (
+          <tr key={dir.id}>
+            <td className="py-3">
+              <div className="font-medium">{dir.name}</div>
+              <div className="text-xs text-gray-400">
+                /suppliers/{dir.slug}
+              </div>
+            </td>
+
+            <td className="py-3">
+              {dir.status === "PENDING" && (
+                <span className="text-yellow-600 text-xs font-semibold">
+                  Pending Approval
+                </span>
+              )}
+              {dir.status === "APPROVED" && (
+                <span className="text-green-600 text-xs font-semibold">
+                  Approved
+                </span>
+              )}
+              {dir.status === "REJECTED" && (
+                <span className="text-red-600 text-xs font-semibold">
+                  Rejected
+                </span>
+              )}
+            </td>
+
+            <td className="py-3 text-right">
+              {dir.isLiveEditable && (
+                <Link
+                  href={`/recruiter/directories/${dir.id}/edit`}
+                  className="text-blue-600 hover:underline text-sm"
+                >
+                  Edit
+                </Link>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</div>
+
+
+
         </main>
 
         {/* ================= SIDEBAR ================= */}

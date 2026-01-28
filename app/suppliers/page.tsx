@@ -1,64 +1,66 @@
-import SupplierFilters from "@/components/suppliers/SupplierFilters"
-import SupplierList from "@/components/suppliers/SupplierList"
-import SupplierAds from "@/components/suppliers/SupplierAds"
-import { Supplier } from "@/types/Supplier"
-import type { Post } from "@/types/Post"
+"use client"
 
-export default async function SuppliersPage() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`,
-    { cache: "no-store" }
-  )
+import { useEffect, useState } from "react"
+import SupplierRowCard from "./SupplierRowCard"
+import SupplierFilters from "./SupplierFilters"
+import SupplierAds from "./SupplierAds"
 
-  const data = await res.json()
-  const posts: Post[] = data.data || data
+type Supplier = {
+  id: number
+  name: string
+  slug: string
+  description: string
+  location?: string
+  logoUrl?: string
+}
 
-  const getCategorySlug = (post: Post) =>
-    typeof post.category === "object"
-      ? post.category?.slug?.toLowerCase()
-      : String(post.category || "").toLowerCase()
+export default function SuppliersPage() {
+  const [suppliers, setSuppliers] = useState<Supplier[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // ✅ FILTER SUPPLIER BLOGS
-  const supplierPosts: Supplier[] = posts
-    .filter((p) => getCategorySlug(p).includes("supplier"))
-    .map((p) => ({
-      id: p.id,
-      name: p.title,
-      description: p.excerpt || p.content?.slice(0, 200) || "",
-      logo: p.imageUrl
-        ? p.imageUrl.startsWith("http")
-          ? p.imageUrl
-          : `${process.env.NEXT_PUBLIC_API_URL}${p.imageUrl}`
-        : undefined,
-
-      // ✅ SAFE FALLBACKS (NO TS ERRORS)
-      location: "",
-      socials: {},
-    }))
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/suppliers`)
+      .then(res => res.json())
+      .then(setSuppliers)
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-6">
-      {/* Hero */}
-      <div className="relative mb-6">
-        <img
-          src="/suppliers-hero.jpg"
-          className="w-full h-[160px] object-cover"
-        />
-        <h1 className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold">
-          Find a MoldMaking Technology Supplier
-        </h1>
+    <div className="bg-[#f5f6f7]">
+
+      {/* HERO */}
+      <div className="bg-[url('/supplier-hero.jpg')] bg-cover bg-center h-[220px] flex items-center">
+        <div className="max-w-[1400px] mx-auto px-6">
+          <h1 className="text-black text-4xl font-bold">
+            Find a MoldMaking Technology Supplier
+          </h1>
+        </div>
       </div>
 
-      {/* Breadcrumb */}
-      <div className="text-sm text-gray-500 mb-4">
-        Home <span className="mx-1">›</span> Find a Supplier
-      </div>
+      {/* GRID */}
+      <div className="max-w-[1400px] mx-auto px-6 py-8 grid grid-cols-12 gap-8">
 
-      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_300px] gap-8">
-        <SupplierFilters />
-        <SupplierList suppliers={supplierPosts} />
-        <SupplierAds />
+        {/* LEFT FILTERS */}
+        <aside className="col-span-3">
+          <SupplierFilters />
+        </aside>
+
+        {/* RESULTS */}
+        <main className="col-span-6 space-y-6">
+          {loading ? (
+            <p>Loading suppliers...</p>
+          ) : (
+            suppliers.map(s => (
+              <SupplierRowCard key={s.id} supplier={s} />
+            ))
+          )}
+        </main>
+
+        {/* RIGHT ADS */}
+        <aside className="col-span-3">
+          <SupplierAds />
+        </aside>
       </div>
-    </main>
+    </div>
   )
 }
