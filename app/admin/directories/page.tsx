@@ -31,8 +31,8 @@ export default function AdminDirectoriesPage() {
 
       const data = await res.json()
 
-      // ✅ FIX IS HERE
-      setDirectories(data.directories ?? [])
+      // ✅ BACKEND RETURNS ARRAY
+      setDirectories(Array.isArray(data) ? data : [])
 
       setLoading(false)
     }

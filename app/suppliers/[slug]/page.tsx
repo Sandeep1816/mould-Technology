@@ -1,3 +1,4 @@
+import VideoGallery from "@/components/VideoGallery"
 import Link from "next/link"
 
 type Supplier = {
@@ -143,30 +144,11 @@ export default async function SupplierShowroomPage({
               </div>
 
               {/* VIDEO GALLERY */}
-              {supplier.videoGallery && supplier.videoGallery.length > 0 && (
-                <div>
-                  <h2 className="font-semibold text-lg mb-4">
-                    Video Gallery
-                  </h2>
+            {/* VIDEO GALLERY */}
+{supplier.videoGallery && supplier.videoGallery.length > 0 && (
+  <VideoGallery videos={supplier.videoGallery} />
+)}
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {supplier.videoGallery.map((url, idx) => {
-                      const videoId =
-                        url.split("v=")[1]?.split("&")[0] ||
-                        url.split("/").pop()
-
-                      return (
-                        <iframe
-                          key={idx}
-                          className="w-full aspect-video rounded border"
-                          src={`https://www.youtube.com/embed/${videoId}`}
-                          allowFullScreen
-                        />
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
             </section>
           </div>
         </div>

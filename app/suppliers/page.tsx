@@ -28,25 +28,63 @@ export default function SuppliersPage() {
   return (
     <div className="bg-[#f5f6f7]">
 
-      {/* HERO */}
-      <div className="bg-[url('/supplier-hero.jpg')] bg-cover bg-center h-[220px] flex items-center">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <h1 className="text-black text-4xl font-bold">
-            Find a MoldMaking Technology Supplier
-          </h1>
-        </div>
-      </div>
-
       {/* GRID */}
-      <div className="max-w-[1400px] mx-auto px-6 py-8 grid grid-cols-12 gap-8">
+      <div className="max-w-[1400px] mx-auto px-6 py-6 grid grid-cols-12 gap-8">
 
         {/* LEFT FILTERS */}
         <aside className="col-span-3">
           <SupplierFilters />
         </aside>
 
-        {/* RESULTS */}
+        {/* CENTER CONTENT */}
         <main className="col-span-6 space-y-6">
+
+       {/* HERO */}
+<div className="relative w-full h-[220px]">
+  <img
+    src="/images/search-landscape.jpg"
+    alt="Find a MoldMaking Technology Supplier"
+    className="w-full h-full object-cover"
+  />
+
+  {/* Dark overlay for readability */}
+  <div className="absolute inset-0 bg-black/40" />
+
+  {/* Centered text */}
+  <div className="absolute inset-0 flex items-center justify-center">
+    <h1 className="text-white text-4xl font-bold tracking-wide text-center">
+      Find a MoldMaking Technology Supplier
+    </h1>
+  </div>
+</div>
+
+
+          {/* BREADCRUMB */}
+          <div className="text-sm text-gray-600">
+            <span className="underline cursor-pointer">Home</span>
+            <span className="mx-2">›</span>
+            <span className="font-medium text-gray-800">Find a Supplier</span>
+          </div>
+
+          {/* SEARCH HEADER */}
+          <div className="flex items-start justify-between">
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b3954]">
+                Search Results
+              </h2>
+              <p className="text-gray-600 mt-1">
+                {suppliers.length} filtered results
+              </p>
+            </div>
+
+            <div>
+              <select className="border px-3 py-2 text-sm">
+                <option>Alphabetical</option>
+              </select>
+            </div>
+          </div>
+
+          {/* RESULTS */}
           {loading ? (
             <p>Loading suppliers...</p>
           ) : (
