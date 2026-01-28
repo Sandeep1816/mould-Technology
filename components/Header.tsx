@@ -103,7 +103,8 @@ export default function Header() {
               </button>
 
               <button className="flex items-center gap-1 hover:text-[#0073FF]">
-                Directory <ChevronDown size={14} />
+                {/* Directory <ChevronDown size={14} /> */}
+                 <Link href="/suppliers" className="hover:text-[#0073FF]">Directory</Link>
               </button>
 
               <button className="flex items-center gap-1 hover:text-[#0073FF]">

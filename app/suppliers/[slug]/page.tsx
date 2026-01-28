@@ -1,5 +1,4 @@
 import VideoGallery from "@/components/VideoGallery"
-import Link from "next/link"
 
 type Supplier = {
   name: string
@@ -41,7 +40,7 @@ export default async function SupplierShowroomPage({
     <div className="bg-[#f5f6f7] min-h-screen">
 
       {/* ================= HERO ================= */}
-      <div className="relative h-[260px] bg-black">
+      <div className="relative h-[300px] bg-black">
         {supplier.coverImageUrl && (
           <img
             src={supplier.coverImageUrl}
@@ -52,32 +51,32 @@ export default async function SupplierShowroomPage({
       </div>
 
       {/* ================= MAIN CARD ================= */}
-      <div className="max-w-6xl mx-auto px-6 -mt-24">
-        <div className="bg-white rounded-lg shadow p-8">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 -mt-36">
+        <div className="bg-white rounded-lg shadow p-10 border-t-4 border-red-700">
 
           {/* HEADER */}
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-center text-[#0b3954]">
             {supplier.name}
           </h1>
 
           {supplier.location && (
-            <p className="text-gray-500 mt-1">
+            <p className="text-gray-500 text-center mt-2">
               {supplier.location}
             </p>
           )}
 
-          {/* GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-8">
+          {/* ================= CONTENT GRID ================= */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mt-12">
 
             {/* ========== LEFT COLUMN ========== */}
-            <aside className="space-y-6">
+            <aside className="space-y-8 md:col-span-1">
 
               {/* LOGO */}
               {supplier.logoUrl && (
                 <img
                   src={supplier.logoUrl}
                   alt={supplier.name}
-                  className="w-full max-w-[220px] object-contain"
+                  className="w-full max-w-[150px] object-contain"
                 />
               )}
 
@@ -115,6 +114,98 @@ export default async function SupplierShowroomPage({
                 )}
               </div>
 
+              {/* SOCIAL MEDIA */}
+              <div>
+                <h4 className="text-sm font-semibold text-gray-600 uppercase mb-3">
+                  Connect
+                </h4>
+                <div className="flex gap-3">
+                  <span className="w-9 h-9 bg-gray-800 text-white flex items-center justify-center rounded cursor-pointer">
+                    f
+                  </span>
+                  <span className="w-9 h-9 bg-gray-800 text-white flex items-center justify-center rounded cursor-pointer">
+                    in
+                  </span>
+                  <span className="w-9 h-9 bg-gray-800 text-white flex items-center justify-center rounded cursor-pointer">
+                    X
+                  </span>
+                  <span className="w-9 h-9 bg-gray-800 text-white flex items-center justify-center rounded cursor-pointer">
+                    ▶
+                  </span>
+                </div>
+              </div>
+
+              {/* TRADE NAMES */}
+              {/* {supplier.tradeNames && supplier.tradeNames.length > 0 && (
+                <div>
+                  <h3 className="font-semibold mb-2 text-sm uppercase text-gray-600">
+                    Trade Names
+                  </h3>
+                  <ul className="list-disc list-inside text-sm text-gray-700">
+                    {supplier.tradeNames.map((name, idx) => (
+                      <li key={idx}>{name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )} */}
+            </aside>
+
+            {/* ========== RIGHT COLUMN ========== */}
+           <section className="md:col-span-2">
+  <h2 className="font-semibold text-lg mb-4">
+    About {supplier.name}
+  </h2>
+
+  <div
+    className="prose prose-sm max-w-none text-gray-700"
+    dangerouslySetInnerHTML={{
+      __html: supplier.description,
+    }}
+  />
+</section>
+
+          </div>
+
+          {/* ================= DIVIDER ================= */}
+          {supplier.videoGallery && supplier.videoGallery.length > 0 && (
+            <>
+              <hr className="my-12 border-gray-200" />
+
+              {/* ================= CLAIM / CTA BAR ================= */}
+<div className="bg-[#e9f7fb] border border-[#cfeaf3] rounded-md p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+
+  <div className="text-gray-700 font-semibold uppercase tracking-wide">
+    Is this your company?
+  </div>
+
+  <div className="flex flex-col sm:flex-row gap-4">
+    <a
+      href="/recruiter/directories"
+      className="bg-[#0b5c7a] text-white px-6 py-3 text-sm font-semibold uppercase text-center"
+    >
+      Update Your Listing
+    </a>
+
+    <a
+      href="/press-release/submit"
+      className="bg-black text-white px-6 py-3 text-sm font-semibold uppercase text-center"
+    >
+      Submit a Press Release to Our Editorial Teams
+    </a>
+  </div>
+</div>
+
+<br />
+<br />
+
+
+              {/* ================= VIDEO GALLERY ================= */}
+              <VideoGallery videos={supplier.videoGallery} />
+            </>
+          )}
+
+
+ <hr className="my-12 border-gray-200" />
               {/* TRADE NAMES */}
               {supplier.tradeNames && supplier.tradeNames.length > 0 && (
                 <div>
@@ -128,29 +219,7 @@ export default async function SupplierShowroomPage({
                   </ul>
                 </div>
               )}
-            </aside>
 
-            {/* ========== RIGHT COLUMN ========== */}
-            <section className="md:col-span-2 space-y-8">
-
-              {/* ABOUT */}
-              <div>
-                <h2 className="font-semibold text-lg mb-2">
-                  About {supplier.name}
-                </h2>
-                <p className="text-sm text-gray-700 whitespace-pre-line">
-                  {supplier.description}
-                </p>
-              </div>
-
-              {/* VIDEO GALLERY */}
-            {/* VIDEO GALLERY */}
-{supplier.videoGallery && supplier.videoGallery.length > 0 && (
-  <VideoGallery videos={supplier.videoGallery} />
-)}
-
-            </section>
-          </div>
         </div>
       </div>
     </div>

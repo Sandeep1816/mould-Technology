@@ -204,3 +204,7 @@ body::-webkit-scrollbar {
 .error {
   @apply text-red-600 text-sm mt-1;
 }
+
+.editor-btn {
+  @apply px-3 py-1 text-sm border rounded hover:bg-gray-100;
+}

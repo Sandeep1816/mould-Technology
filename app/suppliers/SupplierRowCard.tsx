@@ -9,7 +9,8 @@ import {
 
 export default function SupplierRowCard({ supplier }: any) {
   return (
-    <div className="bg-white border rounded-lg p-6 flex gap-6">
+    <div className="bg-white border border-[#dee2e6] border-[0.8px] rounded-[4px] p-6 flex gap-6">
+
 
       {/* LOGO */}
       <div className="w-40 flex items-center justify-center shrink-0">
@@ -41,9 +42,10 @@ export default function SupplierRowCard({ supplier }: any) {
         )}
 
         {/* DESCRIPTION */}
-        <p className="text-sm text-gray-700 mt-2 line-clamp-4">
-          {supplier.description}
-        </p>
+<p className="text-sm text-gray-700 mt-2 line-clamp-4 break-words break-all">
+  {supplier.description}
+</p>
+
 
         {/* FOOTER */}
         <div className="mt-auto pt-6">

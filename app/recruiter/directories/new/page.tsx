@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik"
 import * as Yup from "yup"
+import RichTextEditor from "@/components/RichTextField"
 
 /* ---------------- SLUG HELPER ---------------- */
 
@@ -17,33 +18,18 @@ function slugify(text: string) {
 /* ---------------- VALIDATION ---------------- */
 
 const DirectorySchema = Yup.object({
-  name: Yup.string().min(3, "Too short").required("Company name is required"),
-
+  name: Yup.string().min(3).required("Company name is required"),
   slug: Yup.string()
     .matches(/^[a-z0-9-]+$/, "Only lowercase letters, numbers and hyphens")
     .required("Slug is required"),
-
   phoneNumber: Yup.string().required("Phone number is required"),
-
-  email: Yup.string()
-    .email("Invalid email")
-    .required("Email is required"),
-
-  description: Yup.string()
-    .min(30, "Description must be at least 30 characters")
-    .required("Description is required"),
-
-  website: Yup.string().url("Invalid URL").nullable(),
-  logoUrl: Yup.string().url("Invalid URL").nullable(),
-  coverImageUrl: Yup.string().url("Invalid URL").nullable(),
-
-  tradeNames: Yup.array()
-    .of(Yup.string().min(2, "Too short"))
-    .min(1, "At least one trade name required"),
-
-  videoGallery: Yup.array().of(
-    Yup.string().url("Invalid YouTube URL")
-  ),
+  email: Yup.string().email().required("Email is required"),
+  description: Yup.string().min(20).required("Description is required"),
+  website: Yup.string().url().nullable(),
+  logoUrl: Yup.string().url().nullable(),
+  coverImageUrl: Yup.string().url().nullable(),
+  tradeNames: Yup.array().of(Yup.string()).min(1),
+  videoGallery: Yup.array().of(Yup.string().url()),
 })
 
 /* ---------------- PAGE ---------------- */
@@ -102,17 +88,15 @@ export default function AddDirectoryPage() {
         {({ isSubmitting, setFieldValue, values, status }) => (
           <Form className="space-y-6 bg-white p-6 rounded-xl shadow">
 
-            {/* COMPANY NAME (AUTO SLUG) */}
+            {/* COMPANY NAME */}
             <div>
               <label className="label">Company Name</label>
               <Field
                 name="name"
                 className="input"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                onChange={(e: any) => {
                   const name = e.target.value
                   setFieldValue("name", name)
-
-                  // auto-fill slug unless user changed it manually
                   if (!values.slug || values.slug === slugify(values.name)) {
                     setFieldValue("slug", slugify(name))
                   }
@@ -123,7 +107,7 @@ export default function AddDirectoryPage() {
 
             {/* SLUG */}
             <div>
-              <label className="label">Slug (URL)</label>
+              <label className="label">Slug</label>
               <Field name="slug" className="input" />
               <ErrorMessage name="slug" component="p" className="error" />
               <p className="text-xs text-gray-400 mt-1">
@@ -131,21 +115,18 @@ export default function AddDirectoryPage() {
               </p>
             </div>
 
-            {/* PHONE */}
             <FieldBlock label="Phone Number" name="phoneNumber" />
-
-            {/* EMAIL */}
             <FieldBlock label="Email" name="email" />
 
-            {/* DESCRIPTION */}
-            <FieldBlock
-              label="Description"
-              name="description"
-              textarea
-            />
+            {/* ✅ RICH TEXT DESCRIPTION */}
+            <div>
+              <label className="label">Description</label>
+              <RichTextEditor name="description" />
+              <ErrorMessage name="description" component="p" className="error" />
+            </div>
 
             {/* TRADE NAMES */}
-            <Section title="Trade Names (2–3 recommended)">
+            <Section title="Trade Names">
               <FieldArray name="tradeNames">
                 {({ push, remove }) => (
                   <>
@@ -154,7 +135,6 @@ export default function AddDirectoryPage() {
                         <Field
                           name={`tradeNames.${i}`}
                           className="input flex-1"
-                          placeholder={`Trade name ${i + 1}`}
                         />
                         {i > 0 && (
                           <button
@@ -189,7 +169,6 @@ export default function AddDirectoryPage() {
                         <Field
                           name={`videoGallery.${i}`}
                           className="input flex-1"
-                          placeholder="https://www.youtube.com/watch?v=..."
                         />
                         {i > 0 && (
                           <button
@@ -214,17 +193,14 @@ export default function AddDirectoryPage() {
               </FieldArray>
             </Section>
 
-            {/* URL FIELDS */}
             <FieldBlock label="Website" name="website" />
             <FieldBlock label="Logo URL" name="logoUrl" />
             <FieldBlock label="Cover Image URL" name="coverImageUrl" />
 
-            {/* ERROR */}
             {status && (
               <p className="text-red-600 text-sm">{status}</p>
             )}
 
-            {/* SUBMIT */}
             <button
               type="submit"
               disabled={isSubmitting}
@@ -244,21 +220,14 @@ export default function AddDirectoryPage() {
 function FieldBlock({
   label,
   name,
-  textarea,
 }: {
   label: string
   name: string
-  textarea?: boolean
 }) {
   return (
     <div>
       <label className="label">{label}</label>
-      <Field
-        name={name}
-        as={textarea ? "textarea" : "input"}
-        rows={textarea ? 4 : undefined}
-        className="input"
-      />
+      <Field name={name} className="input" />
       <ErrorMessage name={name} component="p" className="error" />
     </div>
   )
