@@ -208,3 +208,18 @@ body::-webkit-scrollbar {
 .editor-btn {
   @apply px-3 py-1 text-sm border rounded hover:bg-gray-100;
 }
+
+.prose p {
+  margin: 0.25rem 0;
+}
+
+.prose ol,
+.prose ul {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+.prose ol > li > p,
+.prose ul > li > p {
+  margin: 0;
+}

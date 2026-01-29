@@ -6,7 +6,6 @@ import * as Yup from "yup"
 import RichTextEditor from "@/components/RichTextField"
 
 /* ---------------- SLUG HELPER ---------------- */
-
 function slugify(text: string) {
   return text
     .toLowerCase()
@@ -16,7 +15,6 @@ function slugify(text: string) {
 }
 
 /* ---------------- VALIDATION ---------------- */
-
 const DirectorySchema = Yup.object({
   name: Yup.string().min(3).required("Company name is required"),
   slug: Yup.string()
@@ -25,15 +23,25 @@ const DirectorySchema = Yup.object({
   phoneNumber: Yup.string().required("Phone number is required"),
   email: Yup.string().email().required("Email is required"),
   description: Yup.string().min(20).required("Description is required"),
+
   website: Yup.string().url().nullable(),
   logoUrl: Yup.string().url().nullable(),
   coverImageUrl: Yup.string().url().nullable(),
+
   tradeNames: Yup.array().of(Yup.string()).min(1),
   videoGallery: Yup.array().of(Yup.string().url()),
+
+  // ✅ NEW
+  productSupplies: Yup.array().of(Yup.string().min(2)),
+  socialLinks: Yup.object({
+    facebook: Yup.string().url().nullable(),
+    linkedin: Yup.string().url().nullable(),
+    twitter: Yup.string().url().nullable(),
+    youtube: Yup.string().url().nullable(),
+  }),
 })
 
 /* ---------------- PAGE ---------------- */
-
 export default function AddDirectoryPage() {
   const router = useRouter()
 
@@ -54,7 +62,6 @@ export default function AddDirectoryPage() {
       )
 
       if (!res.ok) throw new Error()
-
       router.push("/recruiter/dashboard")
     } catch {
       setStatus("Failed to submit directory")
@@ -81,6 +88,15 @@ export default function AddDirectoryPage() {
           coverImageUrl: "",
           tradeNames: [""],
           videoGallery: [""],
+
+          // ✅ NEW
+          productSupplies: [""],
+          socialLinks: {
+            facebook: "",
+            linkedin: "",
+            twitter: "",
+            youtube: "",
+          },
         }}
         validationSchema={DirectorySchema}
         onSubmit={submit}
@@ -118,12 +134,45 @@ export default function AddDirectoryPage() {
             <FieldBlock label="Phone Number" name="phoneNumber" />
             <FieldBlock label="Email" name="email" />
 
-            {/* ✅ RICH TEXT DESCRIPTION */}
+            {/* DESCRIPTION */}
             <div>
               <label className="label">Description</label>
               <RichTextEditor name="description" />
               <ErrorMessage name="description" component="p" className="error" />
             </div>
+
+            {/* PRODUCT SUPPLIES */}
+            <Section title="Product Supplies / Services">
+              <FieldArray name="productSupplies">
+                {({ push, remove }) => (
+                  <>
+                    {values.productSupplies.map((_: any, i: number) => (
+                      <div key={i} className="flex gap-2">
+                        <Field
+                          name={`productSupplies.${i}`}
+                          className="input flex-1"
+                          placeholder="e.g. Injection Molds"
+                        />
+                        {i > 0 && (
+                          <button type="button" onClick={() => remove(i)}>✕</button>
+                        )}
+                      </div>
+                    ))}
+                    <button type="button" onClick={() => push("")} className="text-sm text-blue-600">
+                      + Add product
+                    </button>
+                  </>
+                )}
+              </FieldArray>
+            </Section>
+
+            {/* SOCIAL LINKS */}
+            <Section title="Social Media Links">
+              <FieldBlock label="Facebook" name="socialLinks.facebook" />
+              <FieldBlock label="LinkedIn" name="socialLinks.linkedin" />
+              <FieldBlock label="Twitter / X" name="socialLinks.twitter" />
+              <FieldBlock label="YouTube" name="socialLinks.youtube" />
+            </Section>
 
             {/* TRADE NAMES */}
             <Section title="Trade Names">
@@ -132,26 +181,13 @@ export default function AddDirectoryPage() {
                   <>
                     {values.tradeNames.map((_: any, i: number) => (
                       <div key={i} className="flex gap-2">
-                        <Field
-                          name={`tradeNames.${i}`}
-                          className="input flex-1"
-                        />
+                        <Field name={`tradeNames.${i}`} className="input flex-1" />
                         {i > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => remove(i)}
-                            className="text-red-500"
-                          >
-                            ✕
-                          </button>
+                          <button type="button" onClick={() => remove(i)}>✕</button>
                         )}
                       </div>
                     ))}
-                    <button
-                      type="button"
-                      onClick={() => push("")}
-                      className="text-sm text-blue-600"
-                    >
+                    <button type="button" onClick={() => push("")} className="text-sm text-blue-600">
                       + Add trade name
                     </button>
                   </>
@@ -166,26 +202,13 @@ export default function AddDirectoryPage() {
                   <>
                     {values.videoGallery.map((_: any, i: number) => (
                       <div key={i} className="flex gap-2">
-                        <Field
-                          name={`videoGallery.${i}`}
-                          className="input flex-1"
-                        />
+                        <Field name={`videoGallery.${i}`} className="input flex-1" />
                         {i > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => remove(i)}
-                            className="text-red-500"
-                          >
-                            ✕
-                          </button>
+                          <button type="button" onClick={() => remove(i)}>✕</button>
                         )}
                       </div>
                     ))}
-                    <button
-                      type="button"
-                      onClick={() => push("")}
-                      className="text-sm text-blue-600"
-                    >
+                    <button type="button" onClick={() => push("")} className="text-sm text-blue-600">
                       + Add video
                     </button>
                   </>
@@ -197,14 +220,12 @@ export default function AddDirectoryPage() {
             <FieldBlock label="Logo URL" name="logoUrl" />
             <FieldBlock label="Cover Image URL" name="coverImageUrl" />
 
-            {status && (
-              <p className="text-red-600 text-sm">{status}</p>
-            )}
+            {status && <p className="text-red-600 text-sm">{status}</p>}
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-black text-white px-6 py-2 rounded disabled:opacity-50"
+              className="bg-black text-white px-6 py-2 rounded"
             >
               {isSubmitting ? "Submitting..." : "Submit for Approval"}
             </button>
@@ -216,14 +237,7 @@ export default function AddDirectoryPage() {
 }
 
 /* ---------------- HELPERS ---------------- */
-
-function FieldBlock({
-  label,
-  name,
-}: {
-  label: string
-  name: string
-}) {
+function FieldBlock({ label, name }: any) {
   return (
     <div>
       <label className="label">{label}</label>
@@ -233,13 +247,7 @@ function FieldBlock({
   )
 }
 
-function Section({
-  title,
-  children,
-}: {
-  title: string
-  children: React.ReactNode
-}) {
+function Section({ title, children }: any) {
   return (
     <div>
       <h3 className="font-semibold mb-2">{title}</h3>

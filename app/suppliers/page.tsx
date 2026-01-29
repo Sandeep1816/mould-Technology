@@ -50,7 +50,7 @@ export default function SuppliersPage() {
         <main className="col-span-6 space-y-6">
 
           {/* HERO */}
-          <div className="relative w-full h-[220px]">
+          <div className="relative w-full h-[160px]">
             <img
               src="/images/search-landscape.jpg"
               alt="Find a MoldMaking Technology Supplier"
