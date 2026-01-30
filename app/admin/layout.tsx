@@ -72,6 +72,20 @@ export default function AdminLayout({
             icon={<Users size={18} />}
             active={pathname === "/admin/authors"}
           />
+          <SidebarLink
+  href="/admin/banners"
+  label="Banners"
+  icon={<Folder size={18} />}
+  active={pathname === "/admin/banners"}
+/>
+
+<SidebarLink
+  href="/admin/banners/reorder"
+  label="Reorder Banners"
+  icon={<Folder size={18} />}
+  active={pathname === "/admin/banners/reorder"}
+/>
+
         </nav>
 
         <div className="p-4 border-t border-indigo-700">

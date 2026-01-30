@@ -1,22 +1,52 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+type Banner = {
+  id: number;
+  title: string;
+  imageUrl: string;
+  targetUrl?: string;
+};
+
 export default function TrendingAd() {
+  const [banner, setBanner] = useState<Banner | null>(null);
+
+  useEffect(() => {
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/banners?placement=HOME_MIDDLE`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.length > 0) {
+          setBanner(data[0]); // take first active banner
+        }
+      });
+  }, []);
+
+  if (!banner) return null; // no ad → no section
+
   return (
-    /* 🔹 section-space = 80px top & bottom */
     <section className="py-[80px] w-full bg-[#F7F7F7]">
-      {/* 🔹 Nerio container */}
       <div className="max-w-[1320px] mx-auto px-[12px]">
         <p className="text-center text-[#616C74] text-sm mb-4">
           Advertisement
         </p>
 
-        {/* 🔹 Banner wrapper (no extra max-widths) */}
         <div className="rounded-xl overflow-hidden">
-          <img
-            src="/trending-ad.jpg"
-            alt="Trending Advertisement"
-            className="w-full h-[218px] object-cover"
-          />
+          <a
+            href={`${process.env.NEXT_PUBLIC_API_URL}/api/banners/${banner.id}/click`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={banner.imageUrl}
+              alt={banner.title}
+              className="w-full h-[218px] object-cover"
+            />
+          </a>
         </div>
       </div>
     </section>
-  )
+  );
 }

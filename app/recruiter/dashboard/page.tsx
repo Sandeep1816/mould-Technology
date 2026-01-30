@@ -160,7 +160,7 @@ export default function RecruiterDashboard() {
             >
               <ActionCard
                 icon={<Briefcase className="text-blue-600" />}
-                title="My Jobs"
+                title="Jobs"
                 desc="View and manage your posted jobs"
               />
             </Link>

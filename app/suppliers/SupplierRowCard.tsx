@@ -5,6 +5,7 @@ import {
   LucideLinkedin,
   LucideTwitter,
   LucideYoutube,
+  LucideEye,
 } from "lucide-react"
 
 /* ---------------- HELPER ---------------- */
@@ -19,9 +20,10 @@ function stripHtml(html: string) {
 /* ---------------- COMPONENT ---------------- */
 export default function SupplierRowCard({ supplier }: any) {
   const social = supplier.socialLinks || {}
+  const views = supplier.views ?? 0
 
   return (
-    <div className="bg-white border border-[#dee2e6] border-[0.8px] rounded-[4px] p-6 flex gap-6">
+    <div className="bg-white border border-[#dee2e6] rounded-[4px] p-6 flex gap-6">
 
       {/* LOGO */}
       <div className="w-40 flex items-center justify-center shrink-0">
@@ -52,7 +54,7 @@ export default function SupplierRowCard({ supplier }: any) {
           </p>
         )}
 
-        {/* DESCRIPTION (PLAIN TEXT) */}
+        {/* DESCRIPTION */}
         <p className="text-sm text-gray-700 mt-2 line-clamp-4">
           {stripHtml(supplier.description)}
         </p>
@@ -63,6 +65,12 @@ export default function SupplierRowCard({ supplier }: any) {
 
             {/* LEFT SIDE */}
             <div className="flex items-center gap-8 flex-wrap">
+
+              {/* VIEWS */}
+              <div className="flex items-center gap-2 text-xs text-gray-500">
+                <LucideEye className="w-4 h-4" />
+                <span>{views.toLocaleString()} views</span>
+              </div>
 
               {/* VIDEO GALLERY */}
               <div className="flex items-center gap-2">
@@ -80,7 +88,6 @@ export default function SupplierRowCard({ supplier }: any) {
                   Connect
                 </span>
 
-                {/* FACEBOOK */}
                 {social.facebook && (
                   <a
                     href={social.facebook}
@@ -92,7 +99,6 @@ export default function SupplierRowCard({ supplier }: any) {
                   </a>
                 )}
 
-                {/* LINKEDIN */}
                 {social.linkedin && (
                   <a
                     href={social.linkedin}
@@ -104,7 +110,6 @@ export default function SupplierRowCard({ supplier }: any) {
                   </a>
                 )}
 
-                {/* TWITTER */}
                 {social.twitter && (
                   <a
                     href={social.twitter}
@@ -116,7 +121,6 @@ export default function SupplierRowCard({ supplier }: any) {
                   </a>
                 )}
 
-                {/* YOUTUBE */}
                 {social.youtube && (
                   <a
                     href={social.youtube}
@@ -130,7 +134,7 @@ export default function SupplierRowCard({ supplier }: any) {
               </div>
             </div>
 
-            {/* RIGHT SIDE CTA */}
+            {/* RIGHT CTA */}
             <Link
               href={`/suppliers/${supplier.slug}`}
               className="ml-auto shrink-0 bg-red-700 text-white px-6 py-2 text-sm font-semibold uppercase whitespace-nowrap hover:bg-red-800 transition"
