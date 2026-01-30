@@ -64,20 +64,26 @@ export default async function SupplierShowroomPage({
   }
 
   const supplier: Supplier = await supplierRes.json()
+  console.log("SUPPLIER ID:", supplier.id)
+console.log("SUPPLIER COMPANY ID:", supplier.companyId)
   const social = supplier.socialLinks || {}
 
-/* ---------- FETCH COMPANY ARTICLES (FINAL FIX) ---------- */
+/* ---------- FETCH COMPANY ARTICLES ---------- */
+const companyId = supplier.companyId ?? supplier.id
+
 const articlesRes = await fetch(
   `${process.env.NEXT_PUBLIC_API_URL}/api/companies/${supplier.companyId}/articles`,
   { cache: "no-store" }
 )
 
+
+
 let articles: Article[] = []
 
 if (articlesRes.ok) {
-  const json = await articlesRes.json()
-  articles = json.data || []
+  articles = await articlesRes.json() // ✅ FIX
 }
+
 
 
   /* ================= UI ================= */
