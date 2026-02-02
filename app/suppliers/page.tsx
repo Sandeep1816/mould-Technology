@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import SupplierRowCard from "./SupplierRowCard"
 import SupplierFilters from "./SupplierFilters"
-import SupplierAds from "./SupplierAds"
+import SupplierAds from "@/components/SupplierAds"
 
 type Supplier = {
   id: number

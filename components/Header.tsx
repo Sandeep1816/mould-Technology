@@ -127,8 +127,10 @@ export default function Header() {
               Resources <ChevronDown size={14} />
             </button>
 
+            <Link href="/articles">Magazine</Link>
+
             <Link href="/suppliers">Directory</Link>
-            <Link href="/contact">Contact</Link>
+            <Link href="/mmtchats">MMT CHATS</Link>
           </nav>
 
           {/* AUTH / USER */}
@@ -214,7 +216,7 @@ export default function Header() {
       {openMega && (
         <div
           onMouseLeave={() => setOpenMega(null)}
-          className="bg-[#003B5C]"
+          className="bg-[#0A2B57]"
         >
           <div className={`${container} py-10 grid grid-cols-[240px_1fr] gap-10`}>
 

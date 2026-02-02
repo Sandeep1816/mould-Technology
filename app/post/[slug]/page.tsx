@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
-import Image from "next/image"
 
 import ShareSection from "@/components/share-section"
 import RelatedPostsCarousel from "@/components/related-posts-carousel"
@@ -11,6 +10,7 @@ import PostViewCounter from "@/components/PostViewCounter"
 import Loader from "@/components/Loader"
 import RightSidebar from "@/components/RightSidebar"
 
+/* ================= TYPES ================= */
 type Author = {
   id: number
   name: string
@@ -34,8 +34,38 @@ type Post = {
   publishedAt?: string
   author?: Author
   category?: Category
+  youtubeUrl?: string
 }
 
+/* ================= YOUTUBE HELPERS ================= */
+function getYoutubeEmbed(url?: string) {
+  if (!url) return null
+
+  if (url.includes("youtube.com/embed")) return url
+
+  const watchMatch = url.match(/[?&]v=([^&]+)/)
+  if (watchMatch?.[1]) {
+    return `https://www.youtube.com/embed/${watchMatch[1]}`
+  }
+
+  if (url.includes("youtu.be/")) {
+    const id = url.split("youtu.be/")[1].split("?")[0]
+    return `https://www.youtube.com/embed/${id}`
+  }
+
+  return null // channel / handle / playlist
+}
+
+function isYoutubeChannel(url?: string) {
+  if (!url) return false
+  return (
+    url.includes("/@") ||
+    url.includes("/channel/") ||
+    url.includes("/c/")
+  )
+}
+
+/* ================= PAGE ================= */
 export default function PostDetailsPage() {
   const { slug } = useParams()
   const slugValue = Array.isArray(slug) ? slug[0] : slug
@@ -48,18 +78,15 @@ export default function PostDetailsPage() {
   useEffect(() => {
     async function fetchPost() {
       setPost(null)
-
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`,
+          { cache: "no-store" }
         )
         const data = await res.json()
-        const allPosts = Array.isArray(data.data) ? data.data : []
-
-        const postData = allPosts.find((p: Post) => p.slug === slugValue)
-        if (!postData) return
-
-        setPost(postData)
+        const posts: Post[] = Array.isArray(data.data) ? data.data : []
+        const found = posts.find(p => p.slug === slugValue)
+        if (found) setPost(found)
       } catch (err) {
         console.error("Failed to load post:", err)
       }
@@ -68,24 +95,17 @@ export default function PostDetailsPage() {
     if (slugValue) fetchPost()
   }, [slugValue])
 
-  /* ================= CONTENT GATE TIMER ================= */
+  /* ================= CONTENT GATE ================= */
   useEffect(() => {
     if (userSubmitted) return
-
-    const timer = setTimeout(() => {
-      setShowGate(true)
-    }, 9000)
-
+    const timer = setTimeout(() => setShowGate(true), 9000)
     return () => clearTimeout(timer)
   }, [userSubmitted])
 
-  const handleGateSubmit = (formData: any) => {
-    console.log("Form submitted:", formData)
-    setUserSubmitted(true)
-    setShowGate(false)
-  }
-
   if (!post) return <Loader />
+
+  const embedUrl = getYoutubeEmbed(post.youtubeUrl)
+  const isVideo = post.category?.slug === "videos"
 
   const imageUrl =
     post.imageUrl?.startsWith("http")
@@ -104,20 +124,22 @@ export default function PostDetailsPage() {
 
   return (
     <>
-      {/* ================= CONTENT GATE ================= */}
       <ContentGateModal
         isOpen={showGate && !userSubmitted}
         onClose={() => setShowGate(false)}
-        onSubmit={handleGateSubmit}
+        onSubmit={() => {
+          setUserSubmitted(true)
+          setShowGate(false)
+        }}
       />
 
-      <main className="bg-[#f9f9f9] text-[16px]">
+      <main className="bg-[#f9f9f9]">
         {slugValue && <PostViewCounter slug={slugValue} />}
 
-        {/* ================= HERO ================= */}
+        {/* ================= HERO (IMAGE ALWAYS) ================= */}
         <section className="bg-white border-b border-gray-200">
-          <div className="max-w-full mx-auto py-10 px-6 md:px-10 lg:px-[80px]">
-            <p className="text-gray-500 text-sm mb-3 uppercase tracking-widest">
+          <div className="px-6 md:px-10 lg:px-[80px] py-10">
+            <p className="text-gray-500 text-sm  mb-3">
               Published {date}
             </p>
 
@@ -126,11 +148,12 @@ export default function PostDetailsPage() {
             </h1>
 
             {post.excerpt && (
-              <p className="text-gray-700 text-[16px] mb-6 max-w-3xl leading-relaxed">
+              <p className="text-gray-700 max-w-3xl mb-6">
                 {post.excerpt}
               </p>
             )}
 
+            {/* ✅ HERO IMAGE ALWAYS */}
             <div className="w-full max-h-[420px] overflow-hidden rounded-lg border">
               <img
                 src={imageUrl}
@@ -147,12 +170,8 @@ export default function PostDetailsPage() {
                   alt={post.author.name}
                 />
                 <div>
-                  <p className="text-sm font-semibold">
-                    {post.author.name}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {post.author.bio}
-                  </p>
+                  <p className="text-sm font-semibold">{post.author.name}</p>
+                  <p className="text-xs text-gray-500">{post.author.bio}</p>
                 </div>
               </div>
             )}
@@ -160,22 +179,50 @@ export default function PostDetailsPage() {
         </section>
 
         {/* ================= CONTENT + SIDEBAR ================= */}
-        <section className="max-w-full mx-auto grid grid-cols-1 lg:grid-cols-[8fr_4fr] gap-10 py-10 px-6 md:px-10 lg:px-[80px]">
-          {/* LEFT CONTENT */}
+        <section className="grid grid-cols-1 lg:grid-cols-[8fr_4fr] gap-10 px-6 md:px-10 lg:px-[80px] py-10">
           <article>
             <div
-              className="prose max-w-none text-[16px] leading-relaxed"
+              className="prose max-w-none"
               dangerouslySetInnerHTML={{ __html: post.content || "" }}
             />
 
-            <ShareSection />
+            <ShareSection  post={post} />
+
+            {/* ================= VIDEO BLOCK (AFTER SHARE) ================= */}
+            {isVideo && post.youtubeUrl && (
+              <div className="mt-10">
+                {embedUrl ? (
+                  <div className="w-full  aspect-video rounded-lg overflow-hidden border shadow-lg">
+                    <iframe
+                      src={embedUrl}
+                      title={post.title}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full rounded-lg border bg-black text-white flex flex-col items-center justify-center py-16">
+                    <p className="text-lg font-semibold mb-4">
+                      Watch more videos on YouTube
+                    </p>
+                    <a
+                      href={post.youtubeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-red-600 px-6 py-3 rounded font-bold hover:bg-red-700"
+                    >
+                      Open YouTube Channel →
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
           </article>
 
-          {/* RIGHT SIDEBAR */}
           <RightSidebar />
         </section>
 
-        {/* ================= RELATED CAROUSEL ================= */}
         <RelatedPostsCarousel />
       </main>
     </>

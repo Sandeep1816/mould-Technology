@@ -1,10 +1,31 @@
-export default function MmtChatsPage() {
+import VideoListing from "@/components/VideoListing"
+import type { Post } from "@/types/Post"
+
+export default async function VideosPage() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`,
+    { cache: "no-store" }
+  )
+
+  const data = await res.json()
+  const posts: Post[] = Array.isArray(data?.data)
+    ? data.data
+    : Array.isArray(data)
+    ? data
+    : []
+
+  const videoPosts = posts.filter((p) => {
+    const slug =
+      typeof p.category === "object"
+        ? p.category?.slug?.toLowerCase()
+        : String(p.category || "").toLowerCase()
+
+    return slug.includes("videos")
+  })
+
   return (
-    <main className="min-h-screen p-10">
-      <h1 className="text-3xl font-bold">MMT Chats</h1>
-      <p className="mt-4 text-gray-600">
-        Welcome to MMT Chats
-      </p>
+    <main className="bg-white">
+      <VideoListing posts={videoPosts} />
     </main>
   )
 }
