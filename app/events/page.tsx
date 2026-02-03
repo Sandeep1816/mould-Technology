@@ -1,28 +1,185 @@
-import EventsListing from "@/components/EventsListing"
-import type { Post } from "@/types/Post"
+import Image from "next/image"
+import Link from "next/link"
+import SupplierAds from "@/components/SupplierAds"
 
-export default async function EventsPage() {
+type Event = {
+  id: number
+  title: string
+  slug: string
+  logoUrl?: string
+  bannerUrl?: string
+  startDate: string
+  endDate: string
+  location?: string
+  description: string
+  registerUrl?: string
+}
+
+async function getEvents(): Promise<Event[]> {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/events`,
     { cache: "no-store" }
   )
 
-  const data = await res.json()
-  const posts: Post[] = data.data || data
+  if (!res.ok) {
+    console.error("Failed to fetch events")
+    return []
+  }
 
-  const getCategorySlug = (post: Post) =>
-    typeof post.category === "object"
-      ? post.category?.slug?.toLowerCase()
-      : String(post.category || "").toLowerCase()
+  return res.json()
+}
 
-  // ✅ ONLY EVENT BLOGS
-  const eventPosts = posts.filter((p) =>
-    getCategorySlug(p).includes("events")
-  )
+export default async function EventsPage() {
+  const events = await getEvents()
+
+  const featuredEvent = events[0] // 🔥 first event as hero
 
   return (
-    <main className="bg-white">
-      <EventsListing posts={eventPosts} />
-    </main>
+    <div className="w-full">
+
+      {/* ================= HERO SECTION ================= */}
+      {featuredEvent?.bannerUrl && (
+        <div className="relative w-full h-[420px]">
+          <Image
+            src={featuredEvent.bannerUrl}
+            alt={featuredEvent.title}
+            fill
+            className="object-cover"
+            priority
+          />
+
+          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+            <div className="bg-white p-8 max-w-md text-center shadow-lg">
+              {featuredEvent.logoUrl && (
+                <Image
+                  src={featuredEvent.logoUrl}
+                  alt={featuredEvent.title}
+                  width={220}
+                  height={120}
+                  className="mx-auto mb-4 object-contain"
+                />
+              )}
+
+              <p className="text-sm text-gray-600 mb-1">
+                {new Date(featuredEvent.startDate).toLocaleDateString()} –{" "}
+                {new Date(featuredEvent.endDate).toLocaleDateString()}
+              </p>
+
+              <h2 className="text-xl font-bold mb-2">
+                {featuredEvent.title}
+              </h2>
+
+              {featuredEvent.location && (
+                <p className="text-sm mb-4">
+                  {featuredEvent.location}
+                </p>
+              )}
+
+              <Link
+                href={`${featuredEvent.registerUrl}`}
+                className="inline-block bg-red-600 text-white px-6 py-2"
+              >
+                REGISTER NOW
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MAIN CONTENT ================= */}
+      <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+        {/* LEFT: EVENTS LIST */}
+        <div className="lg:col-span-8">
+          <h1 className="text-3xl font-bold mb-6">
+            Find an Event
+          </h1>
+
+          {/* Search Bar */}
+          <div className="border-b pb-6 mb-8 flex gap-4">
+            <input
+              type="text"
+              placeholder="Search events"
+              className="border px-4 py-2 w-full max-w-md"
+            />
+            <button className="bg-red-600 text-white px-6 py-2">
+              GO
+            </button>
+          </div>
+
+          <h2 className="text-2xl font-semibold mb-6">
+            Upcoming Events
+          </h2>
+
+          {events.length === 0 ? (
+            <p>No upcoming events.</p>
+          ) : (
+            <div className="space-y-10">
+              {events.map(event => (
+                <div
+                  key={event.id}
+                  className="flex flex-col md:flex-row gap-6 border-b pb-8"
+                >
+                  {/* LOGO */}
+                  <div className="w-full md:w-60 flex-shrink-0">
+                    {event.logoUrl ? (
+                      <Image
+                        src={event.logoUrl}
+                        alt={event.title}
+                        width={240}
+                        height={140}
+                        className="object-contain border"
+                      />
+                    ) : (
+                      <div className="w-full h-32 bg-gray-100 flex items-center justify-center">
+                        No Image
+                      </div>
+                    )}
+                  </div>
+
+                  {/* CONTENT */}
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-500 mb-1">
+                      {new Date(event.startDate).toLocaleDateString()} –{" "}
+                      {new Date(event.endDate).toLocaleDateString()}
+                    </p>
+
+                    <h3 className="text-xl font-semibold mb-2">
+                      <Link
+                        href={`/events/${event.slug}`}
+                        className="hover:underline"
+                      >
+                        {event.title}
+                      </Link>
+                    </h3>
+
+                    <p className="text-gray-700 mb-2 line-clamp-3">
+                      {event.description}
+                    </p>
+
+                    {event.location && (
+                      <p className="text-sm text-gray-500">
+                        📍 {event.location}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="text-center mt-10">
+            <button className="bg-red-600 text-white px-6 py-3">
+              SEE MORE EVENTS
+            </button>
+          </div>
+        </div>
+
+        {/* RIGHT: ADS */}
+        <aside className="lg:col-span-4">
+          <SupplierAds />
+        </aside>
+      </div>
+    </div>
   )
 }

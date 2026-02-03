@@ -223,3 +223,18 @@ body::-webkit-scrollbar {
 .prose ul > li > p {
   margin: 0;
 }
+
+/* form event formic upload icon */
+.input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+

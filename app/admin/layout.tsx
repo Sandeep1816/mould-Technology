@@ -80,10 +80,10 @@ export default function AdminLayout({
 />
 
 <SidebarLink
-  href="/admin/banners/reorder"
-  label="Reorder Banners"
+  href="/admin/events"
+  label="Create Event"
   icon={<Folder size={18} />}
-  active={pathname === "/admin/banners/reorder"}
+  active={pathname === "/admin/events/create"}
 />
 
         </nav>

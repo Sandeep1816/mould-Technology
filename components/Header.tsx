@@ -131,6 +131,7 @@ export default function Header() {
 
             <Link href="/suppliers">Directory</Link>
             <Link href="/mmtchats">MMT CHATS</Link>
+            <Link href="/events">Events</Link>
           </nav>
 
           {/* AUTH / USER */}
