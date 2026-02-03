@@ -7,35 +7,31 @@ import {
   Twitter,
   Youtube,
 } from "lucide-react"
-import FooterRecentPosts from "@/components/FooterRecentPosts"
 
 export default function Footer() {
   return (
     <footer className="relative bg-[#0A2B57] text-[#BEBEBE]">
       {/* ================= FOOTER TOP ================= */}
       <div className="pt-[70px] pb-[80px]">
-        {/* BOOTSTRAP CONTAINER */}
         <div className="max-w-[1320px] mx-auto px-[15px]">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
 
             {/* ================= BRAND ================= */}
-            <div>
+            <div className="lg:col-span-4">
               <Link href="/" className="inline-block mb-6">
                 <Image
-                  src="/images/maxx.png"
+                  src="/images/moldinglogo2.png"
                   alt="Logo"
-                  width={140}
-                  height={40}
+                  width={240}
+                  height={80}
                 />
               </Link>
 
-              <p className="text-sm leading-relaxed text-[#BEBEBE] mb-6 max-w-xs">
-                We love to bring to life as a developer and I aim the today do
-                this using music whatever front end tools necessary.
+              <p className="text-sm leading-relaxed mb-6 max-w-sm">
+                MoldMaking Technology addresses the complete life cycle of the manufacture and maintenance of a mold—from design to first shot—by providing solutions and strategies to moldmaking professionals charged with designing, building and repairing molds. All original technical content on our sites and in our publications is created by Gardner Business Media staff and contributing writers.
               </p>
 
-              {/* SOCIAL ICONS */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 mb-6">
                 {[Facebook, Instagram, Twitter, Linkedin, Youtube].map(
                   (Icon, i) => (
                     <Link
@@ -49,8 +45,7 @@ export default function Footer() {
                 )}
               </div>
 
-              {/* APP STORE BUTTONS */}
-              <div className="flex gap-3 mt-6">
+              <div className="flex gap-3">
                 <Image
                   src="/images/google-play.png"
                   alt="Google Play"
@@ -66,74 +61,71 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* ================= TOP CATEGORIES ================= */}
-            <div>
-              <h5 className="text-white text-lg font-semibold mb-6">
-                Top Categories
+            {/* ================= TOPICS ================= */}
+            <div className="lg:col-span-2">
+              <h5 className="text-white text-lg font-semibold mb-6 uppercase">
+                Topics
               </h5>
-
               <ul className="space-y-3 text-sm">
-                {[
-                  "Entertainment",
-                  "Architecture",
-                  "Technology",
-                  "Menial Health",
-                  "Music News",
-                  "Food & Dining",
-                  "Government",
-                  "Marketing",
-                ].map((item) => (
-                  <li key={item}>
-                    <Link href="#" className="hover:text-white transition">
-                      {item}
-                    </Link>
-                  </li>
-                ))}
+                <li><Link href="/topics/engineer">Engineer</Link></li>
+                <li><Link href="/topics/build">Build</Link></li>
+                <li><Link href="/topics/maintain">Maintain</Link></li>
+                <li><Link href="/topics/manage">Manage</Link></li>
+                <li><Link href="/topics">View All</Link></li>
               </ul>
             </div>
 
-            {/* ================= RECENT POSTS ================= */}
-            <div>
-              <h5 className="text-white text-lg font-semibold mb-6">
-                Recent Post
+            {/* ================= RESOURCES ================= */}
+            <div className="lg:col-span-2">
+              <h5 className="text-white text-lg font-semibold mb-6 uppercase">
+                Resources
               </h5>
-
-              <FooterRecentPosts />
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/mmtchats">MMT Chats</Link></li>
+                <li><Link href="/videos">Videos</Link></li>
+                <li><Link href="/news">News</Link></li>
+                <li><Link href="/products">Products</Link></li>
+                <li><Link href="/podcast">Podcast</Link></li>
+              </ul>
             </div>
 
-            {/* ================= TAGS ================= */}
-            <div>
-              <h5 className="text-white text-lg font-semibold mb-6">
-                Tags
+            {/* ================= MAGAZINE + CALENDAR ================= */}
+            <div className="lg:col-span-2">
+              <h5 className="text-white text-lg font-semibold mb-6 uppercase">
+                Magazine
               </h5>
+              <ul className="space-y-3 text-sm mb-8">
+                <li><Link href="/articles">Latest Issue</Link></li>
+                <li><Link href="/magazine/archives">Archives</Link></li>
+                <li><Link href="/subscribe">Subscribe</Link></li>
+                <li><Link href="/subscribe/renew">Renew Subscription</Link></li>
+                <li><Link href="/customer-service">Subscription Customer Service</Link></li>
+              </ul>
 
-              <div className="flex flex-wrap gap-3">
-                {[
-                  "Gaming",
-                  "Travel",
-                  "Food",
-                  "Sports",
-                  "Social",
-                  "Marketing",
-                  "Trip",
-                  "Makeup",
-                  "Technology",
-                  "Branding",
-                  "Beauty",
-                  "Printing",
-                  "Business",
-                  "Politics",
-                ].map((tag) => (
-                  <Link
-                    key={tag}
-                    href="#"
-                    className="px-4 py-2 text-sm border border-white/20 rounded hover:bg-white/10 transition"
-                  >
-                    {tag}
-                  </Link>
-                ))}
-              </div>
+              <h5 className="text-white text-lg font-semibold mb-6 uppercase">
+                Calendar
+              </h5>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/webinars">Webinars</Link></li>
+                <li><Link href="/events">Events</Link></li>
+              </ul>
             </div>
+
+            {/* ================= MORE ================= */}
+            <div className="lg:col-span-2">
+              <h5 className="text-white text-lg font-semibold mb-6 uppercase">
+                More
+              </h5>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/contact">Contact Us</Link></li>
+                <li><Link href="/suppliers">Find a Supplier</Link></li>
+                <li><Link href="/editorial-guidelines">Editorial Guidelines</Link></li>
+                <li><Link href="/leadtime-leader">Leadtime Leader</Link></li>
+                <li><Link href="/ask-the-expert">Ask the Expert</Link></li>
+                <li><Link href="/30-under-30">30 Under 30</Link></li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </div>
@@ -142,33 +134,19 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="max-w-[1320px] mx-auto px-[15px] py-6">
           <div className="grid grid-cols-1 md:grid-cols-3 items-center text-sm gap-4">
-
             <div className="text-center md:text-left">
-              <Link href="#" className="hover:text-white">
-                Terms & Agreements
-              </Link>
+              <Link href="/terms">Terms & Agreements</Link>
             </div>
 
             <div className="text-center">
               <p className="underline underline-offset-4">
-                Copyright © 2026 Molding Trends{" "}
-                {/* <Link
-                  href="https://rstheme.com"
-                  target="_blank"
-                  className="text-white"
-                >
-                  RSTheme
-                </Link> */}
-                .
+                Copyright © 2026 Molding Trends.
               </p>
             </div>
 
             <div className="text-center md:text-right">
-              <Link href="#" className="hover:text-white">
-                Privacy policy
-              </Link>
+              <Link href="/privacy-policy">Privacy Policy</Link>
             </div>
-
           </div>
         </div>
       </div>

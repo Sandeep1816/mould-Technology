@@ -49,9 +49,9 @@ const getImageUrl = (url?: string | null) => {
   {/* ================= WHATS NEW SECTION ================= */}
 <section className="border-b border-gray-200 bg-white">
   {/* RED STRIP */}
-  <div className="bg-[#C70000] text-white text-sm font-bold px-6 py-2 inline-block">
+  {/* <div className="bg-[#C70000] text-white text-sm font-bold px-6 py-2 inline-block">
     What&apos;s New and What Works in Mold Manufacturing
-  </div>
+  </div> */}
 
   {/* CONTENT */}
   <div className="max-w-[1320px] mx-auto px-6 py-4">

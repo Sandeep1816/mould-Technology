@@ -9,6 +9,7 @@ import ContentGateModal from "@/components/content-gate-modal"
 import PostViewCounter from "@/components/PostViewCounter"
 import Loader from "@/components/Loader"
 import RightSidebar from "@/components/RightSidebar"
+import SupplierAds from "@/components/SupplierAds"
 
 /* ================= TYPES ================= */
 type Author = {
@@ -154,7 +155,7 @@ export default function PostDetailsPage() {
             )}
 
             {/* ✅ HERO IMAGE ALWAYS */}
-            <div className="w-full max-h-[420px] overflow-hidden rounded-lg border">
+            <div className="w-full max-h-[420px] overflow-hidden rounded-none ">
               <img
                 src={imageUrl}
                 alt={post.title}
@@ -220,7 +221,9 @@ export default function PostDetailsPage() {
             )}
           </article>
 
-          <RightSidebar />
+          {/* <RightSidebar /> */}
+            <SupplierAds />
+
         </section>
 
         <RelatedPostsCarousel />

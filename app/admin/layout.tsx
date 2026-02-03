@@ -81,7 +81,7 @@ export default function AdminLayout({
 
 <SidebarLink
   href="/admin/events"
-  label="Create Event"
+  label="Events"
   icon={<Folder size={18} />}
   active={pathname === "/admin/events/create"}
 />

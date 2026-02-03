@@ -16,7 +16,7 @@ function ExploreCategories() {
   ];
 
   return (
-    <div className="bg-white border rounded-xl p-6">
+    <div className="bg-white  rounded-none p-6">
       <h3 className="text-xl font-semibold mb-6">Explore Categories</h3>
 
       <div className="space-y-3">
@@ -59,7 +59,7 @@ function PopularNewsSidebar() {
       : "/placeholder.jpg";
 
   return (
-    <div className="bg-white border rounded-xl p-6">
+    <div className="bg-white  rounded-none p-6">
       <h3 className="text-xl font-semibold mb-6">Popular News</h3>
 
       <div className="space-y-6">
@@ -100,7 +100,7 @@ function TagsWidget() {
   ];
 
   return (
-    <div className="bg-white border rounded-xl p-6">
+    <div className="bg-white  rounded-none p-6">
       <h3 className="text-xl font-semibold mb-6">Tags</h3>
 
       <div className="flex flex-wrap gap-3">
@@ -178,7 +178,7 @@ export default function FeaturedPostsSection({ posts }: FeaturedPostsSectionProp
                   return (
                     <article
                       key={post.id}
-                      className="border rounded-xl overflow-hidden hover:shadow-md transition"
+                      className=" rounded-none overflow-hidden hover:shadow-md transition"
                     >
                       <Link href={`/post/${post.slug}`}>
                         <div className="h-[260px] overflow-hidden">
