@@ -211,7 +211,7 @@ type Event = {
  */
 async function getEvents(search?: string): Promise<Event[]> {
   const baseUrl =
-    process.env.API_URL || "http://localhost:5000"
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
 
   const url = new URL("/api/events", baseUrl)
 
