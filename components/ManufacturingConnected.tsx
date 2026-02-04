@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Post } from "@/types/Post";
+import SupplierAds from "@/components/SupplierAds";
 
 /* ================= RIGHT SIDEBAR ================= */
 
@@ -221,9 +222,11 @@ export default function FeaturedPostsSection({ posts }: FeaturedPostsSectionProp
           {/* RIGHT SIDEBAR */}
           <aside className="lg:col-span-1">
             <div className="sticky top-24 space-y-8">
-              <ExploreCategories />
+              {/* <ExploreCategories />
               <PopularNewsSidebar />
-              <TagsWidget />
+              <TagsWidget /> */}
+
+              <SupplierAds />
             </div>
           </aside>
         </div>

@@ -9,20 +9,29 @@ export default function EditPost() {
   const [form, setForm] = useState({
     title: "",
     slug: "",
+    badge: "",
     imageUrl: "",
     excerpt: "",
     content: "",
     authorId: "",
     categoryId: "",
+
+    facebookUrl: "",
+    linkedinUrl: "",
+    twitterUrl: "",
+    youtubeUrl: "",
+    email: "",
+    whatsappNumber: "",
   });
 
   const [authors, setAuthors] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [message, setMessage] = useState("");
+  const [uploading, setUploading] = useState(false);
 
-  // ✅ Fetch post, authors, categories
+  /* ================= LOAD DATA ================= */
   useEffect(() => {
-    async function loadData() {
+    async function load() {
       try {
         const [postRes, authorRes, categoryRes] = await Promise.all([
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`),
@@ -30,175 +39,154 @@ export default function EditPost() {
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`),
         ]);
 
-        const [postData, authorData, categoryData] = await Promise.all([
-          postRes.json(),
-          authorRes.json(),
-          categoryRes.json(),
-        ]);
+        const postJson = await postRes.json();
+        const post = postJson.data || postJson;
 
-        // ✅ Handle data shape
-        const post = postData.data || postData;
         setForm({
           title: post.title || "",
           slug: post.slug || "",
+          badge: post.badge || "",
           imageUrl: post.imageUrl || "",
           excerpt: post.excerpt || "",
           content: post.content || "",
           authorId: String(post.authorId || post.author?.id || ""),
           categoryId: String(post.categoryId || post.category?.id || ""),
+
+          facebookUrl: post.facebookUrl || "",
+          linkedinUrl: post.linkedinUrl || "",
+          twitterUrl: post.twitterUrl || "",
+          youtubeUrl: post.youtubeUrl || "",
+          email: post.email || "",
+          whatsappNumber: post.whatsappNumber || "",
         });
 
-        setAuthors(authorData.data || authorData);
-        setCategories(categoryData.data || categoryData);
-      } catch (error) {
-        console.error("Error loading data:", error);
+        setAuthors((await authorRes.json()).data || []);
+        setCategories((await categoryRes.json()).data || []);
+      } catch (err) {
+        console.error(err);
+        setMessage("❌ Failed to load post");
       }
     }
 
-    loadData();
+    load();
   }, [id]);
 
-  // ✅ Handle form updates
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  /* ================= HANDLERS ================= */
+  function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
+    const title = e.target.value;
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+    setForm(prev => ({ ...prev, title, slug }));
+  }
 
-  // ✅ Submit updated post
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    setMessage("");
+  function handleChange(
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  }
+
+  async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setMessage("⏫ Uploading image...");
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          ...form,
-          authorId: Number(form.authorId),
-          categoryId: Number(form.categoryId),
-        }),
-      });
+      const fd = new FormData();
+      fd.append("image", file);
 
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
+        { method: "POST", body: fd }
+      );
+
+      const data = await res.json();
       if (res.ok) {
-        setMessage("✅ Post updated successfully!");
-        setTimeout(() => router.push("/admin/posts"), 1500);
-      } else {
-        const err = await res.text();
-        console.error("Update failed:", err);
-        setMessage("❌ Failed to update post.");
-      }
-    } catch (error) {
-      console.error(error);
-      setMessage("❌ Network error while updating.");
+        setForm(prev => ({ ...prev, imageUrl: data.imageUrl }));
+        setMessage("✅ Image updated");
+      } else throw new Error();
+    } catch {
+      setMessage("❌ Image upload failed");
+    } finally {
+      setUploading(false);
     }
   }
 
+  /* ================= SUBMIT ================= */
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ...form,
+            authorId: Number(form.authorId),
+            categoryId: Number(form.categoryId),
+          }),
+        }
+      );
+
+      if (res.ok) {
+        setMessage("✅ Post updated successfully!");
+        setTimeout(() => router.push("/admin/posts"), 1200);
+      } else {
+        setMessage("❌ Update failed");
+      }
+    } catch {
+      setMessage("❌ Network error");
+    }
+  }
+
+  /* ================= UI ================= */
   return (
-    <div className="p-8 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Edit Post</h1>
+    <div className="max-w-3xl mx-auto p-8">
+      <h1 className="text-2xl font-bold mb-6">✏️ Edit Post</h1>
       {message && <p className="mb-4 text-sm">{message}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded shadow">
-        <div>
-          <label className="block mb-1 font-semibold">Title</label>
-          <input
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            className="border p-2 w-full rounded"
-            required
-          />
-        </div>
 
-        <div>
-          <label className="block mb-1 font-semibold">Slug</label>
-          <input
-            name="slug"
-            value={form.slug}
-            onChange={handleChange}
-            className="border p-2 w-full rounded"
-            required
-          />
-        </div>
+        <input name="title" value={form.title} onChange={handleTitleChange} placeholder="Title" className="w-full p-3 border rounded" />
+        <input name="slug" value={form.slug} onChange={handleChange} placeholder="Slug" className="w-full p-3 border rounded" />
+        <input name="badge" value={form.badge} onChange={handleChange} placeholder="Badge" className="w-full p-3 border rounded" />
 
-        <div>
-          <label className="block mb-1 font-semibold">Image URL</label>
-          <input
-            name="imageUrl"
-            value={form.imageUrl}
-            onChange={handleChange}
-            className="border p-2 w-full rounded"
-          />
-        </div>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        {form.imageUrl && <img src={form.imageUrl} className="rounded max-h-56 object-cover" />}
 
-        <div>
-          <label className="block mb-1 font-semibold">Excerpt</label>
-          <textarea
-            name="excerpt"
-            value={form.excerpt}
-            onChange={handleChange}
-            className="border p-2 w-full h-20 rounded"
-          />
-        </div>
+        <select name="categoryId" value={form.categoryId} onChange={handleChange} className="w-full p-3 border rounded">
+          <option value="">Select Category</option>
+          {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+        </select>
 
-        <div>
-          <label className="block mb-1 font-semibold">Content</label>
-          <textarea
-            name="content"
-            value={form.content}
-            onChange={handleChange}
-            className="border p-2 w-full h-40 rounded"
-            required
-          />
-        </div>
+        <select name="authorId" value={form.authorId} onChange={handleChange} className="w-full p-3 border rounded">
+          <option value="">Select Author</option>
+          {authors.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
+        </select>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1 font-semibold">Author</label>
-            <select
-              name="authorId"
-              value={form.authorId}
-              onChange={handleChange}
-              className="border p-2 w-full rounded"
-              required
-            >
-              <option value="">Select Author</option>
-              {authors.map((a: any) => (
-                <option key={a.id} value={a.id}>
-                  {a.name}
-                </option>
-              ))}
-            </select>
-          </div>
+        <textarea name="excerpt" value={form.excerpt} onChange={handleChange} rows={3} placeholder="Excerpt" className="w-full p-3 border rounded" />
+        <textarea name="content" value={form.content} onChange={handleChange} rows={8} placeholder="Content" className="w-full p-3 border rounded" />
 
-          <div>
-            <label className="block mb-1 font-semibold">Category</label>
-            <select
-              name="categoryId"
-              value={form.categoryId}
-              onChange={handleChange}
-              className="border p-2 w-full rounded"
-              required
-            >
-              <option value="">Select Category</option>
-              {categories.map((c: any) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <h3 className="font-semibold">🔗 Social & Contact</h3>
+        <input name="facebookUrl" value={form.facebookUrl} onChange={handleChange} placeholder="Facebook URL" className="w-full p-3 border rounded" />
+        <input name="linkedinUrl" value={form.linkedinUrl} onChange={handleChange} placeholder="LinkedIn URL" className="w-full p-3 border rounded" />
+        <input name="twitterUrl" value={form.twitterUrl} onChange={handleChange} placeholder="Twitter/X URL" className="w-full p-3 border rounded" />
+        <input name="youtubeUrl" value={form.youtubeUrl} onChange={handleChange} placeholder="YouTube URL" className="w-full p-3 border rounded" />
+        <input name="email" value={form.email} onChange={handleChange} placeholder="Email" className="w-full p-3 border rounded" />
+        <input name="whatsappNumber" value={form.whatsappNumber} onChange={handleChange} placeholder="WhatsApp Number" className="w-full p-3 border rounded" />
 
-        <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded font-medium">
-          Update Post
+        <button className="bg-indigo-600 text-white w-full py-3 rounded font-semibold">
+          💾 Update Post
         </button>
       </form>
     </div>

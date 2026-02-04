@@ -7,15 +7,15 @@ export default function SupplierAds() {
       <Ad src="/images/mmtsub.png" />
       <Ad src="/images/PTXPO26_RegNow.png" />
       <Ad src="/images/MMT-progress.png" />
-      <Ad src="/images/mmtsub.png" />
-      <Ad src="/images/PTXPO26_RegNow.png" />
+      {/* <Ad src="/images/mmtsub.png" /> */}
+      {/* <Ad src="/images/PTXPO26_RegNow.png" /> */}
     </div>
   )
 }
 
 function Ad({ src }: { src: string }) {
   return (
-    <div className="bg-white border">
+    <div className="bg-white ">
       <Image
         src={src}
         alt="Advertisement"

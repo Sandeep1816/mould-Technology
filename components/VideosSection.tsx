@@ -8,6 +8,7 @@ type VideoPost = {
   id: number
   title: string
   slug: string
+  badge?: string
   category?: { name: string; slug?: string } | string
   publishedAt?: string
   imageUrl?: string
@@ -16,6 +17,22 @@ type VideoPost = {
     name: string
     avatarUrl?: string
   }
+}
+
+/* ================= COLOR CONFIG ================= */
+
+const BADGE_COLORS: Record<string, string> = {
+  FEATURED: "bg-[#E11D48]",
+  WEBINAR: "bg-[#7C3AED]",
+  EVENT: "bg-[#0EA5E9]",
+  TRENDING: "bg-[#F97316]",
+  EXCLUSIVE: "bg-[#059669]",
+}
+
+const CATEGORY_COLORS: Record<string, string> = {
+  video: "bg-[#F69C00]",
+  latest: "bg-[#F69C00]",
+  engineering: "bg-[#0072BC]",
 }
 
 export default function VideosSection() {
@@ -74,10 +91,42 @@ export default function VideosSection() {
       </span>
     ) : null
 
+  /* ================= TAG HELPERS ================= */
+
+  const getTag = (post?: VideoPost) => {
+    const badge = post?.badge?.trim()
+    const slug =
+      typeof post?.category === "object"
+        ? post?.category?.slug?.toLowerCase() || ""
+        : String(post?.category || "").toLowerCase()
+
+    const categoryName =
+      typeof post?.category === "object"
+        ? post?.category?.name || ""
+        : String(post?.category || "")
+
+    const text = badge ? badge : categoryName
+
+    let color = "bg-[#9CA3AF]" // default gray
+
+    if (badge) {
+      color = BADGE_COLORS[badge.toUpperCase()] || "bg-[#6B7280]"
+    } else {
+      const match = Object.keys(CATEGORY_COLORS).find((k) =>
+        slug.includes(k)
+      )
+      if (match) color = CATEGORY_COLORS[match]
+    }
+
+    return { text, color }
+  }
+
+  /* ================= RENDER ================= */
+
+  const featuredTag = getTag(featured)
+
   return (
-    /* ✅ EXACT NERIO SECTION SPACING */
     <section className="bg-[#171A1E] pt-[70px] pb-[80px] text-white">
-      {/* ✅ EXACT BOOTSTRAP CONTAINER */}
       <div className="max-w-[1320px] mx-auto px-[15px]">
 
         {/* HEADER */}
@@ -92,7 +141,6 @@ export default function VideosSection() {
           </Link>
         </div>
 
-        {/* GRID — col-xl-8 / col-xl-4 */}
         <div className="grid grid-cols-1 lg:grid-cols-[8fr_4fr] gap-8">
 
           {/* FEATURED VIDEO */}
@@ -109,20 +157,18 @@ export default function VideosSection() {
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-            {/* PLAY BUTTON */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-red-600 rounded-full p-5">
-                ▶
-              </div>
+              <div className="bg-red-600 rounded-full p-5">▶</div>
             </div>
 
-            {/* CONTENT */}
             <div className="absolute bottom-6 left-6 max-w-[85%]">
-              <span className="bg-[#F69C00] text-xs font-bold px-3 py-1 rounded">
-                {typeof featured.category === "object"
-                  ? featured.category?.name
-                  : featured.category}
-              </span>
+              {featuredTag.text && (
+                <span
+                  className={`${featuredTag.color} text-xs font-bold px-3 py-1 rounded`}
+                >
+                  {featuredTag.text}
+                </span>
+              )}
 
               <h3 className="text-[28px] font-semibold mt-4 leading-snug">
                 {featured.title}
@@ -131,50 +177,61 @@ export default function VideosSection() {
               <div className="flex items-center gap-4 text-sm text-gray-300 mt-3">
                 <AuthorMeta video={featured} />
                 <span>{date(featured.publishedAt)}</span>
-                {featured.views && <span>{featured.views.toLocaleString()} Views</span>}
+                {featured.views && (
+                  <span>{featured.views.toLocaleString()} Views</span>
+                )}
               </div>
             </div>
           </Link>
 
           {/* SIDE VIDEOS */}
           <div className="space-y-6">
-            {sideVideos.map((video) => (
-              <Link
-                key={video.id}
-                href={`/post/${video.slug}`}
-                className="flex gap-4 pb-6 border-b border-white/10"
-              >
-                <div className="relative w-[120px] h-[90px] rounded-lg overflow-hidden">
-                  <Image
-                    src={imageUrl(video)}
-                    alt={video.title}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="bg-red-600 rounded-full p-2">▶</div>
+            {sideVideos.map((video) => {
+              const tag = getTag(video)
+
+              return (
+                <Link
+                  key={video.id}
+                  href={`/post/${video.slug}`}
+                  className="flex gap-4 pb-6 border-b border-white/10"
+                >
+                  <div className="relative w-[120px] h-[90px] rounded-lg overflow-hidden">
+                    <Image
+                      src={imageUrl(video)}
+                      alt={video.title}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                      <div className="bg-red-600 rounded-full p-2">▶</div>
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <span className="bg-[#54BD05] text-xs font-bold px-3 py-1 rounded">
-                    {typeof video.category === "object"
-                      ? video.category?.name
-                      : video.category}
-                  </span>
+                  <div>
+                    {tag.text && (
+                      <span
+                        className={`${tag.color} text-xs font-bold px-3 py-1 rounded`}
+                      >
+                        {tag.text}
+                      </span>
+                    )}
 
-                  <h4 className="text-base font-semibold mt-2 leading-snug line-clamp-2">
-                    {video.title}
-                  </h4>
+                    <h4 className="text-base font-semibold mt-2 leading-snug line-clamp-2">
+                      {video.title}
+                    </h4>
 
-                  <div className="flex items-center gap-3 text-xs text-gray-400 mt-2">
-                    <AuthorMeta video={video} />
-                    {video.views && <span>{video.views.toLocaleString()} Views</span>}
+                    <div className="flex items-center gap-3 text-xs text-gray-400 mt-2">
+                      <AuthorMeta video={video} />
+                      {video.views && (
+                        <span>{video.views.toLocaleString()} Views</span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              )
+            })}
           </div>
+
         </div>
       </div>
     </section>

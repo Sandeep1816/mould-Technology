@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Post } from "../types/Post";
+import SupplierAds from "@/components/SupplierAds";
 
 /* ------------------ RIGHT SIDEBAR COMPONENTS ------------------ */
 
@@ -229,11 +230,12 @@ export default function BasicsSection() {
 
           {/* RIGHT */}
           <aside>
-            <div className="sticky top-[90px] space-y-8">
-              <ExploreCategories />
+            {/* <div className="sticky top-[90px] space-y-8"> */}
+              {/* <ExploreCategories />
               <PopularNewsSidebar />
-              <FollowUsWidget />
-            </div>
+              <FollowUsWidget /> */}
+              <SupplierAds />
+            {/* </div> */}
           </aside>
         </div>
       </div>

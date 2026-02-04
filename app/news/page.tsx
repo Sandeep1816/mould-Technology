@@ -1,7 +1,126 @@
-export default function NewsPage() {
-    return (
-        <main className="min-h-screen p-10">
-            <h1 className="text-3xl font-bold">News</h1>
-        </main>
-    )
+import Link from "next/link"
+import type { Post } from "@/types/Post"
+import SupplierAds from "@/components/SupplierAds"
+import NewsletterForm from "@/components/news/NewsletterForm"
+
+export default async function NewsPage() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`,
+    { cache: "no-store" }
+  )
+
+  const data = await res.json()
+  const posts: Post[] = data.data || data
+
+  const slugOf = (post: Post) =>
+    typeof post.category === "object"
+      ? post.category?.slug?.toLowerCase()
+      : String(post.category || "").toLowerCase()
+
+  const getImage = (url?: string | null) => {
+    if (!url) return "/placeholder.svg"
+    if (url.startsWith("http")) return url
+    return `${process.env.NEXT_PUBLIC_API_URL}${url}`
+  }
+
+  // ================= WHAT'S NEW =================
+  const whatsNewPosts = posts
+    .filter((p) => slugOf(p).includes("whatsnew"))
+    .slice(0, 5)
+
+  // ================= NEWS POSTS =================
+  const newsPosts = posts.filter(
+    (p) => slugOf(p) === "news"
+  )
+
+  return (
+    <main className="bg-white">
+
+      {/* ================= WHAT'S NEW STRIP ================= */}
+      <section className="border-b border-gray-200">
+        <div className="max-w-[1320px] mx-auto px-6 py-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {whatsNewPosts.map((post) => (
+            <Link key={post.id} href={`/post/${post.slug}`}>
+              <p className="text-sm font-semibold hover:text-[#C8102E]">
+                {post.title}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ================= NEWSLETTER ================= */}
+      <NewsletterForm />
+
+      {/* ================= NEWS LIST ================= */}
+      <section className="max-w-[1320px] mx-auto px-6 py-16">
+        <h1 className="text-[36px] font-bold text-[#003B5C] mb-10">
+          News
+        </h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+
+          {/* LEFT */}
+          <div className="space-y-12">
+            {newsPosts.map((post) => (
+              <article
+                key={post.id}
+                className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 pb-10 border-b"
+              >
+                <img
+                  src={getImage(post.imageUrl)}
+                  alt={post.title}
+                  className="w-full h-[160px] object-cover rounded"
+                />
+
+                <div>
+                  <span className="text-xs text-gray-500 block mb-1">
+                    {post.publishedAt
+                      ? new Date(post.publishedAt).toLocaleDateString("en-US", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })
+                      : ""}
+                  </span>
+
+                  <h2 className="text-[22px] font-bold mb-2">
+                    {post.title}
+                  </h2>
+
+                  <p className="text-gray-600 mb-3">
+                    {post.excerpt ||
+                      post.content
+                        ?.replace(/<[^>]+>/g, "")
+                        .slice(0, 140) + "..."}
+                  </p>
+
+                  <Link
+                    href={`/post/${post.slug}`}
+                    className="text-[#0072BC] font-bold uppercase text-sm"
+                  >
+                    Read More →
+                  </Link>
+                </div>
+              </article>
+            ))}
+
+            {/* PAGINATION */}
+            <div className="flex gap-2">
+              <button className="border px-3 py-2">‹</button>
+              <button className="border px-3 py-2 bg-[#003B5C] text-white">1</button>
+              <button className="border px-3 py-2">2</button>
+              <button className="border px-3 py-2">3</button>
+              <button className="border px-3 py-2">›</button>
+            </div>
+          </div>
+
+          {/* RIGHT ADS */}
+          <aside className="sticky top-24 space-y-6">
+            <SupplierAds />
+          </aside>
+        </div>
+      </section>
+    </main>
+  )
 }

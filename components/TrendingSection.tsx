@@ -5,6 +5,23 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Post } from "../types/Post";
 
+/* ================= COLOR CONFIG ================= */
+
+const BADGE_COLORS: Record<string, string> = {
+  FEATURED: "bg-[#E11D48]",
+  WEBINAR: "bg-[#7C3AED]",
+  EVENT: "bg-[#0EA5E9]",
+  TRENDING: "bg-[#F97316]",
+  EXCLUSIVE: "bg-[#059669]",
+};
+
+const CATEGORY_COLORS: Record<string, string> = {
+  trending: "bg-[#F59E0B]", // yellow
+  latest: "bg-[#F69C00]",
+  video: "bg-[#EF4444]",
+  engineering: "bg-[#2563EB]",
+};
+
 export default function TrendingSection() {
   const [posts, setPosts] = useState<Post[]>([]);
 
@@ -55,10 +72,39 @@ export default function TrendingSection() {
       </div>
     ) : null;
 
+  /* ================= TAG HELPER ================= */
+
+  const getTag = (post?: Post) => {
+    const badge = post?.badge?.trim();
+
+    const slug =
+      typeof post?.category === "object"
+        ? post?.category?.slug?.toLowerCase() || ""
+        : String(post?.category || "").toLowerCase();
+
+    const categoryName =
+      typeof post?.category === "object"
+        ? post?.category?.name || ""
+        : String(post?.category || "");
+
+    const text = badge ? badge : categoryName;
+
+    let color = "bg-gray-400";
+
+    if (badge) {
+      color = BADGE_COLORS[badge.toUpperCase()] || "bg-gray-500";
+    } else {
+      const match = Object.keys(CATEGORY_COLORS).find((k) =>
+        slug.includes(k)
+      );
+      if (match) color = CATEGORY_COLORS[match];
+    }
+
+    return { text, color };
+  };
+
   return (
-    /* 🔹 rs-trending-news-area */
     <section className="bg-[#0f1318] pt-[70px] pb-[80px] text-white">
-      {/* 🔹 container */}
       <div className="max-w-[1320px] mx-auto px-[12px] space-y-10">
 
         {/* HEADER */}
@@ -79,28 +125,33 @@ export default function TrendingSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[s1, s2, s3].map(
               (post, i) =>
-                post && (
-                  <div key={i} className="flex gap-4">
-                    <Image
-                      src={imageUrl(post)}
-                      alt={post.title}
-                      width={90}
-                      height={90}
-                      className="rounded-lg object-cover"
-                    />
-                    <div>
-                      <span className="inline-block mb-2 text-xs font-bold px-3 py-1 rounded bg-yellow-500 text-black">
-                        {typeof post.category === "object"
-                          ? post.category?.name
-                          : post.category}
-                      </span>
-                      <h3 className="text-white text-[16px] font-semibold leading-snug">
-                        {post.title}
-                      </h3>
-                      <Meta post={post} />
+                post && (() => {
+                  const tag = getTag(post);
+                  return (
+                    <div key={i} className="flex gap-4">
+                      <Image
+                        src={imageUrl(post)}
+                        alt={post.title}
+                        width={90}
+                        height={90}
+                        className="rounded-lg object-cover"
+                      />
+                      <div>
+                        {tag.text && (
+                          <span
+                            className={`${tag.color} inline-block mb-2 text-xs font-bold px-3 py-1 rounded text-black`}
+                          >
+                            {tag.text}
+                          </span>
+                        )}
+                        <h3 className="text-white text-[16px] font-semibold leading-snug">
+                          {post.title}
+                        </h3>
+                        <Meta post={post} />
+                      </div>
                     </div>
-                  </div>
-                )
+                  );
+                })()
             )}
           </div>
         </div>
@@ -108,45 +159,54 @@ export default function TrendingSection() {
         {/* FEATURE POSTS */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          {big && (
-            <Link
-              href={`/post/${big.slug}`}
-              className="lg:col-span-2 relative h-[420px] rounded-xl overflow-hidden"
-            >
-              <Image src={imageUrl(big)} alt={big.title} fill className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-              <div className="absolute bottom-6 left-6 max-w-xl">
-                <span className="bg-blue-600 text-xs font-bold px-3 py-1 rounded">
-                  {typeof big.category === "object" ? big.category?.name : big.category}
-                </span>
-                <h2 className="text-white text-[30px] font-semibold mt-4">
-                  {big.title}
-                </h2>
-                <Meta post={big} />
-              </div>
-            </Link>
-          )}
+          {big && (() => {
+            const tag = getTag(big);
+            return (
+              <Link
+                href={`/post/${big.slug}`}
+                className="lg:col-span-2 relative h-[420px] rounded-xl overflow-hidden"
+              >
+                <Image src={imageUrl(big)} alt={big.title} fill className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                <div className="absolute bottom-6 left-6 max-w-xl">
+                  {tag.text && (
+                    <span className={`${tag.color} text-xs font-bold px-3 py-1 rounded`}>
+                      {tag.text}
+                    </span>
+                  )}
+                  <h2 className="text-white text-[30px] font-semibold mt-4">
+                    {big.title}
+                  </h2>
+                  <Meta post={big} />
+                </div>
+              </Link>
+            );
+          })()}
 
-          {right && (
-            <Link
-              href={`/post/${right.slug}`}
-              className="relative h-[420px] rounded-xl overflow-hidden"
-            >
-              <Image src={imageUrl(right)} alt={right.title} fill className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-              <div className="absolute bottom-6 left-6">
-                <span className="bg-pink-600 text-xs font-bold px-3 py-1 rounded">
-                  {typeof right.category === "object"
-                    ? right.category?.name
-                    : right.category}
-                </span>
-                <h3 className="text-white text-[24px] font-semibold mt-4">
-                  {right.title}
-                </h3>
-                <Meta post={right} />
-              </div>
-            </Link>
-          )}
+          {right && (() => {
+            const tag = getTag(right);
+            return (
+              <Link
+                href={`/post/${right.slug}`}
+                className="relative h-[420px] rounded-xl overflow-hidden"
+              >
+                <Image src={imageUrl(right)} alt={right.title} fill className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                <div className="absolute bottom-6 left-6">
+                  {tag.text && (
+                    <span className={`${tag.color} text-xs font-bold px-3 py-1 rounded`}>
+                      {tag.text}
+                    </span>
+                  )}
+                  <h3 className="text-white text-[24px] font-semibold mt-4">
+                    {right.title}
+                  </h3>
+                  <Meta post={right} />
+                </div>
+              </Link>
+            );
+          })()}
+
         </div>
       </div>
     </section>

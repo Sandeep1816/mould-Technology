@@ -48,7 +48,7 @@ function PopularNewsSidebar() {
   useEffect(() => {
     async function fetchPosts() {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=5`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=4`
       );
       const json = await res.json();
       setPosts(json.data || json);
@@ -83,11 +83,17 @@ function PopularNewsSidebar() {
             />
 
             <div>
+                {(post.badge || post.category) && (
+
+
               <span className="inline-block mb-1 text-[11px] font-bold uppercase bg-[#54bd05] text-white px-2 py-[2px] rounded">
-                {typeof post.category === "object"
-                  ? post.category?.name
-                  : post.category}
+                 {post.badge
+        ? post.badge
+        : typeof post.category === "object"
+        ? post.category?.name
+        : post.category}
               </span>
+                )}
 
               <h6 className="text-[14px] font-semibold leading-snug text-[#121213] line-clamp-2">
                 {post.title}

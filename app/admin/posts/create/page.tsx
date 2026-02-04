@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState, FormEvent, ChangeEvent } from "react";
+import UploadBox from "@/components/UploadBox"
+
 
 export default function CreatePost() {
   const [form, setForm] = useState({
@@ -64,35 +66,36 @@ export default function CreatePost() {
   }
 
   /* ================= IMAGE UPLOAD ================= */
-  async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+async function handleImageUpload(file: File) {
+  setUploading(true)
+  setMessage("⏫ Uploading image...")
 
-    setUploading(true);
-    setMessage("⏫ Uploading image...");
+  try {
+    const formData = new FormData()
+    formData.append("image", file)
 
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
+      {
         method: "POST",
         body: formData,
-      });
-
-      const data = await res.json();
-      if (res.ok && data.imageUrl) {
-        setForm(prev => ({ ...prev, imageUrl: data.imageUrl }));
-        setMessage("✅ Image uploaded successfully!");
-      } else {
-        throw new Error();
       }
-    } catch {
-      setMessage("❌ Image upload failed");
-    } finally {
-      setUploading(false);
+    )
+
+    const data = await res.json()
+    if (res.ok && data.imageUrl) {
+      setForm(prev => ({ ...prev, imageUrl: data.imageUrl }))
+      setMessage("✅ Image uploaded successfully!")
+    } else {
+      throw new Error()
     }
+  } catch {
+    setMessage("❌ Image upload failed")
+  } finally {
+    setUploading(false)
   }
+}
+
 
   /* ================= SUBMIT ================= */
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -193,14 +196,14 @@ export default function CreatePost() {
             className="w-full p-3 border rounded-lg"
           />
 
-          {/* IMAGE */}
-          <input type="file" accept="image/*" onChange={handleFileChange} />
-          {form.imageUrl && (
-            <img
-              src={form.imageUrl}
-              className="w-full max-h-64 object-cover rounded-lg"
-            />
-          )}
+         {/* IMAGE */}
+<UploadBox
+  label="Featured Image"
+  value={form.imageUrl}
+  onUpload={handleImageUpload}
+  height="h-64"
+/>
+
 
           {/* CATEGORY */}
           <select

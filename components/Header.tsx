@@ -105,7 +105,7 @@ export default function Header() {
 
           {/* DESKTOP NAV */}
           <nav className="hidden lg:flex justify-center gap-8 text-white font-medium">
-            <Link href="/">Home</Link>
+            {/* <Link href="/">Home</Link> */}
 
             <button
               onMouseEnter={() => {
@@ -132,6 +132,7 @@ export default function Header() {
             <Link href="/suppliers">Directory</Link>
             <Link href="/mmtchats">MMT CHATS</Link>
             <Link href="/events">Events</Link>
+            <Link href="/signup">Jobs</Link>
           </nav>
 
           {/* AUTH / USER */}

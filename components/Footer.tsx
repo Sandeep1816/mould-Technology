@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <footer className="relative bg-[#0A2B57] text-[#BEBEBE]">
       {/* ================= FOOTER TOP ================= */}
-      <div className="pt-[70px] pb-[80px]">
+      <div className="pt-[70px] pb-[30px]">
         <div className="max-w-[1320px] mx-auto px-[15px]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
 
@@ -96,19 +96,19 @@ export default function Footer() {
               </h5>
               <ul className="space-y-3 text-sm mb-8">
                 <li><Link href="/articles">Latest Issue</Link></li>
-                <li><Link href="/magazine/archives">Archives</Link></li>
+                <li><Link href="/">Archives</Link></li>
                 <li><Link href="/subscribe">Subscribe</Link></li>
-                <li><Link href="/subscribe/renew">Renew Subscription</Link></li>
-                <li><Link href="/customer-service">Subscription Customer Service</Link></li>
+                <li><Link href="/">Renew Subscription</Link></li>
+                <li><Link href="/">Subscription Customer Service</Link></li>
               </ul>
 
-              <h5 className="text-white text-lg font-semibold mb-6 uppercase">
+              {/* <h5 className="text-white text-lg font-semibold mb-6 uppercase">
                 Calendar
               </h5>
               <ul className="space-y-3 text-sm">
                 <li><Link href="/webinars">Webinars</Link></li>
                 <li><Link href="/events">Events</Link></li>
-              </ul>
+              </ul> */}
             </div>
 
             {/* ================= MORE ================= */}
@@ -119,10 +119,20 @@ export default function Footer() {
               <ul className="space-y-3 text-sm">
                 <li><Link href="/contact">Contact Us</Link></li>
                 <li><Link href="/suppliers">Find a Supplier</Link></li>
-                <li><Link href="/editorial-guidelines">Editorial Guidelines</Link></li>
-                <li><Link href="/leadtime-leader">Leadtime Leader</Link></li>
-                <li><Link href="/ask-the-expert">Ask the Expert</Link></li>
-                <li><Link href="/30-under-30">30 Under 30</Link></li>
+                {/* <li><Link href="/editorial-guidelines">Editorial Guidelines</Link></li> */}
+                {/* <li><Link href="/leadtime-leader">Leadtime Leader</Link></li> */}
+                {/* <li><Link href="/ask-the-expert">Ask the Expert</Link></li> */}
+                {/* <li><Link href="/30-under-30">30 Under 30</Link></li> */}
+              </ul>
+
+              <br />
+
+               <h5 className="text-white text-lg font-semibold mb-4 uppercase">
+                Calendar
+              </h5>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/webinars">Webinars</Link></li>
+                <li><Link href="/events">Events</Link></li>
               </ul>
             </div>
 
