@@ -132,7 +132,7 @@ export default function Header() {
             <Link href="/suppliers">Directory</Link>
             <Link href="/mmtchats">MMT CHATS</Link>
             <Link href="/events">Events</Link>
-            <Link href="/signup">Jobs</Link>
+            <Link href="/feed">Jobs</Link>
           </nav>
 
           {/* AUTH / USER */}
@@ -147,12 +147,12 @@ export default function Header() {
                   Login
                 </Link>
 
-                <Link
+                {/* <Link
                   href="/signup"
                   className="hidden md:flex h-10 px-5 border border-white text-white rounded-md text-sm font-semibold items-center"
                 >
                   Sign Up
-                </Link>
+                </Link> */}
               </>
             )}
 
@@ -243,12 +243,12 @@ export default function Header() {
             {/* RIGHT POSTS */}
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold uppercase text-white">
+                <h3 className="text-2xl font-bold uppercase text-white">  
                   {activeSlug.replace(/-/g, " ")}
                 </h3>
 
                 <Link
-                  href={`/${openMega}/${activeSlug}`}
+                  href={`/${activeSlug}`}
                   className="bg-red-600 px-4 py-2 text-sm font-bold text-white"
                 >
                   See All →

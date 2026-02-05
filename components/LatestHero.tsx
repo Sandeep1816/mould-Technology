@@ -55,7 +55,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
     : "Today"
 
   return (
-    /* 🔹 SAME TOP SPACING AS NERIO */
+    /* 🔹 SAME TOP SPACING AS Tooling Trends */
     <section className="pt-[40px] w-full">
       {/* 🔹 BOOTSTRAP CONTAINER EQUIVALENT */}
       <div className="max-w-[1320px] mx-auto px-[12px]">

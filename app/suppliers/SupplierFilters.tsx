@@ -2,7 +2,7 @@
 
 export default function SupplierFilters() {
   return (
-    <div className="bg-white  rounded p-4 sticky top-6 max-h-[calc(100vh-40px)] overflow-y-auto">
+    <div className="bg-white  rounded p-4 sticky top-6 ">
 
       {/* SEARCH */}
       <input className="w-full border p-2 mb-3" placeholder="Search by supplier name" />

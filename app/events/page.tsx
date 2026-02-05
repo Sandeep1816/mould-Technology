@@ -251,7 +251,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
 
       {/* ================= HERO SECTION ================= */}
       {featuredEvent?.bannerUrl && (
-        <div className="relative w-full h-[420px]">
+        <div className="relative w-full h-[360px]">
           <Image
             src={featuredEvent.bannerUrl}
             alt={featuredEvent.title}
@@ -260,7 +260,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             priority
           />
 
-          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+          {/* <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
             <div className="bg-white p-8 max-w-md text-center shadow-lg">
               {featuredEvent.logoUrl && (
                 <Image
@@ -296,7 +296,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
                 </Link>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       )}
 

@@ -13,7 +13,7 @@ export default function AuthHero({
 
       <p className="mt-2 text-sm text-[#616C74]">
         <Link href="/" className="hover:text-[#0073FF]">
-          Nerio
+          Tooling Trends
         </Link>{" "}
         →{" "}
         <span className="text-[#0073FF]">{title}</span>

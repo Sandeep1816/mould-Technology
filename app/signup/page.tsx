@@ -7,21 +7,26 @@ export default function SignupPage() {
     <>
       <AuthHero title="Sign Up" />
 
-      <section className="py-28">
+      <section className="py-24 bg-[#f5f7fa]">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 bg-white rounded-[20px] shadow-xl overflow-hidden">
-            
-            <div className="flex items-center justify-center p-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 bg-white rounded-2xl shadow-2xl overflow-hidden">
+
+            {/* LEFT – FORM */}
+            <div className="flex items-center justify-center px-10 py-14">
               <SignupForm />
             </div>
 
+            {/* RIGHT – IMAGE */}
             <div className="hidden lg:block relative">
               <Image
                 src="/images/login.png"
                 alt="Signup"
                 fill
+                priority
                 className="object-cover"
               />
+              {/* subtle overlay for professionalism */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0b3954]/40 to-[#0b3954]/20" />
             </div>
 
           </div>

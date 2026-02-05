@@ -1,78 +1,20 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import {
-  MapPin,
-  Briefcase,
-  Clock,
-  Users,
-} from "lucide-react"
 import Link from "next/link"
 import { useCandidateGuard } from "@/lib/useCandidateGuard"
-
-type Job = {
-  id: number
-  title: string
-  slug: string
-  description: string
-  location: string
-  employmentType?: string
-  company?: {
-    name: string
-    slug: string
-  }
-}
+import JobFeed from "@/components/job/JobFeed"
 
 export default function CandidateFeedPage() {
-  // 🔐 Redirect if not candidate
+  // 🔐 Candidate-only page
   useCandidateGuard()
 
-  const [jobs, setJobs] = useState<Job[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function loadJobs() {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/jobs`,
-          { cache: "no-store" }
-        )
-
-        const data = await res.json()
-
-        if (Array.isArray(data)) {
-          setJobs(data)
-        } else if (Array.isArray(data.jobs)) {
-          setJobs(data.jobs)
-        } else {
-          setJobs([])
-        }
-      } catch (err) {
-        console.error("Failed to load jobs", err)
-        setJobs([])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadJobs()
-  }, [])
-
-  if (loading) {
-    return <div className="p-10">Loading feed...</div>
-  }
-
   return (
-    /* PAGE WRAPPER
-       Mobile → normal scroll
-       Desktop → feed-only scroll */
     <div className="bg-[#f3f2ef] min-h-screen lg:h-screen lg:overflow-hidden scrollbar-hide">
       <div className="max-w-[1200px] mx-auto px-4 py-6 grid grid-cols-12 gap-6 lg:h-full">
 
         {/* ================= LEFT SIDEBAR ================= */}
         <aside className="col-span-12 lg:col-span-3 space-y-4 lg:sticky lg:top-6 self-start">
 
-          {/* PROFILE CARD */}
           <div className="bg-white rounded-lg overflow-hidden shadow-sm">
             <div className="h-16 bg-gradient-to-r from-blue-600 to-indigo-600" />
             <div className="flex flex-col items-center -mt-8 pb-4">
@@ -81,7 +23,7 @@ export default function CandidateFeedPage() {
                 className="w-16 h-16 rounded-full border-2 border-white"
                 alt="Profile"
               />
-              <h3 className="font-semibold mt-2">Candidate{}</h3>
+              <h3 className="font-semibold mt-2">Candidate</h3>
               <p className="text-xs text-gray-500">
                 Aspiring Professional
               </p>
@@ -99,16 +41,15 @@ export default function CandidateFeedPage() {
             </div>
           </div>
 
-          {/* QUICK LINKS */}
           <div className="bg-white rounded-lg shadow-sm p-4 text-sm space-y-2">
             <p className="font-medium">Quick links</p>
             <p className="text-gray-600">Saved jobs</p>
             <Link
-  href="/candidate/applications"
-  className="text-gray-600 hover:underline block"
->
-  My applications
-</Link>
+              href="/candidate/applications"
+              className="text-gray-600 hover:underline block"
+            >
+              My applications
+            </Link>
             <p className="text-gray-600">Job alerts</p>
           </div>
         </aside>
@@ -116,7 +57,7 @@ export default function CandidateFeedPage() {
         {/* ================= FEED ================= */}
         <main className="col-span-12 lg:col-span-6 space-y-4 lg:overflow-y-auto scrollbar-hide lg:h-full pr-2">
 
-          {/* SEARCH BAR */}
+          {/* SEARCH BAR (unchanged UI) */}
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex items-center gap-3">
               <img
@@ -132,98 +73,13 @@ export default function CandidateFeedPage() {
             </div>
           </div>
 
-          {/* EMPTY STATE */}
-          {jobs.length === 0 && (
-            <div className="bg-white rounded-lg shadow-sm p-6 text-sm text-gray-500">
-              No jobs available right now.
-            </div>
-          )}
+          {/* 🔥 REUSED COMPONENT */}
+          <JobFeed />
 
-          {/* JOB POSTS */}
-          {jobs.map((job) => (
-            <div
-              key={job.id}
-              className="bg-white rounded-lg shadow-sm p-5"
-            >
-              {/* COMPANY HEADER */}
-              {job.company?.slug ? (
-                <Link
-                  href={`/company/${job.company.slug}`}
-                  className="flex items-center gap-3 mb-3 group"
-                >
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                    <Briefcase size={18} className="text-blue-600" />
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm group-hover:underline">
-                      {job.company.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Hiring · {job.employmentType || "Full-time"}
-                    </p>
-                  </div>
-                </Link>
-              ) : (
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                    <Briefcase size={18} className="text-blue-600" />
-                  </div>
-                  <p className="font-semibold text-sm">Company</p>
-                </div>
-              )}
-
-              {/* JOB TITLE */}
-              <h2 className="font-semibold mb-1">
-                {job.title}
-              </h2>
-
-              {/* META */}
-              <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-3">
-                <span className="flex items-center gap-1">
-                  <MapPin size={12} />
-                  {job.location}
-                </span>
-
-                <span className="flex items-center gap-1">
-                  <Clock size={12} />
-                  Recently posted
-                </span>
-
-                <span className="flex items-center gap-1">
-                  <Users size={12} />
-                  Actively hiring
-                </span>
-              </div>
-
-              {/* DESCRIPTION */}
-              <p className="text-sm text-gray-700 line-clamp-3 mb-4">
-                {job.description}
-              </p>
-
-              {/* ACTIONS */}
-              <div className="flex gap-4 text-sm">
-                <Link
-                  href={`/jobs/${job.slug}`}
-                  className="text-blue-600 font-medium"
-                >
-                  View job
-                </Link>
-
-                <Link
-                  href={`/jobs/${job.slug}#apply`}
-                  className="text-gray-600"
-                >
-                  Apply
-                </Link>
-              </div>
-            </div>
-          ))}
         </main>
 
         {/* ================= RIGHT SIDEBAR ================= */}
         <aside className="col-span-12 lg:col-span-3 space-y-4 lg:sticky lg:top-6 self-start">
-
           <div className="bg-white rounded-lg shadow-sm p-4">
             <h4 className="font-semibold mb-3">
               Job Market News
@@ -238,7 +94,6 @@ export default function CandidateFeedPage() {
                   2h ago · 4,200 readers
                 </p>
               </li>
-
               <li>
                 <p className="font-medium">
                   Remote jobs still trending
@@ -247,7 +102,6 @@ export default function CandidateFeedPage() {
                   4h ago · 2,100 readers
                 </p>
               </li>
-
               <li>
                 <p className="font-medium">
                   Interview tips for 2026
@@ -259,6 +113,7 @@ export default function CandidateFeedPage() {
             </ul>
           </div>
         </aside>
+
       </div>
     </div>
   )

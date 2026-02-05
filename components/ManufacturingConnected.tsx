@@ -143,7 +143,7 @@ export default function FeaturedPostsSection({ posts }: FeaturedPostsSectionProp
       : "";
 
   return (
-    /* ✅ EXACT NERIO SECTION SPACING */
+    /* ✅ EXACT Tooling Trends SECTION SPACING */
     <section className="bg-white pt-[70px] pb-[80px]">
       {/* ✅ EXACT BOOTSTRAP CONTAINER */}
       <div className="max-w-[1320px] mx-auto px-[15px]">

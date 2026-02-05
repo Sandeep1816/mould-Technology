@@ -11,7 +11,7 @@ export default function ContactPage() {
       <section className="relative bg-[#f8f9fb] py-24 text-center">
         <h1 className="text-4xl font-semibold text-[#121213]">Contact</h1>
         <div className="mt-2 text-sm text-[#616C74]">
-          <Link href="/" className="hover:text-blue-600">Nerio</Link>
+          <Link href="/" className="hover:text-blue-600">Tooling Trends</Link>
           <span className="mx-2">→</span>
           <span className="text-blue-600">Contact</span>
         </div>
@@ -69,7 +69,7 @@ export default function ContactPage() {
                   {item.phone}
                 </p>
                 <p className="text-sm text-[#616C74] mt-1">
-                  nerionewsexmple@gmail.com
+                  toolingtrends@gmail.com
                 </p>
               </div>
             ))}
@@ -121,7 +121,7 @@ export default function ContactPage() {
                   <label className="text-sm text-[#121213]">Website*</label>
                   <input
                     type="text"
-                    placeholder="www.nerio.net"
+                    placeholder="www.toolingtrends.com"
                     className="mt-2 w-full rounded-lg border px-4 py-3 text-sm outline-none focus:border-blue-600"
                   />
                 </div>
