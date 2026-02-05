@@ -1,3 +1,4 @@
+import SupplierAds from "@/components/SupplierAds"
 import type { Post } from "@/types/Post"
 import Link from "next/link"
 
@@ -234,9 +235,10 @@ const getImageUrl = (url?: string | null) => {
 
     {/* RIGHT – ADS */}
     <aside className="space-y-6">
+      {/* <img src="/advertisement-banner.jpg" className="w-full border" />
       <img src="/advertisement-banner.jpg" className="w-full border" />
-      <img src="/advertisement-banner.jpg" className="w-full border" />
-      <img src="/advertisement-banner.jpg" className="w-full border" />
+      <img src="/advertisement-banner.jpg" className="w-full border" /> */}
+      <SupplierAds />
     </aside>
   </div>
 </section>

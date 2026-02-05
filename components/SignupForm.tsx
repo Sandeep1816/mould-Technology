@@ -70,7 +70,7 @@ export default function SignupForm() {
 
       {/* ROLE BADGE */}
       <span className="inline-block mb-4 text-xs font-semibold uppercase tracking-wide text-[#0073FF] bg-blue-50 px-3 py-1 rounded-full">
-        {role === "recruiter" ? "Recruiter Signup" : "Candidate Signup"}
+        {role === "recruiter" ? "Company Signup" : "Candidate Signup"}
       </span>
 
       <h2 className="text-3xl font-bold text-gray-900 mb-2">

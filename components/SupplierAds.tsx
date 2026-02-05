@@ -36,7 +36,7 @@ function RecruiterAd({ src }: { src: string }) {
   return (
     <Link
       href="/signup?role=recruiter"
-      className="relative block group overflow-hidden rounded-lg"
+      className="relative block group overflow-hidden rounded-none"
     >
       {/* IMAGE */}
       <Image

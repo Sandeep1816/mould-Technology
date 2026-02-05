@@ -1,6 +1,7 @@
 import AuthHero from "@/components/AuthHero"
 import SignupForm from "@/components/SignupForm"
 import Image from "next/image"
+import { Suspense } from "react"
 
 export default function SignupPage() {
   return (
@@ -13,7 +14,9 @@ export default function SignupPage() {
 
             {/* LEFT – FORM */}
             <div className="flex items-center justify-center px-10 py-14">
-              <SignupForm />
+              <Suspense fallback={<div>Loading...</div>}>
+                <SignupForm />
+              </Suspense>
             </div>
 
             {/* RIGHT – IMAGE */}
@@ -25,7 +28,6 @@ export default function SignupPage() {
                 priority
                 className="object-cover"
               />
-              {/* subtle overlay for professionalism */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#0b3954]/40 to-[#0b3954]/20" />
             </div>
 

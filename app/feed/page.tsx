@@ -1,9 +1,13 @@
 import JobFeed from "@/components/job/JobFeed"
 import Link from "next/link"
+import CursorBall from "@/components/ui/CursorBall"
 
 export default function PublicFeedPage() {
   return (
-    <div className="bg-[#f4f6f8] min-h-screen">
+    <div className="bg-[#f4f6f8] min-h-screen relative">
+         {/* CURSOR EFFECT */}
+      <CursorBall />
+
 
       {/* ================= HERO ================= */}
       <section className="relative bg-[#0b3954]">
@@ -11,7 +15,7 @@ export default function PublicFeedPage() {
           <img
             src="/images/hirings.png"
             alt="Tooling Trends Hiring Platform"
-            className="w-full h-full object-cover opacity-25"
+            className="w-full h-full object-cover opacity-55"
           />
         </div>
 
