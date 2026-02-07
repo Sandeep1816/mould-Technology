@@ -107,107 +107,84 @@ export default function Header() {
     window.location.href = "/login"
   }
 
-  const container = "max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-[15px]"
+  const container = "max-w-[1320px] mx-auto px-4 md:px-6 lg:px-[15px]"
 
   /* ================= RENDER ================= */
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-      isSticky 
-        ? "bg-[#0A2B57] shadow-xl border-b border-white/10" 
-        : "bg-[#0A2B57]"
-    }`}>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all ${isSticky ? "bg-[#0A2B57] shadow-lg" : "bg-[#0A2B57]"}`}>
 
       {/* ================= TOP BAR ================= */}
-      <div className={`${container} transition-all duration-300 ${
-        isSticky ? "h-[60px] sm:h-[70px] lg:h-[90px]" : "h-[70px] sm:h-[90px] lg:h-[130px]"
-      }`}>
-        <div className="grid grid-cols-[auto_1fr_auto] lg:grid-cols-[240px_1fr_auto] xl:grid-cols-[280px_1fr_auto] items-center h-full gap-3 sm:gap-4 lg:gap-8 xl:gap-10">
+      <div className={`${container} ${isSticky ? "h-[80px] md:h-[100px] lg:h-[100px]" : "h-[90px] md:h-[120px] lg:h-[150px]"} transition-all`}>
+        <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[320px_1fr_auto] items-center h-full gap-6 lg:gap-10">
 
-          {/* ========== LOGO ========== */}
-          <Link href="/" className="flex items-center">
+          {/* LOGO */}
+          <Link href="/" className="flex items-center justify-start">
             <Image
               src="/images/moldinglogo2.png"
               alt="MoldMaking Technology Logo"
-              width={isSticky ? 160 : 240}
-              height={isSticky ? 68 : 102}
+              width={isSticky ? 220 : 300}
+              height={isSticky ? 93 : 127}
               priority
-              className={`w-auto transition-all duration-300 ${
+              quality={100}
+              className={`w-auto transition-all ${
                 isSticky 
-                  ? "h-[40px] sm:h-[50px] lg:h-[60px]" 
-                  : "h-[50px] sm:h-[70px] lg:h-[90px]"
+                  ? "h-[60px] md:h-[70px] lg:h-[80px]" 
+                  : "h-[70px] md:h-[90px] lg:h-[120px]"
               }`}
             />
           </Link>
 
-          {/* ========== DESKTOP NAVIGATION ========== */}
-          <nav className="hidden lg:flex justify-center items-center gap-5 xl:gap-7 text-white font-medium text-[15px] xl:text-base">
-            
-            {/* Topics Dropdown */}
+          {/* DESKTOP NAV */}
+          <nav className="hidden lg:flex justify-center gap-6 xl:gap-8 text-white font-medium text-sm xl:text-base">
             <button
               onMouseEnter={() => {
                 setOpenMega("topics")
                 setActiveSlug("engineer")
               }}
-              className="flex items-center gap-1.5 py-2 hover:text-[#0073FF] transition-colors duration-200 group"
+              className="flex items-center gap-1 hover:text-[#0073FF] transition-colors"
             >
-              <span>Topics</span>
-              <ChevronDown size={16} className="group-hover:translate-y-0.5 transition-transform" />
+              Topics <ChevronDown size={14} />
             </button>
 
-            {/* Resources Dropdown */}
             <button
               onMouseEnter={() => {
                 setOpenMega("resources")
                 setActiveSlug("webinars")
               }}
-              className="flex items-center gap-1.5 py-2 hover:text-[#0073FF] transition-colors duration-200 group"
+              className="flex items-center gap-1 hover:text-[#0073FF] transition-colors"
             >
-              <span>Resources</span>
-              <ChevronDown size={16} className="group-hover:translate-y-0.5 transition-transform" />
+              Resources <ChevronDown size={14} />
             </button>
 
-            {/* Direct Links */}
-            <Link href="/articles" className="py-2 hover:text-[#0073FF] transition-colors duration-200">
-              Magazine
-            </Link>
-            <Link href="/suppliers" className="py-2 hover:text-[#0073FF] transition-colors duration-200">
-              Directory
-            </Link>
-            <Link href="/mmtchats" className="py-2 hover:text-[#0073FF] transition-colors duration-200">
-              MMT CHATS
-            </Link>
-            <Link href="/events" className="py-2 hover:text-[#0073FF] transition-colors duration-200">
-              Events
-            </Link>
-            <Link href="/feed" className="py-2 hover:text-[#0073FF] transition-colors duration-200">
-              Jobs
-            </Link>
+            <Link href="/articles" className="hover:text-[#0073FF] transition-colors">Magazine</Link>
+            <Link href="/suppliers" className="hover:text-[#0073FF] transition-colors">Directory</Link>
+            <Link href="/mmtchats" className="hover:text-[#0073FF] transition-colors">MMT CHATS</Link>
+            <Link href="/events" className="hover:text-[#0073FF] transition-colors">Events</Link>
+            <Link href="/feed" className="hover:text-[#0073FF] transition-colors">Jobs</Link>
           </nav>
 
-          {/* ========== AUTH & MOBILE MENU ========== */}
-          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+          {/* AUTH / USER */}
+          <div className="flex items-center justify-end gap-3 md:gap-4">
 
-            {/* Login Button - Desktop */}
             {!user && (
               <Link
                 href="/login"
-                className="hidden md:flex h-9 lg:h-10 px-4 lg:px-6 bg-[#0073FF] text-white rounded-md text-sm font-semibold items-center justify-center hover:bg-[#0060DD] transition-all duration-200 shadow-lg hover:shadow-xl"
+                className="hidden md:flex h-10 lg:h-11 px-5 lg:px-6 bg-[#0073FF] text-white rounded-md text-sm lg:text-base font-semibold items-center hover:bg-[#0060DD] transition-colors shadow-lg"
               >
                 Login
               </Link>
             )}
 
-            {/* User Menu - Desktop */}
             {user && (
               <div className="relative">
                 <button
                   onClick={() => setOpenUserMenu(!openUserMenu)}
-                  className="flex items-center gap-2 lg:gap-3 bg-white/10 backdrop-blur-sm px-2.5 lg:px-3 py-2 rounded-md text-white hover:bg-white/20 transition-all duration-200 border border-white/20"
+                  className="flex items-center gap-2 md:gap-3 bg-white/10 px-3 md:px-4 py-2 md:py-2.5 rounded-md text-white hover:bg-white/20 transition-colors border border-white/20"
                 >
                   <img
                     src="https://i.pravatar.cc/40"
                     alt="User avatar"
-                    className="w-7 h-7 lg:w-8 lg:h-8 rounded-full border-2 border-white/30"
+                    className="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-white/30"
                   />
                   <div className="hidden md:block text-left">
                     <p className="text-sm font-semibold leading-tight">
@@ -217,7 +194,7 @@ export default function Header() {
                       {user.role}
                     </p>
                   </div>
-                  <ChevronDown size={14} className={`transition-transform ${openUserMenu ? 'rotate-180' : ''}`} />
+                  <ChevronDown size={14} />
                 </button>
 
                 {openUserMenu && (
@@ -235,7 +212,7 @@ export default function Header() {
                             ? "/recruiter/dashboard"
                             : "/candidate/feed"
                         }
-                        className="block px-4 py-3 hover:bg-blue-50 text-sm transition-colors border-b border-gray-100"
+                        className="block px-4 py-3 hover:bg-gray-100 text-sm transition-colors border-b border-gray-100"
                         onClick={() => setOpenUserMenu(false)}
                       >
                         Dashboard
@@ -253,13 +230,13 @@ export default function Header() {
               </div>
             )}
 
-            {/* Mobile Menu Button */}
+            {/* MOBILE MENU BUTTON */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden h-9 w-9 sm:h-10 sm:w-10 border border-white/30 rounded-md flex items-center justify-center text-white hover:bg-white/10 transition-all duration-200 backdrop-blur-sm"
+              className="lg:hidden h-10 w-10 md:h-11 md:w-11 border border-white/30 rounded-md flex items-center justify-center text-white hover:bg-white/10 transition-colors backdrop-blur-sm shadow-lg"
               aria-label="Toggle menu"
             >
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
@@ -269,64 +246,59 @@ export default function Header() {
       {openMega && (
         <div
           onMouseLeave={() => setOpenMega(null)}
-          className="hidden lg:block bg-gradient-to-b from-[#0A2B57] to-[#08385C] border-t border-white/10 shadow-2xl"
+          className="hidden lg:block bg-[#0A2B57] border-t border-white/10"
         >
-          <div className={`${container} py-8 lg:py-10 grid grid-cols-[220px_1fr] xl:grid-cols-[240px_1fr] gap-8 lg:gap-10`}>
+          <div className={`${container} py-10 grid grid-cols-[240px_1fr] gap-10`}>
 
-            {/* LEFT SIDEBAR MENU */}
-            <aside className="bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 shadow-lg">
+            {/* LEFT MENU */}
+            <aside className="bg-[#0A4A6A] rounded-lg overflow-hidden shadow-xl">
               {(openMega === "topics" ? TOPICS : RESOURCES).map(item => (
                 <button
                   key={item.slug}
                   onMouseEnter={() => setActiveSlug(item.slug)}
-                  className={`w-full px-5 py-3.5 text-left uppercase font-bold text-sm flex justify-between transition-all duration-200 ${
+                  className={`w-full px-5 py-4 text-left uppercase font-bold flex justify-between transition-colors ${
                     activeSlug === item.slug
-                      ? "bg-[#0073FF] text-white shadow-md"
-                      : "text-white hover:bg-white/10"
+                      ? "bg-[#003B5C] text-white"
+                      : "text-white hover:bg-[#0F5D86]"
                   }`}
                 >
-                  <span>{item.label}</span>
-                  {activeSlug === item.slug && <ChevronRight size={18} />}
+                  {item.label}
+                  {activeSlug === item.slug && <span>›</span>}
                 </button>
               ))}
             </aside>
 
-            {/* RIGHT CONTENT GRID */}
+            {/* RIGHT POSTS */}
             <div>
-              {/* Header */}
-              <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
-                <h3 className="text-2xl xl:text-3xl font-bold uppercase text-white">  
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-bold uppercase text-white">  
                   {activeSlug.replace(/-/g, " ")}
                 </h3>
 
                 <Link
                   href={`/${activeSlug}`}
-                  className="bg-red-600 hover:bg-red-700 px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 shadow-lg hover:shadow-xl rounded"
+                  className="bg-red-600 px-4 py-2 text-sm font-bold text-white hover:bg-red-700 transition-colors rounded shadow-lg"
                 >
                   See All →
                 </Link>
               </div>
 
-              {/* Posts Grid */}
-              <div className="grid grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6">
+              <div className="grid grid-cols-4 gap-6">
                 {filteredPosts.map(post => (
-                  <article key={post.id} className="group">
-                    <Link href={`/post/${post.slug}`} className="block">
-                      <div className="relative overflow-hidden rounded-lg mb-3 shadow-md group-hover:shadow-xl transition-shadow">
-                        <img
-                          src={post.imageUrl || "/placeholder.svg"}
-                          alt={post.title}
-                          className="w-full h-36 xl:h-40 object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
+                  <article key={post.id}>
+                    <Link href={`/post/${post.slug}`}>
+                      <img
+                        src={post.imageUrl || "/placeholder.svg"}
+                        alt={post.title}
+                        className="w-full h-40 object-cover mb-3 rounded hover:opacity-90 transition-opacity"
+                      />
                     </Link>
 
-                    <p className="text-[10px] xl:text-xs uppercase text-[#6EC1E4] font-bold mb-1.5 tracking-wide">
+                    <p className="text-xs uppercase text-[#6EC1E4] font-bold mb-1">
                       {post.badge || post.category?.name}
                     </p>
 
-                    <h4 className="text-sm xl:text-base font-semibold text-white leading-snug group-hover:text-[#0073FF] transition-colors line-clamp-2">
+                    <h4 className="text-sm font-semibold text-white leading-snug hover:text-[#0073FF] transition-colors">
                       <Link href={`/post/${post.slug}`}>
                         {post.title}
                       </Link>
@@ -345,37 +317,37 @@ export default function Header() {
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm lg:hidden z-40"
+            className="fixed inset-0 bg-black/50 lg:hidden z-40"
             onClick={() => setIsMenuOpen(false)}
           />
           
           {/* Mobile Menu Panel */}
-          <div className="fixed top-[60px] sm:top-[70px] left-0 right-0 bottom-0 bg-gradient-to-b from-[#0A2B57] to-[#08385C] lg:hidden z-50 overflow-y-auto shadow-2xl">
-            <nav className="py-2">
+          <div className={`fixed ${isSticky ? "top-[80px] md:top-[100px]" : "top-[90px] md:top-[120px]"} left-0 right-0 bottom-0 bg-[#0A2B57] lg:hidden z-50 overflow-y-auto`}>
+            <nav className="py-4">
               
               {/* Topics Section */}
               <div className="border-b border-white/10">
                 <button
                   onClick={() => setMobileActiveMenu(mobileActiveMenu === "topics" ? null : "topics")}
-                  className="w-full px-5 sm:px-6 py-4 text-white font-semibold flex items-center justify-between hover:bg-white/5 transition-colors text-base sm:text-lg"
+                  className="w-full px-6 py-4 text-white font-semibold flex items-center justify-between hover:bg-white/5 transition-colors"
                 >
                   <span>Topics</span>
                   <ChevronDown 
-                    size={20} 
-                    className={`transition-transform duration-300 ${mobileActiveMenu === "topics" ? "rotate-180" : ""}`}
+                    size={18} 
+                    className={`transition-transform ${mobileActiveMenu === "topics" ? "rotate-180" : ""}`}
                   />
                 </button>
                 
                 {mobileActiveMenu === "topics" && (
-                  <div className="bg-white/5 backdrop-blur-sm px-3 sm:px-4 py-2 border-t border-white/10">
+                  <div className="bg-[#0A4A6A] px-4 py-2">
                     {TOPICS.map(item => (
                       <Link
                         key={item.slug}
                         href={`/${item.slug}`}
-                        className="flex items-center justify-between px-4 py-3 text-white hover:bg-white/10 transition-colors rounded-md mb-1"
+                        className="flex items-center justify-between px-4 py-3 text-white hover:bg-white/10 transition-colors rounded"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        <span className="text-sm sm:text-base">{item.label}</span>
+                        <span>{item.label}</span>
                         <ChevronRight size={16} />
                       </Link>
                     ))}
@@ -387,25 +359,25 @@ export default function Header() {
               <div className="border-b border-white/10">
                 <button
                   onClick={() => setMobileActiveMenu(mobileActiveMenu === "resources" ? null : "resources")}
-                  className="w-full px-5 sm:px-6 py-4 text-white font-semibold flex items-center justify-between hover:bg-white/5 transition-colors text-base sm:text-lg"
+                  className="w-full px-6 py-4 text-white font-semibold flex items-center justify-between hover:bg-white/5 transition-colors"
                 >
                   <span>Resources</span>
                   <ChevronDown 
-                    size={20} 
-                    className={`transition-transform duration-300 ${mobileActiveMenu === "resources" ? "rotate-180" : ""}`}
+                    size={18} 
+                    className={`transition-transform ${mobileActiveMenu === "resources" ? "rotate-180" : ""}`}
                   />
                 </button>
                 
                 {mobileActiveMenu === "resources" && (
-                  <div className="bg-white/5 backdrop-blur-sm px-3 sm:px-4 py-2 border-t border-white/10">
+                  <div className="bg-[#0A4A6A] px-4 py-2">
                     {RESOURCES.map(item => (
                       <Link
                         key={item.slug}
                         href={`/${item.slug}`}
-                        className="flex items-center justify-between px-4 py-3 text-white hover:bg-white/10 transition-colors rounded-md mb-1"
+                        className="flex items-center justify-between px-4 py-3 text-white hover:bg-white/10 transition-colors rounded"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        <span className="text-sm sm:text-base">{item.label}</span>
+                        <span className="text-sm">{item.label}</span>
                         <ChevronRight size={16} />
                       </Link>
                     ))}
@@ -416,7 +388,7 @@ export default function Header() {
               {/* Direct Links */}
               <Link
                 href="/articles"
-                className="block px-5 sm:px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors text-base sm:text-lg"
+                className="block px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Magazine
@@ -424,7 +396,7 @@ export default function Header() {
 
               <Link
                 href="/suppliers"
-                className="block px-5 sm:px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors text-base sm:text-lg"
+                className="block px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Directory
@@ -432,7 +404,7 @@ export default function Header() {
 
               <Link
                 href="/mmtchats"
-                className="block px-5 sm:px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors text-base sm:text-lg"
+                className="block px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 MMT CHATS
@@ -440,7 +412,7 @@ export default function Header() {
 
               <Link
                 href="/events"
-                className="block px-5 sm:px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors text-base sm:text-lg"
+                className="block px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Events
@@ -448,7 +420,7 @@ export default function Header() {
 
               <Link
                 href="/feed"
-                className="block px-5 sm:px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors text-base sm:text-lg"
+                className="block px-6 py-4 text-white font-semibold border-b border-white/10 hover:bg-white/5 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Jobs
@@ -456,10 +428,10 @@ export default function Header() {
 
               {/* Mobile Login Button */}
               {!user && (
-                <div className="px-5 sm:px-6 py-5">
+                <div className="px-6 py-5">
                   <Link
                     href="/login"
-                    className="block w-full py-3.5 bg-[#0073FF] text-white rounded-lg text-center font-semibold hover:bg-[#0060DD] transition-all duration-200 shadow-lg text-base sm:text-lg"
+                    className="block w-full py-3.5 bg-[#0073FF] text-white rounded-md text-center font-semibold hover:bg-[#0060DD] transition-colors shadow-lg"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Login
