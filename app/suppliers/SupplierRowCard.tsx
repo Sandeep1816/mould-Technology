@@ -11,10 +11,7 @@ import {
 /* ---------------- HELPER ---------------- */
 function stripHtml(html: string) {
   if (!html) return ""
-  return html
-    .replace(/<[^>]*>/g, "")
-    .replace(/\s+/g, " ")
-    .trim()
+  return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim()
 }
 
 /* ---------------- COMPONENT ---------------- */
@@ -23,17 +20,17 @@ export default function SupplierRowCard({ supplier }: any) {
   const views = supplier.views ?? 0
 
   return (
-    <div className="bg-white border border-[#dee2e6] rounded-[4px] p-6 flex gap-6">
+    <div className="bg-white border border-[#dee2e6] rounded-md p-4 sm:p-6 flex flex-col lg:flex-row gap-6">
 
       {/* LOGO */}
-      <div className="w-40 flex items-center justify-center shrink-0">
+      <div className="w-full lg:w-40 flex items-center justify-center shrink-0">
         {supplier.logoUrl ? (
           <Image
             src={supplier.logoUrl}
             alt={supplier.name}
-            width={140}
-            height={80}
-            className="object-contain"
+            width={160}
+            height={90}
+            className="object-contain max-h-24"
           />
         ) : (
           <div className="text-gray-400 text-sm">No Logo</div>
@@ -44,7 +41,7 @@ export default function SupplierRowCard({ supplier }: any) {
       <div className="flex-1 flex flex-col min-w-0">
 
         {/* TITLE */}
-        <h2 className="text-xl font-bold text-gray-900">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900">
           {supplier.name}
         </h2>
 
@@ -55,16 +52,16 @@ export default function SupplierRowCard({ supplier }: any) {
         )}
 
         {/* DESCRIPTION */}
-        <p className="text-sm text-gray-700 mt-2 line-clamp-4">
+        <p className="text-sm text-gray-700 mt-3 line-clamp-4">
           {stripHtml(supplier.description)}
         </p>
 
         {/* FOOTER */}
-        <div className="mt-auto pt-6">
-          <div className="flex items-end gap-6 flex-wrap">
+        <div className="mt-5 pt-4 border-t border-gray-200">
+          <div className="flex flex-col lg:flex-row lg:items-end gap-4">
 
-            {/* LEFT SIDE */}
-            <div className="flex items-center gap-8 flex-wrap">
+            {/* LEFT INFO */}
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
 
               {/* VIEWS */}
               <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -72,19 +69,19 @@ export default function SupplierRowCard({ supplier }: any) {
                 <span>{views.toLocaleString()} views</span>
               </div>
 
-              {/* VIDEO GALLERY */}
+              {/* VIDEO */}
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold tracking-wide text-gray-500 uppercase">
-                  Video Gallery
+                <span className="text-xs font-semibold uppercase text-gray-500">
+                  Video
                 </span>
                 <span className="w-9 h-9 flex items-center justify-center border border-gray-300">
                   <LucideYoutube className="w-5 h-5 text-red-600" />
                 </span>
               </div>
 
-              {/* CONNECT */}
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold tracking-wide text-gray-500 uppercase">
+              {/* SOCIAL */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-semibold uppercase text-gray-500">
                   Connect
                 </span>
 
@@ -92,8 +89,7 @@ export default function SupplierRowCard({ supplier }: any) {
                   <a
                     href={social.facebook}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-9 h-9 bg-[#3b5998] flex items-center justify-center hover:opacity-80 transition"
+                    className="w-9 h-9 bg-[#3b5998] flex items-center justify-center"
                   >
                     <LucideFacebook className="w-4 h-4 text-white" />
                   </a>
@@ -103,8 +99,7 @@ export default function SupplierRowCard({ supplier }: any) {
                   <a
                     href={social.linkedin}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-9 h-9 bg-[#0077b5] flex items-center justify-center hover:opacity-80 transition"
+                    className="w-9 h-9 bg-[#0077b5] flex items-center justify-center"
                   >
                     <LucideLinkedin className="w-4 h-4 text-white" />
                   </a>
@@ -114,8 +109,7 @@ export default function SupplierRowCard({ supplier }: any) {
                   <a
                     href={social.twitter}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-9 h-9 bg-black flex items-center justify-center hover:opacity-80 transition"
+                    className="w-9 h-9 bg-black flex items-center justify-center"
                   >
                     <LucideTwitter className="w-4 h-4 text-white" />
                   </a>
@@ -125,8 +119,7 @@ export default function SupplierRowCard({ supplier }: any) {
                   <a
                     href={social.youtube}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-9 h-9 bg-red-600 flex items-center justify-center hover:opacity-80 transition"
+                    className="w-9 h-9 bg-red-600 flex items-center justify-center"
                   >
                     <LucideYoutube className="w-4 h-4 text-white" />
                   </a>
@@ -134,10 +127,10 @@ export default function SupplierRowCard({ supplier }: any) {
               </div>
             </div>
 
-            {/* RIGHT CTA */}
+            {/* CTA */}
             <Link
               href={`/suppliers/${supplier.slug}`}
-              className="ml-auto shrink-0 bg-red-700 text-white px-6 py-2 text-sm font-semibold uppercase whitespace-nowrap hover:bg-red-800 transition"
+              className="lg:ml-auto w-full lg:w-auto text-center bg-red-700 text-white px-6 py-3 text-sm font-semibold uppercase hover:bg-red-800 transition"
             >
               View Showroom
             </Link>

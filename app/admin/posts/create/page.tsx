@@ -1,6 +1,13 @@
 "use client";
+import dynamic from "next/dynamic"
+
 import { useEffect, useState, FormEvent, ChangeEvent } from "react";
 import UploadBox from "@/components/UploadBox"
+
+import "react-quill-new/dist/quill.snow.css"
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false })
+
+
 
 
 export default function CreatePost() {
@@ -243,16 +250,22 @@ async function handleImageUpload(file: File) {
             className="w-full p-3 border rounded-lg"
           />
 
-          {/* CONTENT */}
-          <textarea
-            name="content"
-            value={form.content}
-            onChange={handleChange}
-            rows={10}
-            required
-            placeholder="Post content"
-            className="w-full p-3 border rounded-lg"
-          />
+         {/* CONTENT */}
+<div>
+  <label className="block font-semibold mb-2">
+    Post Content
+  </label>
+
+  <ReactQuill
+    theme="snow"
+    value={form.content}
+    onChange={(value) =>
+      setForm(prev => ({ ...prev, content: value }))
+    }
+    className="bg-white"
+  />
+</div>
+
 
           {/* SOCIAL / CONTACT */}
           <h3 className="font-bold text-lg">🔗 Social & Contact (Optional)</h3>

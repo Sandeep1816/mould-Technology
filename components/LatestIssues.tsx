@@ -11,16 +11,14 @@ interface LatestIssuesProps {
 
 /* ================= COLOR CONFIG ================= */
 
-// Badge → Color mapping (scalable)
 const BADGE_COLORS: Record<string, string> = {
-  FEATURED: "bg-[#E11D48]",   // red
-  WEBINAR: "bg-[#7C3AED]",    // purple
-  EVENT: "bg-[#0EA5E9]",      // blue
-  TRENDING: "bg-[#F97316]",   // orange
-  EXCLUSIVE: "bg-[#059669]",  // green
+  FEATURED: "bg-[#E11D48]",
+  WEBINAR: "bg-[#7C3AED]",
+  EVENT: "bg-[#0EA5E9]",
+  TRENDING: "bg-[#F97316]",
+  EXCLUSIVE: "bg-[#059669]",
 }
 
-// Category → Color mapping (fallback)
 const CATEGORY_COLORS: Record<string, string> = {
   gaming: "bg-[#0073FF]",
   fashion: "bg-[#E033E0]",
@@ -57,9 +55,9 @@ export default function LatestIssues({
   if (!posts.length) return null
 
   return (
-    <section className="pt-[40px] w-full">
-      <div className="max-w-[1320px] mx-auto px-[12px]">
-        <div className="relative bg-[#F7F7F7] rounded-[18px] px-[24px] py-[28px]">
+    <section className="pt-4 sm:pt-8 w-full">
+      <div className="max-w-[1320px] mx-auto px-4">
+        <div className="relative bg-[#F7F7F7] rounded-2xl px-4 sm:px-6 py-6 sm:py-7">
 
           {/* background shapes */}
           <Image
@@ -67,18 +65,18 @@ export default function LatestIssues({
             alt=""
             width={120}
             height={120}
-            className="absolute top-0 right-0 opacity-40 pointer-events-none"
+            className="absolute top-0 right-0 opacity-30 pointer-events-none hidden sm:block"
           />
           <Image
             src="/images/shape/flower-shape-02.png"
             alt=""
             width={120}
             height={120}
-            className="absolute bottom-0 left-2 opacity-40 pointer-events-none"
+            className="absolute bottom-0 left-2 opacity-30 pointer-events-none hidden sm:block"
           />
 
-          {/* posts */}
-          <div className="flex flex-wrap gap-y-6 gap-x-6 relative z-10">
+          {/* POSTS GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 relative z-10">
             {posts.map((post) => {
               const slug =
                 typeof post.category === "object"
@@ -92,13 +90,9 @@ export default function LatestIssues({
 
               const badge = post.badge?.trim()
 
-              /* ================= TEXT LOGIC ================= */
-              // Badge wins → else category
-              const tagText = badge ? badge : categoryName
+              const tagText = badge || categoryName
 
-              /* ================= COLOR LOGIC ================= */
-              let tagClass = "bg-[#9CA3AF]" // default gray
-
+              let tagClass = "bg-[#9CA3AF]"
               if (badge) {
                 tagClass =
                   BADGE_COLORS[badge.toUpperCase()] || "bg-[#6B7280]"
@@ -112,54 +106,52 @@ export default function LatestIssues({
               return (
                 <div
                   key={post.id}
-                  className="w-full md:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)]"
+                  className="bg-white rounded-xl p-4 sm:p-5 flex gap-4 h-full"
                 >
-                  <div className="flex gap-5 bg-white rounded-[14px] p-5 h-full">
-                    {/* thumbnail */}
-                    <Link
-                      href={`/post/${post.slug}`}
-                      className="relative w-[96px] h-[96px] rounded-[12px] overflow-hidden flex-shrink-0"
-                    >
-                      <Image
-                        src={
-                          post.imageUrl?.startsWith("http")
-                            ? post.imageUrl
-                            : `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
-                        }
-                        alt={post.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </Link>
+                  {/* thumbnail */}
+                  <Link
+                    href={`/post/${post.slug}`}
+                    className="relative w-[72px] h-[72px] sm:w-[96px] sm:h-[96px] rounded-xl overflow-hidden flex-shrink-0"
+                  >
+                    <Image
+                      src={
+                        post.imageUrl?.startsWith("http")
+                          ? post.imageUrl
+                          : `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
+                      }
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </Link>
 
-                    {/* content */}
-                    <div className="flex flex-col gap-2">
-                      {tagText && (
-                        <Link
-                          href={`/category/${slug}`}
-                          className={`${tagClass} text-white px-4 py-[4px] rounded-full rounded-tl-none w-fit text-xs font-medium`}
-                        >
-                          {tagText}
-                        </Link>
-                      )}
+                  {/* content */}
+                  <div className="flex flex-col gap-2 min-w-0">
+                    {tagText && (
+                      <Link
+                        href={`/category/${slug}`}
+                        className={`${tagClass} text-white px-3 py-[3px] rounded-full rounded-tl-none w-fit text-[11px] font-medium`}
+                      >
+                        {tagText}
+                      </Link>
+                    )}
 
-                      <h6 className="text-[18px] leading-snug font-semibold text-[#121213] underline hover:text-[#0073FF] transition">
-                        <Link href={`/post/${post.slug}`}>
-                          {post.title}
-                        </Link>
-                      </h6>
+                    <h6 className="text-[15px] sm:text-[17px] leading-snug font-semibold text-[#121213] line-clamp-2 hover:text-[#0073FF] transition">
+                      <Link href={`/post/${post.slug}`}>
+                        {post.title}
+                      </Link>
+                    </h6>
 
-                      <div className="flex items-center gap-4 text-[13px] text-[#616C74]">
-                        <span>
-                          By{" "}
-                          <span className="font-medium">
-                            {post.author?.name || "rstheme"}
-                          </span>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-[#616C74]">
+                      <span>
+                        By{" "}
+                        <span className="font-medium">
+                          {post.author?.name || "rstheme"}
                         </span>
-                        <span>
-                          {post.views?.toLocaleString() || 0} Views
-                        </span>
-                      </div>
+                      </span>
+                      <span>
+                        {post.views?.toLocaleString() || 0} Views
+                      </span>
                     </div>
                   </div>
                 </div>

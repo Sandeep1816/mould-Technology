@@ -8,7 +8,6 @@ import RelatedPostsCarousel from "@/components/related-posts-carousel"
 import ContentGateModal from "@/components/content-gate-modal"
 import PostViewCounter from "@/components/PostViewCounter"
 import Loader from "@/components/Loader"
-import RightSidebar from "@/components/RightSidebar"
 import SupplierAds from "@/components/SupplierAds"
 
 /* ================= TYPES ================= */
@@ -54,16 +53,7 @@ function getYoutubeEmbed(url?: string) {
     return `https://www.youtube.com/embed/${id}`
   }
 
-  return null // channel / handle / playlist
-}
-
-function isYoutubeChannel(url?: string) {
-  if (!url) return false
-  return (
-    url.includes("/@") ||
-    url.includes("/channel/") ||
-    url.includes("/c/")
-  )
+  return null
 }
 
 /* ================= PAGE ================= */
@@ -78,7 +68,6 @@ export default function PostDetailsPage() {
   /* ================= FETCH POST ================= */
   useEffect(() => {
     async function fetchPost() {
-      setPost(null)
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`,
@@ -125,6 +114,7 @@ export default function PostDetailsPage() {
 
   return (
     <>
+      {/* ================= CONTENT GATE MODAL ================= */}
       <ContentGateModal
         isOpen={showGate && !userSubmitted}
         onClose={() => setShowGate(false)}
@@ -134,13 +124,14 @@ export default function PostDetailsPage() {
         }}
       />
 
-      <main className="bg-[#f9f9f9]">
+      <main className="bg-[#f9f9f9] overflow-x-hidden">
+        {/* ✅ VIEW COUNT (INCREMENTS ON LOAD) */}
         {slugValue && <PostViewCounter slug={slugValue} />}
 
-        {/* ================= HERO (IMAGE ALWAYS) ================= */}
+        {/* ================= HERO ================= */}
         <section className="bg-white border-b border-gray-200">
           <div className="px-6 md:px-10 lg:px-[80px] py-10">
-            <p className="text-gray-500 text-sm  mb-3">
+            <p className="text-gray-500 text-sm mb-3">
               Published {date}
             </p>
 
@@ -154,8 +145,7 @@ export default function PostDetailsPage() {
               </p>
             )}
 
-            {/* ✅ HERO IMAGE ALWAYS */}
-            <div className="w-full max-h-[420px] overflow-hidden rounded-none ">
+            <div className="w-full max-h-[420px] overflow-hidden">
               <img
                 src={imageUrl}
                 alt={post.title}
@@ -181,24 +171,25 @@ export default function PostDetailsPage() {
 
         {/* ================= CONTENT + SIDEBAR ================= */}
         <section className="grid grid-cols-1 lg:grid-cols-[8fr_4fr] gap-10 px-6 md:px-10 lg:px-[80px] py-10">
-          <article>
+          
+          {/* CONTENT */}
+          <article className="max-w-3xl overflow-hidden">
             <div
-              className="prose max-w-none"
+              className="prose prose-lg max-w-none break-words overflow-hidden"
               dangerouslySetInnerHTML={{ __html: post.content || "" }}
             />
 
-            <ShareSection  post={post} />
+            <ShareSection post={post} />
 
-            {/* ================= VIDEO BLOCK (AFTER SHARE) ================= */}
+            {/* ================= VIDEO BLOCK ================= */}
             {isVideo && post.youtubeUrl && (
               <div className="mt-10">
                 {embedUrl ? (
-                  <div className="w-full  aspect-video rounded-lg overflow-hidden border shadow-lg">
+                  <div className="aspect-video w-full rounded-lg overflow-hidden border shadow">
                     <iframe
                       src={embedUrl}
                       title={post.title}
                       className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                     />
                   </div>
@@ -221,9 +212,10 @@ export default function PostDetailsPage() {
             )}
           </article>
 
-          {/* <RightSidebar /> */}
+          {/* SIDEBAR */}
+          <div className="w-full overflow-hidden">
             <SupplierAds />
-
+          </div>
         </section>
 
         <RelatedPostsCarousel />

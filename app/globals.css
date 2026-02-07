@@ -15,7 +15,7 @@
   --ring: oklch(0.708 0 0);
   --radius: 0.625rem;
 
-  /* ================= FONT SYSTEM (INTER TIGHT) ================= */
+  /* ================= FONT SYSTEM ================= */
   --font-primary: var(--font-inter-tight),
     system-ui,
     -apple-system,
@@ -123,7 +123,12 @@
     font-weight: var(--fw-medium);
   }
 
-  p, span, div, button, input, textarea {
+  p,
+  span,
+  div,
+  button,
+  input,
+  textarea {
     font-family: var(--font-primary);
   }
 }
@@ -149,7 +154,9 @@
   font-weight: var(--fw-semibold);
 }
 
-
+/* ======================================================
+   HEADER SOCIAL
+====================================================== */
 .header-top-social a {
   display: inline-flex;
   align-items: center;
@@ -163,7 +170,7 @@
 
 .header-top-social a:hover {
   opacity: 1;
-  color: #3b82f6; /* blue hover like RS theme */
+  color: #3b82f6;
 }
 
 .header-top-social i {
@@ -171,65 +178,52 @@
   line-height: 1;
 }
 
-/* 🔥 Hide scrollbar but keep scroll working */
+/* ======================================================
+   SCROLLBAR HANDLING
+====================================================== */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE, Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  display: none;
 }
 
-/* 🔥 Hide page scrollbar on mobile + desktop */
+/* Hide scrollbars visually */
 html,
 body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
+/* Hide scrollbars (WebKit) */
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   display: none;
 }
 
-.input {
-  @apply w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black;
+/* 🔒 IMPORTANT: prevent horizontal overflow */
+html,
+body {
+  overflow-x: hidden;
 }
 
-.label {
-  @apply block text-sm font-medium mb-1;
-}
-
-.error {
-  @apply text-red-600 text-sm mt-1;
-}
-
-.editor-btn {
-  @apply px-3 py-1 text-sm border rounded hover:bg-gray-100;
-}
-
-.prose p {
-  margin: 0.25rem 0;
-}
-
-.prose ol,
-.prose ul {
-  margin: 0.25rem 0;
-  padding-left: 1.25rem;
-}
-
-.prose ol > li > p,
-.prose ul > li > p {
-  margin: 0;
-}
-
-/* form event formic upload icon */
+/* ======================================================
+   FORMS
+====================================================== */
 .input {
   width: 100%;
   border: 1px solid #d1d5db;
   padding: 10px;
   border-radius: 6px;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
 .error {
@@ -238,3 +232,128 @@ body::-webkit-scrollbar {
   margin-top: 4px;
 }
 
+.editor-btn {
+  padding: 4px 12px;
+  font-size: 0.875rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+
+.editor-btn:hover {
+  background: #f3f4f6;
+}
+
+/* ======================================================
+   PROSE (BLOG CONTENT – MAGAZINE STYLE)
+====================================================== */
+
+/* Paragraphs */
+.prose p {
+  margin: 1.25rem 0;
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+/* Headings */
+.prose h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: #0f172a; /* slate-900 */
+}
+
+.prose h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b; /* slate-800 */
+}
+
+/* Lists */
+.prose ol,
+.prose ul {
+  margin: 1.25rem 0;
+  padding-left: 1.75rem;
+}
+
+.prose li {
+  margin: 0.75rem 0;
+  line-height: 1.7;
+}
+
+/* Fix Quill wrapping <p> inside <li> */
+.prose li > p {
+  margin: 0;
+}
+
+/* Blockquotes */
+.prose blockquote {
+  margin: 2rem 0;
+  padding-left: 1.25rem;
+  border-left: 4px solid #3b82f6;
+  color: #334155;
+  font-style: italic;
+}
+
+/* Inline formatting */
+.prose strong {
+  font-weight: 600;
+}
+
+.prose em {
+  font-style: italic;
+}
+
+/* Links */
+.prose a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  text-decoration: none;
+}
+
+/* ======================================================
+   RICH CONTENT SAFETY
+====================================================== */
+
+.prose img,
+.prose iframe,
+.prose video,
+.prose table {
+  max-width: 100%;
+}
+
+/* Responsive embeds */
+.prose iframe {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin: 1.5rem 0;
+}
+
+/* Code blocks */
+.prose pre {
+  overflow-x: auto;
+  padding: 1rem;
+  background: #0f172a;
+  color: #e5e7eb;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+/* Tables */
+.prose table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+}
