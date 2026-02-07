@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import Link from "next/link"
 import {
   LayoutDashboard,
   FileText,
@@ -10,35 +10,63 @@ import {
   Folder,
   Users,
   LogOut,
-} from "lucide-react";
+} from "lucide-react"
 
 export default function AdminLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname()
+  const router = useRouter()
 
-  // ✅ Protect all admin routes (except login)
+  const [checking, setChecking] = useState(true)
+  const [allowed, setAllowed] = useState(false)
+
+  // ✅ ADMIN ROLE GUARD (DO NOT REMOVE SIDEBAR)
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token && pathname !== "/admin/login") {
-      router.push("/admin/login");
+    // allow admin login page
+    if (pathname === "/admin/login") {
+      setAllowed(true)
+      setChecking(false)
+      return
     }
-  }, [pathname, router]);
 
-  // ✅ Hide sidebar for login page
+    const token = localStorage.getItem("token")
+    const userRaw = localStorage.getItem("user")
+
+    if (!token || !userRaw) {
+      router.replace("/admin/login")
+      return
+    }
+
+    const user = JSON.parse(userRaw)
+
+    if (user.role !== "admin") {
+      router.replace("/unauthorized")
+      return
+    }
+
+    setAllowed(true)
+    setChecking(false)
+  }, [pathname, router])
+
+  // ⛔ Prevent render while checking
+  if (checking) return null
+
+  // ✅ Login page → no sidebar
   if (pathname === "/admin/login") {
-    return <>{children}</>;
+    return <>{children}</>
   }
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      {/* ✅ Sidebar */}
+      {/* ================= SIDEBAR ================= */}
       <aside className="w-64 bg-indigo-800 text-white flex flex-col">
         <div className="p-5 border-b border-indigo-700">
-          <h1 className="text-xl font-bold tracking-wide">Admin Panel</h1>
+          <h1 className="text-xl font-bold tracking-wide">
+            Admin Panel
+          </h1>
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
@@ -48,64 +76,74 @@ export default function AdminLayout({
             icon={<LayoutDashboard size={18} />}
             active={pathname === "/admin/dashboard"}
           />
+
           <SidebarLink
             href="/admin/posts"
             label="All Posts"
             icon={<FileText size={18} />}
             active={pathname === "/admin/posts"}
           />
+
           <SidebarLink
             href="/admin/posts/create"
             label="Create Post"
             icon={<PlusCircle size={18} />}
             active={pathname === "/admin/posts/create"}
           />
+
           <SidebarLink
             href="/admin/categories"
             label="Categories"
             icon={<Folder size={18} />}
             active={pathname === "/admin/categories"}
           />
+
           <SidebarLink
             href="/admin/authors"
             label="Authors"
             icon={<Users size={18} />}
             active={pathname === "/admin/authors"}
           />
+
           <SidebarLink
-  href="/admin/banners"
-  label="Banners"
-  icon={<Folder size={18} />}
-  active={pathname === "/admin/banners"}
-/>
+            href="/admin/banners"
+            label="Banners"
+            icon={<Folder size={18} />}
+            active={pathname === "/admin/banners"}
+          />
 
-<SidebarLink
-  href="/admin/events"
-  label="Events"
-  icon={<Folder size={18} />}
-  active={pathname === "/admin/events/create"}
-/>
-
+          <SidebarLink
+            href="/admin/events"
+            label="Events"
+            icon={<Folder size={18} />}
+            active={pathname === "/admin/events"}
+          />
         </nav>
 
         <div className="p-4 border-t border-indigo-700">
           <button
             onClick={() => {
-              localStorage.removeItem("token");
-              router.push("/admin/login");
+              localStorage.removeItem("token")
+              localStorage.removeItem("user")
+              router.push("/admin/login")
             }}
             className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-yellow-300 transition"
           >
-            <LogOut size={18} /> Logout
+            <LogOut size={18} />
+            Logout
           </button>
         </div>
       </aside>
 
-      {/* ✅ Dynamic Page Content */}
-      <main className="flex-1 p-8 overflow-y-auto">{children}</main>
+      {/* ================= CONTENT ================= */}
+      <main className="flex-1 p-8 overflow-y-auto">
+        {children}
+      </main>
     </div>
-  );
+  )
 }
+
+/* ================= SIDEBAR LINK ================= */
 
 function SidebarLink({
   href,
@@ -113,10 +151,10 @@ function SidebarLink({
   icon,
   active,
 }: {
-  href: string;
-  label: string;
-  icon: React.ReactNode;
-  active: boolean;
+  href: string
+  label: string
+  icon: React.ReactNode
+  active: boolean
 }) {
   return (
     <Link
@@ -130,5 +168,5 @@ function SidebarLink({
       {icon}
       <span>{label}</span>
     </Link>
-  );
+  )
 }

@@ -97,7 +97,8 @@ export default function SuppliersPage() {
   return (
     <div className="bg-[#f5f6f7] min-h-screen">
 
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-4 md:py-6">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-0 pb-4 md:py-6">
+
         
         {/* MOBILE FILTER BUTTON */}
         <button
@@ -156,7 +157,7 @@ export default function SuppliersPage() {
           <main className="lg:col-span-6 space-y-4 md:space-y-6">
 
             {/* HERO */}
-            <div className="relative w-full h-[120px] sm:h-[140px] md:h-[160px] rounded-lg overflow-hidden">
+            <div className="relative w-full h-[96px] sm:h-[140px] md:h-[160px] rounded-lg overflow-hidden">
               <img
                 src="/images/search-landscape.jpg"
                 alt="Find a MoldMaking Technology Supplier"
