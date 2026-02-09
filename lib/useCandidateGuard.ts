@@ -1,15 +1,25 @@
 "use client"
 
 import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 
 export function useCandidateGuard() {
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    // ✅ Allow public job pages
+    if (pathname.startsWith("/jobs")) return
 
-    if (!user.id) {
+    const raw = localStorage.getItem("user")
+    if (!raw) {
+      router.push("/login")
+      return
+    }
+
+    const user = JSON.parse(raw)
+
+    if (!user?.id) {
       router.push("/login")
       return
     }
@@ -22,5 +32,5 @@ export function useCandidateGuard() {
     if (!user.isOnboarded) {
       router.push("/candidate/onboarding")
     }
-  }, [])
+  }, [pathname, router])
 }

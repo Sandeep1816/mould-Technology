@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { MapPin, Briefcase, Clock, Users } from "lucide-react"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 type Job = {
@@ -37,12 +36,16 @@ export default function JobFeed({ isPublic = false }: { isPublic?: boolean }) {
     loadJobs()
   }, [])
 
-  function handleProtectedClick(url: string) {
-    if (isPublic) {
-      router.push("/signup?role=candidate") // or /login
-    } else {
-      router.push(url)
+  /** 🔐 Apply is protected */
+  function handleApply(slug: string) {
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+
+    if (!user?.id) {
+      router.push("/signup?role=candidate")
+      return
     }
+
+    router.push(`/jobs/${slug}#apply`)
   }
 
   if (loading) {
@@ -97,20 +100,18 @@ export default function JobFeed({ isPublic = false }: { isPublic?: boolean }) {
 
           {/* ACTIONS */}
           <div className="flex gap-4 text-sm">
+            {/* ✅ PUBLIC */}
             <button
-              onClick={() =>
-                handleProtectedClick(`/jobs/${job.slug}`)
-              }
-              className="text-blue-600 font-medium cursor-pointer hover:underline"
+              onClick={() => router.push(`/jobs/${job.slug}`)}
+              className="text-blue-600 font-medium hover:underline"
             >
               View job
             </button>
 
+            {/* 🔐 PROTECTED */}
             <button
-              onClick={() =>
-                handleProtectedClick(`/jobs/${job.slug}#apply`)
-              }
-              className="text-gray-600 cursor-pointer hover:text-blue-600 font-medium"
+              onClick={() => handleApply(job.slug)}
+              className="text-gray-600 hover:text-blue-600 font-medium"
             >
               Apply
             </button>

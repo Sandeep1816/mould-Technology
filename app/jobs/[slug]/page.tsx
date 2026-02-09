@@ -6,17 +6,13 @@ import { MapPin, Briefcase } from "lucide-react"
 import { ApplySection } from "./ApplySection"
 
 export default function JobDetailPage() {
-  const params = useParams()
-  const slug = params.slug as string
-
+  const { slug } = useParams<{ slug: string }>()
   const [job, setJob] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!slug) return
-
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${slug}`)
-      .then((res) => res.json())
+      .then(res => res.json())
       .then(setJob)
       .finally(() => setLoading(false))
   }, [slug])
@@ -26,24 +22,30 @@ export default function JobDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <h1 className="text-2xl font-bold mb-2">{job.title}</h1>
+      <h1 className="text-3xl font-bold mb-2">
+        {job.title}
+      </h1>
 
-      <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+      <div className="flex gap-6 text-sm text-gray-600 mb-6">
         <span className="flex items-center gap-1">
           <MapPin size={14} />
           {job.location}
         </span>
+
         <span className="flex items-center gap-1">
           <Briefcase size={14} />
           {job.employmentType}
         </span>
       </div>
 
-      <p className="text-gray-700 whitespace-pre-line mb-8">
-        {job.description}
-      </p>
+      <div className="prose max-w-none mb-10">
+        <p className="whitespace-pre-line">
+          {job.description}
+        </p>
+      </div>
 
-      <ApplySection jobId={job.id} />
+      {/* 🔐 Apply requires auth */}
+      {/* <ApplySection jobId={job.id} /> */}
     </div>
   )
 }

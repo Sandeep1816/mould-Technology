@@ -1,14 +1,24 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export function ApplySection({ jobId }: { jobId: number }) {
+  const router = useRouter()
   const [coverNote, setCoverNote] = useState("")
-  const [resumeUrl, setResumeUrl] = useState("") // ✅ NEW
+  const [resumeUrl, setResumeUrl] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
 
   async function apply() {
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+
+    // 🔐 AUTH CHECK ONLY HERE
+    if (!user?.id) {
+      router.push("/signup?role=candidate")
+      return
+    }
+
     setLoading(true)
     setMessage("")
 
@@ -24,8 +34,8 @@ export function ApplySection({ jobId }: { jobId: number }) {
         },
         body: JSON.stringify({
           jobId,
-          resumeUrl, // ✅ SENT
-          coverNote, // ✅ SENT
+          resumeUrl,
+          coverNote,
         }),
       }
     )
@@ -42,10 +52,11 @@ export function ApplySection({ jobId }: { jobId: number }) {
   }
 
   return (
-    <div id="apply" className="border-t pt-6">
-      <h3 className="font-semibold mb-2">Apply for this job</h3>
+    <div className="border-t pt-6">
+      <h3 className="font-semibold mb-4">
+        Apply for this job
+      </h3>
 
-      {/* Resume URL (temporary, until Cloudinary) */}
       <input
         placeholder="Resume URL (optional)"
         value={resumeUrl}
@@ -57,18 +68,20 @@ export function ApplySection({ jobId }: { jobId: number }) {
         placeholder="Cover note (optional)"
         value={coverNote}
         onChange={(e) => setCoverNote(e.target.value)}
-        className="w-full border rounded p-3 mb-3"
+        className="w-full border rounded p-3 mb-4"
       />
 
       <button
-        disabled={loading}
         onClick={apply}
+        disabled={loading}
         className="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
       >
         {loading ? "Applying..." : "Apply"}
       </button>
 
-      {message && <p className="mt-2 text-sm">{message}</p>}
+      {message && (
+        <p className="mt-3 text-sm">{message}</p>
+      )}
     </div>
   )
 }
