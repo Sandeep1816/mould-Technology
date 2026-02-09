@@ -13,6 +13,7 @@ import Footer from "../components/Footer"
 
 import type { Post } from "../types/Post"
 import TrendingSection from "@/components/TrendingSection"
+import CompanyArticles from "@/components/company/CompanyArticles"
 
 export default async function Home() {
 // quick fix: ask for many posts
@@ -50,7 +51,9 @@ const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000
       {/* <Header /> */}
        {/* <AdBanner /> */}
         {/* 📖 Latest Issue1 */}
-      <LatestIssues />
+
+        <CompanyArticles />
+      {/* <LatestIssues /> */}
 
       {/* 📰 Latest Category Hero */}
       {latestPost && <LatestHero post={latestPost} />}

@@ -1,263 +1,328 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+"use client"
+
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import Image from "next/image"
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from "@tanstack/react-table"
+import {
+  FileText,
+  Plus,
+  Edit,
+  Trash2,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  FolderOpen,
+  User,
+} from "lucide-react"
+
+/* ================= TYPES ================= */
 
 type Post = {
-  id: number;
-  title: string;
-  slug: string;
-  imageUrl?: string;
-  badge?: string; // ✅ NEW
-  category?: { name: string };
-  author?: { name: string };
-  publishedAt?: string;
-};
+  id: number
+  title: string
+  slug: string
+  imageUrl?: string
+  category?: { name: string }
+  author?: { name: string }
+  publishedAt?: string
+}
+
+const PAGE_SIZE = 10
+
+/* ================= PAGE ================= */
 
 export default function PostsList() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState("");
-  const router = useRouter();
+  const router = useRouter()
+
+  const [posts, setPosts] = useState<Post[]>([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState("")
+  const [debouncedSearch, setDebouncedSearch] = useState("")
+
+  /* ================= DEBOUNCE ================= */
 
   useEffect(() => {
-    async function fetchPosts() {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
-        );
-        const data = await res.json();
-        setPosts(data.data || data);
-      } catch (err) {
-        console.error(err);
-        setMessage("❌ Failed to load posts.");
-      } finally {
-        setLoading(false);
-      }
+    const t = setTimeout(() => setDebouncedSearch(search), 400)
+    return () => clearTimeout(t)
+  }, [search])
+
+  /* ================= FETCH ================= */
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true)
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts?page=${page}&limit=${PAGE_SIZE}&search=${debouncedSearch}`
+      )
+      const data = await res.json()
+      setPosts(data.data)
+      setTotal(data.total)
+      setLoading(false)
     }
-    fetchPosts();
-  }, []);
+    load()
+  }, [page, debouncedSearch])
+
+  /* ================= DELETE ================= */
 
   async function handleDelete(id: number) {
-    const token = localStorage.getItem("token");
-    if (!token) return alert("Unauthorized: please login again.");
+    const token = localStorage.getItem("token")
+    if (!token) return alert("Unauthorized")
 
-    if (!confirm("Are you sure you want to delete this post?")) return;
+    if (!confirm("Delete this post?")) return
 
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (res.ok) {
-        setPosts((prev) => prev.filter((p) => p.id !== id));
-        setMessage("✅ Post deleted successfully!");
-      } else {
-        setMessage("❌ Failed to delete post.");
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`,
+      {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       }
-    } catch (err) {
-      console.error(err);
-      setMessage("❌ Network error.");
-    }
+    )
+
+    setPosts((p) => p.filter((x) => x.id !== id))
   }
 
-  /* ================= TABLE SETUP ================= */
-  const columnHelper = createColumnHelper<Post>();
+  /* ================= TABLE ================= */
+
+  const columnHelper = createColumnHelper<Post>()
 
   const columns = [
-    /* IMAGE */
     columnHelper.display({
       id: "image",
       header: "Image",
       cell: (info) => {
-        const imageUrl = info.row.original.imageUrl;
-        const fixedUrl = imageUrl?.startsWith("http")
-          ? imageUrl
-          : imageUrl
-          ? `${process.env.NEXT_PUBLIC_API_URL}${imageUrl}`
-          : null;
-
-        return fixedUrl ? (
-          <img
-            src={fixedUrl}
-            alt="post"
-            className="w-16 h-16 object-cover rounded-md"
+        const url = info.row.original.imageUrl
+        return url ? (
+          <Image
+            src={url.startsWith("http") ? url : `${process.env.NEXT_PUBLIC_API_URL}${url}`}
+            width={64}
+            height={64}
+            alt=""
+            className="rounded object-cover"
           />
         ) : (
-          <span className="text-gray-400 italic">No Image</span>
-        );
+          <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
+            <FileText className="text-gray-400" />
+          </div>
+        )
       },
     }),
 
-    /* TITLE */
     columnHelper.accessor("title", {
       header: "Title",
       cell: (info) => (
-        <span className="font-medium">{info.getValue()}</span>
+        <div>
+          <p className="font-semibold line-clamp-2">
+            {info.getValue()}
+          </p>
+          <p className="text-xs text-gray-500">
+            /{info.row.original.slug}
+          </p>
+        </div>
       ),
     }),
 
-    /* BADGE ✅ */
-    columnHelper.display({
-      id: "badge",
-      header: "Badge",
-      cell: (info) => {
-        const badge = info.row.original.badge;
-        return badge ? (
-          <span className="inline-block bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
-            {badge}
-          </span>
-        ) : (
-          <span className="text-gray-400 text-xs">—</span>
-        );
-      },
-    }),
-
-    /* CATEGORY */
     columnHelper.display({
       id: "category",
       header: "Category",
-      cell: (info) => info.row.original.category?.name || "-",
+      cell: (info) =>
+        info.row.original.category?.name ?? (
+          <span className="text-gray-400">—</span>
+        ),
     }),
 
-    /* AUTHOR */
     columnHelper.display({
-      id: "author",
-      header: "Author",
-      cell: (info) => info.row.original.author?.name || "-",
-    }),
-
-    /* PUBLISHED */
-    columnHelper.display({
-      id: "publishedAt",
+      id: "published",
       header: "Published",
-      cell: (info) => {
-        const date = info.row.original.publishedAt;
-        return date ? new Date(date).toLocaleDateString() : "—";
-      },
+      cell: (info) =>
+        info.row.original.publishedAt ? (
+          new Date(info.row.original.publishedAt).toLocaleDateString()
+        ) : (
+          <span className="text-gray-400">Draft</span>
+        ),
     }),
 
-    /* ACTIONS */
     columnHelper.display({
       id: "actions",
       header: "Actions",
       cell: (info) => (
-        <div className="space-x-2 text-center">
+        <div className="flex gap-2">
           <button
             onClick={() =>
               router.push(`/admin/posts/edit/${info.row.original.id}`)
             }
-            className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-xs"
+            className="p-2 bg-blue-50 text-blue-600 rounded"
           >
-            Edit
+            <Edit size={16} />
           </button>
           <button
             onClick={() => handleDelete(info.row.original.id)}
-            className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 text-xs"
+            className="p-2 bg-red-50 text-red-600 rounded"
           >
-            Delete
+            <Trash2 size={16} />
           </button>
         </div>
       ),
     }),
-  ];
+  ]
 
   const table = useReactTable({
     data: posts,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  });
+  })
+
+  const totalPages = Math.ceil(total / PAGE_SIZE)
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-600">
-        Loading posts...
+      <div className="h-screen flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
       </div>
-    );
+    )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto bg-white shadow-md rounded-2xl p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-indigo-700">
-            All Posts
-          </h1>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="max-w-7xl mx-auto space-y-6">
+
+        {/* HEADER */}
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Content Management</h1>
           <button
             onClick={() => router.push("/admin/posts/create")}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
+            className="bg-indigo-600 text-white px-4 py-2 rounded flex items-center gap-2"
           >
-            ➕ Create New Post
+            <Plus size={18} /> New Post
           </button>
         </div>
 
-        {message && (
-          <p
-            className={`text-center text-sm font-medium mb-4 ${
-              message.startsWith("✅")
-                ? "text-green-600"
-                : "text-red-600"
-            }`}
-          >
-            {message}
-          </p>
-        )}
+        {/* QUICK ACTIONS */}
+        <div className="grid md:grid-cols-3 gap-4">
+          <ActionCard
+            icon={<Plus />}
+            title="Create Post"
+            desc="Write a new article"
+            onClick={() => router.push("/admin/posts/create")}
+          />
+          <ActionCard
+            icon={<FolderOpen />}
+            title="Categories"
+            desc="Manage categories"
+            onClick={() => router.push("/admin/categories")}
+          />
+          <ActionCard
+            icon={<User />}
+            title="Authors"
+            desc="Manage authors"
+            onClick={() => router.push("/admin/authors")}
+          />
+        </div>
 
-        {posts.length === 0 ? (
-          <p className="text-center text-gray-500">No posts found.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-200 text-sm">
-              <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <th
-                        key={header.id}
-                        className="px-4 py-3 border text-left font-semibold"
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <tr
-                    key={row.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className="px-4 py-3 border">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* TABLE */}
+        <div className="bg-white rounded-xl shadow overflow-hidden">
+          <div className="p-4 border-b flex justify-between items-center">
+            <div className="relative max-w-sm">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search posts..."
+                className="pl-10 pr-4 py-2 border rounded w-full"
+              />
+            </div>
           </div>
-        )}
+
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              {table.getHeaderGroups().map((hg) => (
+                <tr key={hg.id}>
+                  {hg.headers.map((h) => (
+                    <th
+                      key={h.id}
+                      className="px-6 py-3 text-left text-xs font-semibold text-gray-600"
+                    >
+                      {flexRender(h.column.columnDef.header, h.getContext())}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+
+            <tbody className="divide-y">
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id} className="hover:bg-gray-50">
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-6 py-4">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* PAGINATION */}
+          <div className="p-4 border-t flex justify-between items-center">
+            <span className="text-sm text-gray-600">
+              Page {page} of {totalPages}
+            </span>
+
+            <div className="flex gap-2">
+              <button
+                disabled={page === 1}
+                onClick={() => setPage((p) => p - 1)}
+                className="p-2 border rounded disabled:opacity-50"
+              >
+                <ChevronLeft />
+              </button>
+              <button
+                disabled={page === totalPages}
+                onClick={() => setPage((p) => p + 1)}
+                className="p-2 border rounded disabled:opacity-50"
+              >
+                <ChevronRight />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  );
+  )
+}
+
+/* ================= ACTION CARD ================= */
+
+function ActionCard({
+  icon,
+  title,
+  desc,
+  onClick,
+}: {
+  icon: React.ReactNode
+  title: string
+  desc: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="p-5 bg-white rounded-xl shadow hover:shadow-md transition text-left flex gap-4"
+    >
+      <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
+        {icon}
+      </div>
+      <div>
+        <h3 className="font-semibold">{title}</h3>
+        <p className="text-sm text-gray-500">{desc}</p>
+      </div>
+    </button>
+  )
 }

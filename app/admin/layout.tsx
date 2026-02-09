@@ -84,26 +84,11 @@ export default function AdminLayout({
             active={pathname === "/admin/posts"}
           />
 
-          <SidebarLink
-            href="/admin/posts/create"
-            label="Create Post"
-            icon={<PlusCircle size={18} />}
-            active={pathname === "/admin/posts/create"}
-          />
+       
 
-          <SidebarLink
-            href="/admin/categories"
-            label="Categories"
-            icon={<Folder size={18} />}
-            active={pathname === "/admin/categories"}
-          />
+ 
 
-          <SidebarLink
-            href="/admin/authors"
-            label="Authors"
-            icon={<Users size={18} />}
-            active={pathname === "/admin/authors"}
-          />
+
 
           <SidebarLink
             href="/admin/banners"
@@ -118,6 +103,29 @@ export default function AdminLayout({
             icon={<Folder size={18} />}
             active={pathname === "/admin/events"}
           />
+
+                 <SidebarLink
+            href="/admin/jobs"
+            label="Jobs"
+            icon={<Folder size={18} />}
+            active={pathname === "/admin/jobs"}
+          />
+
+               <SidebarLink
+            href="/admin/articles"
+            label="Articles"
+            icon={<Folder size={18} />}
+            active={pathname === "/admin/articles"}
+          />
+
+                    <SidebarLink
+            href="/admin/directories"
+            label="Directories"
+            icon={<Folder size={18} />}
+            active={pathname === "/admin/directories"}
+          />
+
+
         </nav>
 
         <div className="p-4 border-t border-indigo-700">
