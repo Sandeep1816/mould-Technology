@@ -6,9 +6,7 @@ import Link from "next/link"
 import {
   LayoutDashboard,
   FileText,
-  PlusCircle,
   Folder,
-  Users,
   LogOut,
 } from "lucide-react"
 
@@ -23,9 +21,7 @@ export default function AdminLayout({
   const [checking, setChecking] = useState(true)
   const [allowed, setAllowed] = useState(false)
 
-  // ✅ ADMIN ROLE GUARD (DO NOT REMOVE SIDEBAR)
   useEffect(() => {
-    // allow admin login page
     if (pathname === "/admin/login") {
       setAllowed(true)
       setChecking(false)
@@ -51,25 +47,30 @@ export default function AdminLayout({
     setChecking(false)
   }, [pathname, router])
 
-  // ⛔ Prevent render while checking
   if (checking) return null
 
-  // ✅ Login page → no sidebar
   if (pathname === "/admin/login") {
     return <>{children}</>
   }
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex bg-[#F4F6FA]">
+
       {/* ================= SIDEBAR ================= */}
-      <aside className="w-64 bg-indigo-800 text-white flex flex-col">
-        <div className="p-5 border-b border-indigo-700">
-          <h1 className="text-xl font-bold tracking-wide">
+      <aside className="w-64 bg-[#0A2B57] text-[#E6ECF3] flex flex-col shadow-xl rounded-none">
+
+        {/* BRAND */}
+        <div className="px-6 py-5 border-b border-[#123A6F]">
+          <h1 className="text-lg font-semibold tracking-wide">
             Admin Panel
           </h1>
+          <p className="text-xs text-[#9FB2CC] mt-1">
+            Mold Technology
+          </p>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        {/* NAV */}
+        <nav className="flex-1 px-3 py-4 space-y-1">
           <SidebarLink
             href="/admin/dashboard"
             label="Dashboard"
@@ -83,12 +84,6 @@ export default function AdminLayout({
             icon={<FileText size={18} />}
             active={pathname === "/admin/posts"}
           />
-
-       
-
- 
-
-
 
           <SidebarLink
             href="/admin/banners"
@@ -104,38 +99,37 @@ export default function AdminLayout({
             active={pathname === "/admin/events"}
           />
 
-                 <SidebarLink
+          <SidebarLink
             href="/admin/jobs"
             label="Jobs"
             icon={<Folder size={18} />}
             active={pathname === "/admin/jobs"}
           />
 
-               <SidebarLink
+          <SidebarLink
             href="/admin/articles"
-            label="TechArticles"
+            label="Tech Articles"
             icon={<Folder size={18} />}
             active={pathname === "/admin/articles"}
           />
 
-                    <SidebarLink
+          <SidebarLink
             href="/admin/directories"
             label="Directories"
             icon={<Folder size={18} />}
             active={pathname === "/admin/directories"}
           />
-
-
         </nav>
 
-        <div className="p-4 border-t border-indigo-700">
+        {/* FOOTER */}
+        <div className="px-5 py-4 border-t border-[#123A6F]">
           <button
             onClick={() => {
               localStorage.removeItem("token")
               localStorage.removeItem("user")
               router.push("/admin/login")
             }}
-            className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-yellow-300 transition"
+            className="flex items-center gap-3 text-sm font-medium text-[#E6ECF3]/90 hover:text-[#C9A227] transition"
           >
             <LogOut size={18} />
             Logout
@@ -145,7 +139,9 @@ export default function AdminLayout({
 
       {/* ================= CONTENT ================= */}
       <main className="flex-1 p-8 overflow-y-auto">
-        {children}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          {children}
+        </div>
       </main>
     </div>
   )
@@ -167,11 +163,13 @@ function SidebarLink({
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-        active
-          ? "bg-indigo-600 text-white"
-          : "text-gray-300 hover:bg-indigo-700 hover:text-white"
-      }`}
+      className={`flex items-center gap-3 px-4 py-2.5 rounded-md text-sm font-medium transition-all
+        ${
+          active
+            ? "bg-[#143D7A] text-white shadow-sm"
+            : "text-[#9FB2CC] hover:bg-[#0F3A70] hover:text-white"
+        }
+      `}
     >
       {icon}
       <span>{label}</span>

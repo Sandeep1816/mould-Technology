@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { Calendar, Eye, Users } from "lucide-react"
+
+/* ================= TYPES ================= */
 
 type Event = {
   id: number
@@ -12,21 +15,23 @@ type Event = {
   endDate: string
   location?: string
   createdAt: string
-  views: number // ✅ now REQUIRED
+  views: number
 }
+
+/* ================= PAGE ================= */
 
 export default function AdminEventsPage() {
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
   const [publishingId, setPublishingId] = useState<number | null>(null)
 
-  // 📊 STATS
+  /* ================= STATS ================= */
+
   const totalEvents = events.length
-  const totalViews = events.reduce(
-    (sum, event) => sum + (event.views ?? 0),
-    0
-  )
+  const totalViews = events.reduce((sum, e) => sum + (e.views ?? 0), 0)
   const totalRegistrations = 0 // future
+
+  /* ================= FETCH ================= */
 
   const fetchEvents = async () => {
     try {
@@ -38,11 +43,10 @@ export default function AdminEventsPage() {
           },
         }
       )
-
       const data = await res.json()
       setEvents(data)
-    } catch (error) {
-      console.error("Failed to fetch events", error)
+    } catch (err) {
+      console.error("Failed to fetch events", err)
     } finally {
       setLoading(false)
     }
@@ -51,6 +55,8 @@ export default function AdminEventsPage() {
   useEffect(() => {
     fetchEvents()
   }, [])
+
+  /* ================= ACTIONS ================= */
 
   const publishEvent = async (id: number) => {
     if (!confirm("Publish this event?")) return
@@ -73,7 +79,7 @@ export default function AdminEventsPage() {
       } else {
         alert("Failed to publish event")
       }
-    } catch (error) {
+    } catch {
       alert("Error publishing event")
     } finally {
       setPublishingId(null)
@@ -81,87 +87,100 @@ export default function AdminEventsPage() {
   }
 
   if (loading) {
-    return <p className="p-6">Loading events...</p>
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F4F6FA]">
+        <div className="w-12 h-12 border-4 border-[#0A2B57] border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
   }
 
+  /* ================= UI ================= */
+
   return (
-    <div className="p-6 space-y-8">
-      {/* 🔝 STATS CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white border rounded-lg p-6">
-          <p className="text-sm text-gray-500">Total Events</p>
-          <p className="text-3xl font-bold mt-2">{totalEvents}</p>
-        </div>
-
-        <div className="bg-white border rounded-lg p-6">
-          <p className="text-sm text-gray-500">Total Views</p>
-          <p className="text-3xl font-bold mt-2">{totalViews}</p>
-          <p className="text-xs text-gray-400 mt-1">
-            Public event page views
-          </p>
-        </div>
-
-        <div className="bg-white border rounded-lg p-6">
-          <p className="text-sm text-gray-500">Registrations</p>
-          <p className="text-3xl font-bold mt-2">{totalRegistrations}</p>
-          <p className="text-xs text-gray-400 mt-1">
-            Will be connected later
-          </p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#F4F6FA] p-8 space-y-8">
 
       {/* HEADER */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Events</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-[#0A2B57]">
+            Events Management
+          </h1>
+          <p className="text-sm text-gray-500">
+            Create, review and publish events
+          </p>
+        </div>
 
         <Link
           href="/admin/events/create"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-[#0A2B57] text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:bg-[#143D7A] transition"
         >
           + Create Event
         </Link>
       </div>
 
-      {/* TABLE */}
-      {events.length === 0 ? (
-        <p>No events found.</p>
-      ) : (
-        <div className="overflow-x-auto bg-white border rounded-lg">
+      {/* STATS */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <StatCard
+          label="Total Events"
+          value={totalEvents}
+          icon={<Calendar />}
+          color="bg-blue-600"
+        />
+        <StatCard
+          label="Total Views"
+          value={totalViews}
+          icon={<Eye />}
+          color="bg-green-600"
+        />
+        <StatCard
+          label="Registrations"
+          value={totalRegistrations}
+          icon={<Users />}
+          color="bg-purple-600"
+        />
+      </div>
+
+      {/* LIST */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+
+        {events.length === 0 ? (
+          <p className="p-6 text-gray-500">No events found.</p>
+        ) : (
           <table className="w-full text-sm">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="border p-2 text-left">Title</th>
-                <th className="border p-2">Dates</th>
-                <th className="border p-2">Location</th>
-                <th className="border p-2">Views</th>
-                <th className="border p-2">Status</th>
-                <th className="border p-2">Actions</th>
+            <thead className="bg-gray-50 border-b">
+              <tr className="text-left text-gray-600">
+                <th className="px-6 py-4">Title</th>
+                <th className="px-6 py-4 text-center">Dates</th>
+                <th className="px-6 py-4 text-center">Location</th>
+                <th className="px-6 py-4 text-center">Views</th>
+                <th className="px-6 py-4 text-center">Status</th>
+                <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
 
-            <tbody>
+            <tbody className="divide-y">
               {events.map(event => (
-                <tr key={event.id} className="hover:bg-gray-50">
-                  <td className="border p-2 font-medium">
+                <tr key={event.id} className="hover:bg-gray-50 transition">
+                  <td className="px-6 py-4 font-medium text-[#0A2B57]">
                     {event.title}
                   </td>
 
-                  <td className="border p-2 text-center">
+                  <td className="px-6 py-4 text-center text-gray-600">
                     {new Date(event.startDate).toLocaleDateString()} –{" "}
                     {new Date(event.endDate).toLocaleDateString()}
                   </td>
 
-                  <td className="border p-2 text-center">
-                    {event.location || "-"}
+                  <td className="px-6 py-4 text-center text-gray-600">
+                    {event.location || "—"}
                   </td>
 
-                  <td className="border p-2 text-center font-semibold">
+                  <td className="px-6 py-4 text-center font-semibold">
                     {event.views}
                   </td>
 
-                  <td className="border p-2 text-center">
+                  <td className="px-6 py-4 text-center">
                     <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
                         event.status === "PUBLISHED"
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
@@ -171,12 +190,12 @@ export default function AdminEventsPage() {
                     </span>
                   </td>
 
-                  <td className="border p-2 text-center space-x-2">
+                  <td className="px-6 py-4 text-right space-x-2">
                     {event.status === "DRAFT" && (
                       <button
                         onClick={() => publishEvent(event.id)}
                         disabled={publishingId === event.id}
-                        className="bg-green-600 text-white px-3 py-1 rounded text-xs disabled:opacity-50"
+                        className="bg-green-600 text-white px-3 py-1.5 rounded-md text-xs font-medium hover:bg-green-700 disabled:opacity-50"
                       >
                         {publishingId === event.id
                           ? "Publishing..."
@@ -186,7 +205,7 @@ export default function AdminEventsPage() {
 
                     <Link
                       href={`/admin/events/edit/${event.id}`}
-                      className="bg-gray-200 px-3 py-1 rounded text-xs"
+                      className="bg-gray-100 px-3 py-1.5 rounded-md text-xs font-medium hover:bg-gray-200"
                     >
                       Edit
                     </Link>
@@ -195,8 +214,36 @@ export default function AdminEventsPage() {
               ))}
             </tbody>
           </table>
-        </div>
-      )}
+        )}
+      </div>
+    </div>
+  )
+}
+
+/* ================= STAT CARD ================= */
+
+function StatCard({
+  label,
+  value,
+  icon,
+  color,
+}: {
+  label: string
+  value: number
+  icon: React.ReactNode
+  color: string
+}) {
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex justify-between items-center">
+      <div>
+        <p className="text-sm text-gray-500">{label}</p>
+        <h3 className="text-2xl font-bold">{value}</h3>
+      </div>
+      <div
+        className={`w-12 h-12 ${color} text-white rounded-lg flex items-center justify-center`}
+      >
+        {icon}
+      </div>
     </div>
   )
 }

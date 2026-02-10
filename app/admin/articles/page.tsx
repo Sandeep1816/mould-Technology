@@ -24,7 +24,6 @@ export default function AdminArticlesPage() {
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(null)
   const [status, setStatus] = useState<"PENDING" | "APPROVED">("APPROVED")
 
-
   const token =
     typeof window !== "undefined"
       ? localStorage.getItem("token")
@@ -60,7 +59,6 @@ export default function AdminArticlesPage() {
     [articles]
   )
 
-  // 🚧 Future feature
   const totalShares = 0
 
   /* ================= GROUP BY COMPANY ================= */
@@ -92,12 +90,17 @@ export default function AdminArticlesPage() {
   /* ================= UI ================= */
 
   return (
-    <div className="min-h-screen bg-[#f6f8fc] p-8 space-y-8">
+    <div className="min-h-screen bg-[#F4F6FA] p-8 space-y-8">
 
       {/* ================= HEADER ================= */}
-      <h1 className="text-2xl font-bold">
-        Article Moderation
-      </h1>
+      <div>
+        <h1 className="text-2xl font-bold text-[#0A2B57]">
+          Article Moderation
+        </h1>
+        <p className="text-sm text-gray-500">
+          Review and manage company articles
+        </p>
+      </div>
 
       {/* ================= STATS ================= */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -105,57 +108,64 @@ export default function AdminArticlesPage() {
           label="Articles Posted"
           value={totalArticles}
           icon={<FileText />}
+          color="bg-blue-600"
         />
         <StatCard
           label="Articles Viewed"
           value={totalViews}
           icon={<Eye />}
+          color="bg-green-600"
         />
         <StatCard
           label="Articles Shared"
           value={totalShares}
           icon={<Share2 />}
+          color="bg-purple-600"
         />
       </div>
 
       {/* ================= TABS ================= */}
-      <div className="flex gap-4">
-        <button
-          onClick={() => setStatus("PENDING")}
-          className={`px-4 py-2 rounded ${
-            status === "PENDING" ? "bg-black text-white" : "bg-white border"
-          }`}
-        >
-          Pending
-        </button>
-
-        <button
-          onClick={() => setStatus("APPROVED")}
-          className={`px-4 py-2 rounded ${
-            status === "APPROVED" ? "bg-black text-white" : "bg-white border"
-          }`}
-        >
-          Approved
-        </button>
+      <div className="flex gap-3">
+        {["PENDING", "APPROVED"].map(tab => (
+          <button
+            key={tab}
+            onClick={() => setStatus(tab as any)}
+            className={`px-5 py-2 rounded-md text-sm font-medium transition
+              ${
+                status === tab
+                  ? "bg-[#0A2B57] text-white shadow"
+                  : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-100"
+              }
+            `}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
       {/* ================= CONTENT ================= */}
       <div className="grid grid-cols-12 gap-6">
 
         {/* COMPANIES */}
-        <aside className="col-span-3 bg-white rounded-xl shadow p-4">
-          <h2 className="font-semibold mb-4">Companies</h2>
+        <aside className="col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+          <h2 className="font-semibold text-[#0A2B57] mb-4">
+            Companies
+          </h2>
 
           <ul className="space-y-2">
             {companies.map(({ company, count }) => (
               <li
                 key={company.id}
                 onClick={() => setSelectedCompanyId(company.id)}
-                className={`p-3 rounded cursor-pointer flex justify-between
-                  ${selectedCompanyId === company.id ? "bg-blue-50" : "hover:bg-gray-100"}`}
+                className={`p-3 rounded-md cursor-pointer flex justify-between items-center transition
+                  ${
+                    selectedCompanyId === company.id
+                      ? "bg-blue-50 text-[#0A2B57] font-medium"
+                      : "hover:bg-gray-100 text-gray-700"
+                  }`}
               >
                 <span>{company.name}</span>
-                <span className="text-xs bg-gray-200 px-2 rounded">
+                <span className="text-xs bg-gray-200 px-2 py-0.5 rounded">
                   {count}
                 </span>
               </li>
@@ -164,7 +174,7 @@ export default function AdminArticlesPage() {
         </aside>
 
         {/* ARTICLES */}
-        <main className="col-span-9 bg-white rounded-xl shadow p-6">
+        <main className="col-span-9 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           {!selectedCompanyId && (
             <p className="text-gray-500">
               Select a company to view articles
@@ -173,8 +183,13 @@ export default function AdminArticlesPage() {
 
           <ul className="space-y-4">
             {filteredArticles.map(article => (
-              <li key={article.id} className="border rounded p-4">
-                <h3 className="font-medium">{article.title}</h3>
+              <li
+                key={article.id}
+                className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition"
+              >
+                <h3 className="font-semibold text-[#0A2B57]">
+                  {article.title}
+                </h3>
                 <p className="text-xs text-gray-500 mt-1">
                   👁 {article.views} views
                 </p>
@@ -193,18 +208,22 @@ function StatCard({
   label,
   value,
   icon,
+  color,
 }: {
   label: string
   value: number
   icon: React.ReactNode
+  color: string
 }) {
   return (
-    <div className="bg-white rounded-xl shadow p-5 flex justify-between items-center">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex justify-between items-center">
       <div>
         <p className="text-sm text-gray-500">{label}</p>
         <h3 className="text-2xl font-bold">{value}</h3>
       </div>
-      <div className="w-12 h-12 bg-black text-white rounded-lg flex items-center justify-center">
+      <div
+        className={`w-12 h-12 ${color} text-white rounded-lg flex items-center justify-center`}
+      >
         {icon}
       </div>
     </div>
