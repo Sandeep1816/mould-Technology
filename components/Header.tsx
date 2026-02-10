@@ -117,22 +117,24 @@ export default function Header() {
       <div className={`${container} ${isSticky ? "h-[80px] md:h-[100px] lg:h-[100px]" : "h-[90px] md:h-[120px] lg:h-[150px]"} transition-all`}>
         <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[320px_1fr_auto] items-center h-full gap-6 lg:gap-10">
 
-          {/* LOGO */}
-          <Link href="/" className="flex items-center justify-start">
-            <Image
-              src="/images/moldinglogo2.png"
-              alt="MoldMaking Technology Logo"
-              width={isSticky ? 220 : 300}
-              height={isSticky ? 93 : 127}
-              priority
-              quality={100}
-              className={`w-auto transition-all ${
-                isSticky 
-                  ? "h-[60px] md:h-[70px] lg:h-[80px]" 
-                  : "h-[70px] md:h-[90px] lg:h-[120px]"
-              }`}
-            />
-          </Link>
+      {/* LOGO */}
+<Link href="/" className="flex items-center justify-start">
+  <Image
+    src="/images/moldinglogo2.png"
+    alt="MoldMaking Technology Logo"
+    width={300}
+    height={127}
+    priority
+    quality={100}
+    sizes="(max-width: 768px) 70px, (max-width: 1024px) 90px, 120px"
+    className={`w-auto transition-all ${
+      isSticky 
+        ? "h-[60px] md:h-[70px] lg:h-[80px]" 
+        : "h-[70px] md:h-[90px] lg:h-[120px]"
+    }`}
+    style={{ imageRendering: 'crisp-edges' }}
+  />
+</Link>
 
           {/* DESKTOP NAV */}
           <nav className="hidden lg:flex justify-center gap-6 xl:gap-8 text-white font-medium text-sm xl:text-base">
