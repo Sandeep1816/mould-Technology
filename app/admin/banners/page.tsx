@@ -1,13 +1,26 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { BANNER_PLACEMENTS } from "@/lib/bannerPlacements";
+import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
+import { BANNER_PLACEMENTS } from "@/lib/bannerPlacements"
+import { Eye, Image as ImageIcon } from "lucide-react"
+
+type Banner = {
+  id: number
+  title: string
+  imageUrl: string
+  placement: string
+  status: "ACTIVE" | "INACTIVE"
+  position: number
+  clicks: number
+}
 
 export default function BannerListPage() {
-  const [banners, setBanners] = useState<any[]>([]);
-  const [placement, setPlacement] = useState<string>("ALL");
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [banners, setBanners] = useState<Banner[]>([])
+  const [placement, setPlacement] = useState("ALL")
+  const [deletingId, setDeletingId] = useState<number | null>(null)
+
+  /* ================= FETCH ================= */
 
   const fetchBanners = async () => {
     const res = await fetch(
@@ -17,19 +30,38 @@ export default function BannerListPage() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }
-    );
-    const data = await res.json();
-    setBanners(data);
-  };
+    )
+
+    const data = await res.json()
+    setBanners(data)
+  }
 
   useEffect(() => {
-    fetchBanners();
-  }, []);
+    fetchBanners()
+  }, [])
+
+  /* ================= STATS ================= */
+
+  const totalBanners = banners.length
+
+  const totalClicks = useMemo(
+    () => banners.reduce((sum, b) => sum + (b.clicks ?? 0), 0),
+    [banners]
+  )
+
+  /* ================= FILTER ================= */
+
+  const filteredBanners =
+    placement === "ALL"
+      ? banners
+      : banners.filter(b => b.placement === placement)
+
+  /* ================= DELETE ================= */
 
   const deleteBanner = async (id: number) => {
-    if (!confirm("Delete this banner permanently?")) return;
+    if (!confirm("Delete this banner permanently?")) return
 
-    setDeletingId(id);
+    setDeletingId(id)
 
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/banners/${id}`,
@@ -39,22 +71,22 @@ export default function BannerListPage() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }
-    );
+    )
 
-    setBanners((prev) => prev.filter((b) => b.id !== id));
-    setDeletingId(null);
-  };
+    setBanners(prev => prev.filter(b => b.id !== id))
+    setDeletingId(null)
+  }
 
-  const filteredBanners =
-    placement === "ALL"
-      ? banners
-      : banners.filter((b) => b.placement === placement);
+  /* ================= UI ================= */
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
+    <div className="p-6 space-y-6 bg-[#f6f8fc] min-h-screen">
+
+      {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Advertisement Banners</h1>
+        <h1 className="text-2xl font-bold">
+          Advertisement Banners
+        </h1>
 
         <div className="flex gap-3">
           <Link
@@ -73,7 +105,24 @@ export default function BannerListPage() {
         </div>
       </div>
 
-      {/* Placement Filter */}
+      {/* ================= STATS ================= */}
+      <div className="grid sm:grid-cols-2 gap-6">
+        <StatCard
+          label="Total Banners Posted"
+          value={totalBanners}
+          icon={<ImageIcon className="w-6 h-6 text-white" />}
+          color="from-blue-500 to-blue-600"
+        />
+
+        <StatCard
+          label="Total Banner Clicks"
+          value={totalClicks}
+          icon={<Eye className="w-6 h-6 text-white" />}
+          color="from-green-500 to-green-600"
+        />
+      </div>
+
+      {/* ================= FILTER ================= */}
       <div className="flex items-center gap-3">
         <label className="text-sm font-medium text-gray-600">
           Filter by placement:
@@ -81,11 +130,11 @@ export default function BannerListPage() {
 
         <select
           value={placement}
-          onChange={(e) => setPlacement(e.target.value)}
-          className="border px-3 py-2 rounded"
+          onChange={e => setPlacement(e.target.value)}
+          className="border px-3 py-2 rounded bg-white"
         >
           <option value="ALL">All Placements</option>
-          {BANNER_PLACEMENTS.map((p) => (
+          {BANNER_PLACEMENTS.map(p => (
             <option key={p.value} value={p.value}>
               {p.label}
             </option>
@@ -93,8 +142,8 @@ export default function BannerListPage() {
         </select>
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-lg shadow overflow-x-auto">
+      {/* ================= TABLE ================= */}
+      <div className="bg-white rounded-xl shadow overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-100 text-gray-700">
             <tr>
@@ -103,19 +152,16 @@ export default function BannerListPage() {
               <th className="p-3 text-left">Title</th>
               <th className="p-3 text-left">Placement</th>
               <th className="p-3 text-left">Status</th>
+              <th className="p-3 text-left">Clicks</th>
               <th className="p-3 text-right">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {filteredBanners.map((b) => (
+            {filteredBanners.map(b => (
               <tr key={b.id} className="border-t hover:bg-gray-50">
-                {/* Order */}
-                <td className="p-3 font-medium text-gray-700">
-                  {b.position}
-                </td>
+                <td className="p-3 font-medium">{b.position}</td>
 
-                {/* Image */}
                 <td className="p-3">
                   <img
                     src={b.imageUrl}
@@ -124,13 +170,10 @@ export default function BannerListPage() {
                   />
                 </td>
 
-                {/* Title */}
                 <td className="p-3 font-medium">{b.title}</td>
 
-                {/* Placement */}
                 <td className="p-3 text-gray-600">{b.placement}</td>
 
-                {/* Status */}
                 <td className="p-3">
                   <span
                     className={`px-2 py-1 rounded text-xs font-medium ${
@@ -143,7 +186,11 @@ export default function BannerListPage() {
                   </span>
                 </td>
 
-                {/* Actions */}
+                {/* 👁️ CLICKS */}
+                <td className="p-3 font-semibold text-gray-700">
+                  {b.clicks ?? 0}
+                </td>
+
                 <td className="p-3 text-right space-x-4">
                   <Link
                     href={`/admin/banners/edit/${b.id}`}
@@ -165,10 +212,7 @@ export default function BannerListPage() {
 
             {filteredBanners.length === 0 && (
               <tr>
-                <td
-                  colSpan={6}
-                  className="p-8 text-center text-gray-500"
-                >
+                <td colSpan={7} className="p-8 text-center text-gray-500">
                   No banners found for this placement
                 </td>
               </tr>
@@ -177,5 +221,32 @@ export default function BannerListPage() {
         </table>
       </div>
     </div>
-  );
+  )
+}
+
+/* ================= STAT CARD ================= */
+function StatCard({
+  label,
+  value,
+  icon,
+  color,
+}: {
+  label: string
+  value: number
+  icon: React.ReactNode
+  color: string
+}) {
+  return (
+    <div className="bg-white rounded-xl shadow-sm border p-6 flex items-center justify-between">
+      <div>
+        <p className="text-sm text-gray-600 mb-1">{label}</p>
+        <h3 className="text-3xl font-bold">{value}</h3>
+      </div>
+      <div
+        className={`w-14 h-14 bg-gradient-to-br ${color} rounded-xl flex items-center justify-center`}
+      >
+        {icon}
+      </div>
+    </div>
+  )
 }

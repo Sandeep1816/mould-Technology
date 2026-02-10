@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import {
@@ -18,6 +20,18 @@ function stripHtml(html: string) {
 export default function SupplierRowCard({ supplier }: any) {
   const social = supplier.socialLinks || {}
   const views = supplier.views ?? 0
+
+  /* 🔗 TRACK CONNECTION */
+  const trackConnection = async () => {
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/suppliers/${supplier.id}/connection`,
+        { method: "POST" }
+      )
+    } catch (err) {
+      console.error("Failed to track connection", err)
+    }
+  }
 
   return (
     <div className="bg-white border border-[#dee2e6] rounded-md p-4 sm:p-6 flex flex-col lg:flex-row gap-6">
@@ -89,6 +103,8 @@ export default function SupplierRowCard({ supplier }: any) {
                   <a
                     href={social.facebook}
                     target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={trackConnection}
                     className="w-9 h-9 bg-[#3b5998] flex items-center justify-center"
                   >
                     <LucideFacebook className="w-4 h-4 text-white" />
@@ -99,6 +115,8 @@ export default function SupplierRowCard({ supplier }: any) {
                   <a
                     href={social.linkedin}
                     target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={trackConnection}
                     className="w-9 h-9 bg-[#0077b5] flex items-center justify-center"
                   >
                     <LucideLinkedin className="w-4 h-4 text-white" />
@@ -109,6 +127,8 @@ export default function SupplierRowCard({ supplier }: any) {
                   <a
                     href={social.twitter}
                     target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={trackConnection}
                     className="w-9 h-9 bg-black flex items-center justify-center"
                   >
                     <LucideTwitter className="w-4 h-4 text-white" />
@@ -119,6 +139,8 @@ export default function SupplierRowCard({ supplier }: any) {
                   <a
                     href={social.youtube}
                     target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={trackConnection}
                     className="w-9 h-9 bg-red-600 flex items-center justify-center"
                   >
                     <LucideYoutube className="w-4 h-4 text-white" />

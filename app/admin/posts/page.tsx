@@ -19,6 +19,7 @@ import {
   ChevronRight,
   FolderOpen,
   User,
+  Eye,
 } from "lucide-react"
 
 /* ================= TYPES ================= */
@@ -31,6 +32,7 @@ type Post = {
   category?: { name: string }
   author?: { name: string }
   publishedAt?: string
+  views: number // ✅ ADD
 }
 
 const PAGE_SIZE = 10
@@ -59,14 +61,17 @@ export default function PostsList() {
   useEffect(() => {
     async function load() {
       setLoading(true)
+
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/posts?page=${page}&limit=${PAGE_SIZE}&search=${debouncedSearch}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts?page=${page}&limit=${PAGE_SIZE}&q=${debouncedSearch}`
       )
-      const data = await res.json()
-      setPosts(data.data)
-      setTotal(data.total)
+      const json = await res.json()
+
+      setPosts(json.data)
+      setTotal(json.meta.total)
       setLoading(false)
     }
+
     load()
   }, [page, debouncedSearch])
 
@@ -136,6 +141,17 @@ export default function PostsList() {
         info.row.original.category?.name ?? (
           <span className="text-gray-400">—</span>
         ),
+    }),
+
+    /* 👁️ VIEWS COLUMN */
+    columnHelper.accessor("views", {
+      header: "Views",
+      cell: (info) => (
+        <div className="flex items-center gap-1 text-gray-700 font-medium">
+          <Eye size={14} className="text-gray-400" />
+          {info.getValue()}
+        </div>
+      ),
     }),
 
     columnHelper.display({
@@ -228,7 +244,7 @@ export default function PostsList() {
 
         {/* TABLE */}
         <div className="bg-white rounded-xl shadow overflow-hidden">
-          <div className="p-4 border-b flex justify-between items-center">
+          <div className="p-4 border-b">
             <div className="relative max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input

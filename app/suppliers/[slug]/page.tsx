@@ -1,5 +1,6 @@
 import CompanyArticlesCarousel from "@/components/CompanyArticlesCarousel"
 import VideoGallery from "@/components/VideoGallery"
+import SocialLinksTracker from "@/components/SocialLinksTracker"
 import {
   LucideFacebook,
   LucideLinkedin,
@@ -64,34 +65,25 @@ export default async function SupplierShowroomPage({
   }
 
   const supplier: Supplier = await supplierRes.json()
-  console.log("SUPPLIER ID:", supplier.id)
-console.log("SUPPLIER COMPANY ID:", supplier.companyId)
   const social = supplier.socialLinks || {}
 
-/* ---------- FETCH COMPANY ARTICLES ---------- */
-const companyId = supplier.companyId ?? supplier.id
+  /* ---------- FETCH COMPANY ARTICLES ---------- */
+  const articlesRes = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/companies/${supplier.companyId}/articles`,
+    { cache: "no-store" }
+  )
 
-const articlesRes = await fetch(
-  `${process.env.NEXT_PUBLIC_API_URL}/api/companies/${supplier.companyId}/articles`,
-  { cache: "no-store" }
-)
-
-
-
-let articles: Article[] = []
-
-if (articlesRes.ok) {
-  articles = await articlesRes.json() // ✅ FIX
-}
-
-
+  let articles: Article[] = []
+  if (articlesRes.ok) {
+    articles = await articlesRes.json()
+  }
 
   /* ================= UI ================= */
 
   return (
     <div className="bg-[#f5f6f7] min-h-screen">
 
-      {/* ================= HERO ================= */}
+      {/* HERO */}
       <div className="relative h-[300px] bg-black">
         {supplier.coverImageUrl && (
           <img
@@ -102,11 +94,10 @@ if (articlesRes.ok) {
         )}
       </div>
 
-      {/* ================= MAIN CARD ================= */}
+      {/* MAIN CARD */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 -mt-36">
         <div className="bg-white rounded-lg shadow p-10 border-t-4 border-red-700">
 
-          {/* HEADER */}
           <h1 className="text-3xl font-bold text-center text-[#0b3954]">
             {supplier.name}
           </h1>
@@ -117,10 +108,9 @@ if (articlesRes.ok) {
             </p>
           )}
 
-          {/* ================= GRID ================= */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mt-12">
 
-            {/* LEFT COLUMN */}
+            {/* LEFT */}
             <aside className="space-y-8 md:col-span-1">
 
               {supplier.logoUrl && (
@@ -146,25 +136,9 @@ if (articlesRes.ok) {
                     </a>
                   </p>
                 )}
-
-                {supplier.phoneNumber && (
-                  <p><strong>Phone:</strong> {supplier.phoneNumber}</p>
-                )}
-
-                {supplier.email && (
-                  <p>
-                    <strong>Email:</strong>{" "}
-                    <a
-                      href={`mailto:${supplier.email}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {supplier.email}
-                    </a>
-                  </p>
-                )}
               </div>
 
-              {/* SOCIAL */}
+              {/* SOCIAL (TRACKED) */}
               {(social.facebook ||
                 social.linkedin ||
                 social.twitter ||
@@ -174,33 +148,35 @@ if (articlesRes.ok) {
                     Connect
                   </h4>
 
-                  <div className="flex gap-3">
-                    {social.facebook && (
-                      <a href={social.facebook} target="_blank">
-                        <LucideFacebook className="w-5 h-5 text-[#3b5998]" />
-                      </a>
-                    )}
-                    {social.linkedin && (
-                      <a href={social.linkedin} target="_blank">
-                        <LucideLinkedin className="w-5 h-5 text-[#0077b5]" />
-                      </a>
-                    )}
-                    {social.twitter && (
-                      <a href={social.twitter} target="_blank">
-                        <LucideTwitter className="w-5 h-5" />
-                      </a>
-                    )}
-                    {social.youtube && (
-                      <a href={social.youtube} target="_blank">
-                        <LucideYoutube className="w-5 h-5 text-red-600" />
-                      </a>
-                    )}
-                  </div>
+                  <SocialLinksTracker supplierId={supplier.id}>
+                    <div className="flex gap-3">
+                      {social.facebook && (
+                        <a href={social.facebook} target="_blank">
+                          <LucideFacebook className="w-5 h-5 text-[#3b5998]" />
+                        </a>
+                      )}
+                      {social.linkedin && (
+                        <a href={social.linkedin} target="_blank">
+                          <LucideLinkedin className="w-5 h-5 text-[#0077b5]" />
+                        </a>
+                      )}
+                      {social.twitter && (
+                        <a href={social.twitter} target="_blank">
+                          <LucideTwitter className="w-5 h-5" />
+                        </a>
+                      )}
+                      {social.youtube && (
+                        <a href={social.youtube} target="_blank">
+                          <LucideYoutube className="w-5 h-5 text-red-600" />
+                        </a>
+                      )}
+                    </div>
+                  </SocialLinksTracker>
                 </div>
               )}
             </aside>
 
-            {/* RIGHT COLUMN */}
+            {/* RIGHT */}
             <section className="md:col-span-2">
               <h2 className="font-semibold text-lg mb-4">
                 About {supplier.name}
@@ -213,36 +189,19 @@ if (articlesRes.ok) {
             </section>
           </div>
 
-          {/* ================= VIDEO GALLERY ================= */}
-          {supplier.videoGallery && supplier.videoGallery.length > 0 && (
+          {supplier.videoGallery?.length > 0 && (
             <>
               <hr className="my-12" />
               <VideoGallery videos={supplier.videoGallery} />
             </>
           )}
 
-          {/* ================= COMPANY ARTICLES (NOW WORKING) ================= */}
           {articles.length > 0 && (
             <>
               <hr className="my-12" />
               <CompanyArticlesCarousel articles={articles} />
             </>
           )}
-
-          {/* ================= TRADE NAMES ================= */}
-          {supplier.tradeNames && supplier.tradeNames.length > 0 && (
-            <div className="mt-12">
-              <h3 className="font-semibold mb-2 text-sm uppercase text-gray-600">
-                Trade Names
-              </h3>
-              <ul className="list-disc list-inside text-sm text-gray-700">
-                {supplier.tradeNames.map((name, idx) => (
-                  <li key={idx}>{name}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
         </div>
       </div>
     </div>

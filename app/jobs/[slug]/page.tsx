@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { MapPin, Briefcase } from "lucide-react"
-import { ApplySection } from "./ApplySection"
+// import { ApplySection } from "./ApplySection"
 
 export default function JobDetailPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -11,6 +11,15 @@ export default function JobDetailPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!slug) return
+
+    // 1️⃣ Increment job view (fire-and-forget)
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${slug}/view`,
+      { method: "POST" }
+    ).catch(() => {})
+
+    // 2️⃣ Fetch job details
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${slug}`)
       .then(res => res.json())
       .then(setJob)
@@ -34,7 +43,7 @@ export default function JobDetailPage() {
 
         <span className="flex items-center gap-1">
           <Briefcase size={14} />
-          {job.employmentType}
+          {job.employmentType || "Full-time"}
         </span>
       </div>
 

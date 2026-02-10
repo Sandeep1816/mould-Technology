@@ -113,7 +113,7 @@ export default function AdminLayout({
 
                <SidebarLink
             href="/admin/articles"
-            label="Articles"
+            label="TechArticles"
             icon={<Folder size={18} />}
             active={pathname === "/admin/articles"}
           />

@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import SupplierAds from "@/components/SupplierAds"
+import EventViewTracker from "@/components/events/EventViewTracker"
 
 type Event = {
   id: number
@@ -32,7 +33,7 @@ export default async function EventDetailsPage({
 }: {
   params: Promise<{ slug: string }>
 }) {
-  const { slug } = await params   // ✅ REQUIRED IN NEXT 15+
+  const { slug } = await params
 
   const event = await getEvent(slug)
 
@@ -46,6 +47,8 @@ export default async function EventDetailsPage({
 
   return (
     <div className="w-full">
+      {/* ✅ VIEW TRACKER (IMPORTANT) */}
+      <EventViewTracker slug={slug} />
 
       {/* ================= HERO ================= */}
       <div className="relative w-full h-[420px]">
@@ -103,9 +106,7 @@ export default async function EventDetailsPage({
 
       {/* ================= CONTENT ================= */}
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-12 gap-10">
-
         <main className="lg:col-span-8 space-y-10">
-
           <section>
             <h2 className="text-2xl font-bold mb-4">
               About This Event
@@ -147,16 +148,15 @@ export default async function EventDetailsPage({
               )}
 
               {event.calendarUrl && (
-               <li>
-  <strong>Add to calendar:</strong>{" "}
-  <Link
-    href={`${process.env.NEXT_PUBLIC_API_URL}/api/calendar/event/${event.slug}.ics`}
-    className="text-blue-600 underline"
-  >
-    Add to calendar
-  </Link>
-</li>
-
+                <li>
+                  <strong>Add to calendar:</strong>{" "}
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_API_URL}/api/calendar/event/${event.slug}.ics`}
+                    className="text-blue-600 underline"
+                  >
+                    Add to calendar
+                  </Link>
+                </li>
               )}
             </ul>
           </section>
@@ -169,4 +169,3 @@ export default async function EventDetailsPage({
     </div>
   )
 }
-
