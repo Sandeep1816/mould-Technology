@@ -16,6 +16,9 @@ type Event = {
   location?: string
   createdAt: string
   views: number
+  _count: {
+   registrations: number
+  }
 }
 
 /* ================= PAGE ================= */
@@ -29,7 +32,11 @@ export default function AdminEventsPage() {
 
   const totalEvents = events.length
   const totalViews = events.reduce((sum, e) => sum + (e.views ?? 0), 0)
-  const totalRegistrations = 0 // future
+  const totalRegistrations = events.reduce(
+  (sum, e) => sum + (e._count?.registrations ?? 0),
+  0
+)
+
 
   /* ================= FETCH ================= */
 
@@ -153,17 +160,26 @@ export default function AdminEventsPage() {
                 <th className="px-6 py-4 text-center">Dates</th>
                 <th className="px-6 py-4 text-center">Location</th>
                 <th className="px-6 py-4 text-center">Views</th>
+                <th className="px-6 py-4 text-center">Registrations</th>
+
                 <th className="px-6 py-4 text-center">Status</th>
                 <th className="px-6 py-4 text-right">Actions</th>
+                
               </tr>
             </thead>
 
             <tbody className="divide-y">
               {events.map(event => (
                 <tr key={event.id} className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 font-medium text-[#0A2B57]">
-                    {event.title}
-                  </td>
+                 <td className="px-6 py-4 font-medium text-[#0A2B57]">
+  <Link
+    href={`/admin/events/${event.id}/registrations`}
+    className="hover:underline text-blue-600"
+  >
+    {event.title}
+  </Link>
+</td>
+
 
                   <td className="px-6 py-4 text-center text-gray-600">
                     {new Date(event.startDate).toLocaleDateString()} –{" "}
@@ -177,6 +193,10 @@ export default function AdminEventsPage() {
                   <td className="px-6 py-4 text-center font-semibold">
                     {event.views}
                   </td>
+
+                  <td className="px-6 py-4 text-center font-semibold">
+  {event._count?.registrations ?? 0}
+</td>
 
                   <td className="px-6 py-4 text-center">
                     <span
