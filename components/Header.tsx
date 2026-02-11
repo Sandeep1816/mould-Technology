@@ -196,7 +196,7 @@ export default function Header() {
                       {user.role}
                     </p>
                   </div>
-                  <ChevronDown size={14} />
+                  <ChevronDown size={14} />                                                                                                                                                                   
                 </button>
 
                 {openUserMenu && (

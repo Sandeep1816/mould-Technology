@@ -14,6 +14,7 @@ type Article = {
   id: number
   title: string
   views: number
+  shares: number
   company?: Company
 }
 
@@ -59,7 +60,11 @@ export default function AdminArticlesPage() {
     [articles]
   )
 
-  const totalShares = 0
+  const totalShares = useMemo(
+  () => articles.reduce((sum, a) => sum + (a.shares ?? 0), 0),
+  [articles]
+)
+
 
   /* ================= GROUP BY COMPANY ================= */
 
@@ -192,6 +197,9 @@ export default function AdminArticlesPage() {
                 </h3>
                 <p className="text-xs text-gray-500 mt-1">
                   👁 {article.views} views
+                </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                  👁 {article.shares} views
                 </p>
               </li>
             ))}

@@ -18,13 +18,24 @@ type Props = {
 }
 
 export default function ShareSection({ post }: Props) {
-  // current page url
   const pageUrl =
     typeof window !== "undefined"
       ? window.location.href
       : ""
 
   const shareText = encodeURIComponent(post.title)
+
+  /* ✅ TRACK SHARE */
+  const trackShare = async () => {
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${post.slug}/share`,
+        { method: "POST" }
+      )
+    } catch (err) {
+      console.error("Failed to track share")
+    }
+  }
 
   const shareButtons = [
     {
@@ -64,12 +75,6 @@ export default function ShareSection({ post }: Props) {
           ? `https://wa.me/${post.whatsappNumber}?text=${shareText}%20${pageUrl}`
           : `https://wa.me/?text=${shareText}%20${pageUrl}`,
     },
-    {
-      icon: "ri-printer-fill",
-      label: "Print",
-      href: "#",
-      onClick: () => window.print(),
-    },
   ]
 
   return (
@@ -84,13 +89,22 @@ export default function ShareSection({ post }: Props) {
             key={btn.label}
             href={btn.href}
             target="_blank"
-            onClick={btn.onClick}
+            onClick={trackShare}   
             className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-[#0077b6] hover:text-white transition"
             title={btn.label}
           >
             <i className={`${btn.icon} text-lg`}></i>
           </Link>
         ))}
+
+        {/* Print (no share tracking) */}
+        <button
+          onClick={() => window.print()}
+          className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-[#0077b6] hover:text-white transition"
+          title="Print"
+        >
+          <i className="ri-printer-fill text-lg"></i>
+        </button>
       </div>
     </div>
   )
