@@ -103,11 +103,7 @@ export default function CompanyArticles() {
           />
 
           {/* POSTS GRID */}
-          <div
-            className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 transition-opacity duration-300 ${
-              fade ? "opacity-100" : "opacity-0"
-            }`}
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
             {visiblePosts.map((post) => {
               const slug =
                 typeof post.category === "object"
@@ -137,7 +133,7 @@ export default function CompanyArticles() {
               return (
                 <div
                   key={post.id}
-                  className="bg-white rounded-xl p-4 sm:p-5 flex gap-4 h-full"
+                  className="bg-white rounded-xl p-4 sm:p-5 flex gap-4 h-[140px] sm:h-[160px] overflow-hidden"
                 >
                   {/* thumbnail */}
                   <Link
@@ -150,14 +146,22 @@ export default function CompanyArticles() {
                           ? post.imageUrl
                           : `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
                       }
-                      alt={post.title}
+                      alt={post.title.slice(0, 20)}
                       fill
-                      className="object-cover"
+                      className={`object-cover transition-all duration-500 ${
+                        fade ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                      }`}
                     />
                   </Link>
 
                   {/* content */}
-                  <div className="flex flex-col gap-2 min-w-0">
+                  <div
+                    className={`flex flex-col gap-2 min-w-0 transition-all duration-500 ${
+                      fade
+                        ? "translate-y-0 opacity-100"
+                        : "translate-y-2 opacity-0"
+                    }`}
+                  >
                     {tagText && (
                       <span
                         className={`${tagClass} text-white px-3 py-[3px] rounded-full rounded-tl-none w-fit text-[11px] font-medium`}
@@ -166,7 +170,7 @@ export default function CompanyArticles() {
                       </span>
                     )}
 
-                    <h6 className="text-[15px] sm:text-[17px] leading-snug font-semibold text-[#121213] line-clamp-2 hover:text-[#0073FF] transition">
+                    <h6 className="text-[15px] sm:text-[17px] leading-snug font-semibold text-[#121213] line-clamp-2 h-[44px] sm:h-[48px] hover:text-[#0073FF] transition">
                       <Link href={`/post/${post.slug}`}>
                         {post.title}
                       </Link>

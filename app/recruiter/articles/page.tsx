@@ -7,6 +7,10 @@ type Article = {
   id: number
   title: string
   slug: string
+  excerpt?: string
+  imageUrl?: string
+  badge?: string
+  status?: string
   createdAt: string
 }
 
@@ -31,13 +35,10 @@ export default function RecruiterArticlesPage() {
         }
       )
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch articles")
-      }
+      if (!res.ok) throw new Error("Failed to fetch articles")
 
       const data = await res.json()
 
-      // ✅ SAFELY NORMALIZE RESPONSE
       const articlesArray: Article[] = Array.isArray(data)
         ? data
         : Array.isArray(data?.data)
@@ -69,11 +70,8 @@ export default function RecruiterArticlesPage() {
         }
       )
 
-      if (!res.ok) {
-        throw new Error("Delete failed")
-      }
+      if (!res.ok) throw new Error("Delete failed")
 
-      // ✅ Remove locally after delete
       setArticles(prev => prev.filter(article => article.id !== id))
     } catch (error) {
       alert("Failed to delete article")
@@ -85,13 +83,13 @@ export default function RecruiterArticlesPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-10">
-      <div className="flex items-center justify-between mb-6">
+    <div className="max-w-6xl mx-auto p-10">
+      <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold">My Articles</h1>
 
         <Link
           href="/recruiter/articles/create"
-          className="bg-black text-white px-4 py-2 rounded"
+          className="bg-black text-white px-5 py-2 rounded-lg"
         >
           + Create Article
         </Link>
@@ -100,33 +98,79 @@ export default function RecruiterArticlesPage() {
       {articles.length === 0 ? (
         <p className="text-gray-500">No articles created yet.</p>
       ) : (
-        <div className="space-y-4">
+        <div className="grid md:grid-cols-2 gap-6">
           {articles.map(article => (
             <div
               key={article.id}
-              className="border rounded-lg p-4 flex justify-between items-center"
+              className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
             >
-              <div>
-                <h2 className="font-semibold">{article.title}</h2>
-                <p className="text-sm text-gray-500">
+              {/* IMAGE */}
+              {article.imageUrl && (
+                <img
+                  src={article.imageUrl}
+                  alt={article.title}
+                  className="w-full h-40 object-cover"
+                />
+              )}
+
+              <div className="p-5 space-y-3">
+
+                {/* BADGE + STATUS */}
+                <div className="flex items-center justify-between">
+                  {article.badge && (
+                    <span className="text-xs px-3 py-1 rounded-full bg-blue-600 text-white">
+                      {article.badge}
+                    </span>
+                  )}
+
+                  {article.status && (
+                    <span
+                      className={`text-xs px-3 py-1 rounded-full ${
+                        article.status === "APPROVED"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
+                    >
+                      {article.status}
+                    </span>
+                  )}
+                </div>
+
+                {/* TITLE */}
+                <h2 className="font-semibold text-lg line-clamp-2">
+                  {article.title}
+                </h2>
+
+                {/* EXCERPT */}
+                {article.excerpt && (
+                  <p className="text-sm text-gray-600 line-clamp-2">
+                    {article.excerpt}
+                  </p>
+                )}
+
+                {/* DATE */}
+                <p className="text-xs text-gray-400">
+                  Created:{" "}
                   {new Date(article.createdAt).toLocaleDateString()}
                 </p>
-              </div>
 
-              <div className="flex gap-4">
-                <Link
-                  href={`/recruiter/articles/${article.id}/edit`}
-                  className="text-blue-600 text-sm"
-                >
-                  Edit
-                </Link>
+                {/* ACTIONS */}
+                <div className="flex gap-4 pt-3 border-t">
+                  <Link
+                    href={`/recruiter/articles/${article.id}/edit`}
+                    className="text-blue-600 text-sm font-medium"
+                  >
+                    Edit
+                  </Link>
 
-                <button
-                  onClick={() => handleDelete(article.id)}
-                  className="text-red-600 text-sm"
-                >
-                  Delete
-                </button>
+                  <button
+                    onClick={() => handleDelete(article.id)}
+                    className="text-red-600 text-sm font-medium"
+                  >
+                    Delete
+                  </button>
+                </div>
+
               </div>
             </div>
           ))}
