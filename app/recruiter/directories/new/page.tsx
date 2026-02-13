@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation"
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik"
 import * as Yup from "yup"
 import RichTextEditor from "@/components/RichTextField"
+import UploadBox from "@/components/UploadBox"
+import { useState } from "react"
 
 /* ---------------- SLUG HELPER ---------------- */
 function slugify(text: string) {
@@ -44,6 +46,53 @@ const DirectorySchema = Yup.object({
 /* ---------------- PAGE ---------------- */
 export default function AddDirectoryPage() {
   const router = useRouter()
+const [uploadingLogo, setUploadingLogo] = useState(false)
+const [uploadingCover, setUploadingCover] = useState(false)
+const [uploadError, setUploadError] = useState("")
+
+
+  // 🔥 CLOUDINARY UPLOAD FUNCTION
+ const handleImageUpload = async (
+  file: File,
+  setFieldValue: any,
+  fieldName: "logoUrl" | "coverImageUrl",
+  type: "logo" | "cover"
+) => {
+  if (type === "logo") setUploadingLogo(true)
+  if (type === "cover") setUploadingCover(true)
+
+  setUploadError("")
+
+  try {
+    const formData = new FormData()
+    formData.append("image", file)
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+
+    if (!res.ok) {
+      throw new Error("Image upload failed")
+    }
+
+    const data = await res.json()
+
+    // ✅ Dynamically set field
+    setFieldValue(fieldName, data.imageUrl)
+
+  } catch (err: any) {
+    setUploadError(err.message)
+  } finally {
+    if (type === "logo") setUploadingLogo(false)
+    if (type === "cover") setUploadingCover(false)
+  }
+}
+
+
 
   async function submit(values: any, { setSubmitting, setStatus }: any) {
     try {
@@ -141,6 +190,52 @@ export default function AddDirectoryPage() {
               <ErrorMessage name="description" component="p" className="error" />
             </div>
 
+ {/* 🔥 LOGO + COVER IMAGE ROW */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+  {/* LOGO */}
+  <div>
+    <UploadBox
+      label="Company Logo"
+      value={values.logoUrl}
+      onUpload={(file) =>
+        handleImageUpload(file, setFieldValue, "logoUrl", "logo")
+      }
+      height="h-40"
+    />
+
+    {uploadingLogo && (
+      <p className="text-sm text-gray-500 mt-2">
+        Uploading logo...
+      </p>
+    )}
+  </div>
+
+  {/* COVER IMAGE */}
+  <div>
+    <UploadBox
+      label="Cover Image"
+      value={values.coverImageUrl}
+      onUpload={(file) =>
+        handleImageUpload(file, setFieldValue, "coverImageUrl", "cover")
+      }
+      height="h-40"
+    />
+
+    {uploadingCover && (
+      <p className="text-sm text-gray-500 mt-2">
+        Uploading cover image...
+      </p>
+    )}
+  </div>
+
+</div>
+
+
+
+
+
+
             {/* PRODUCT SUPPLIES */}
             <Section title="Product Supplies / Services">
               <FieldArray name="productSupplies">
@@ -217,18 +312,19 @@ export default function AddDirectoryPage() {
             </Section>
 
             <FieldBlock label="Website" name="website" />
-            <FieldBlock label="Logo URL" name="logoUrl" />
-            <FieldBlock label="Cover Image URL" name="coverImageUrl" />
+            {/* <FieldBlock label="Logo URL" name="logoUrl" /> */}
+            {/* <FieldBlock label="Cover Image URL" name="coverImageUrl" /> */}
 
             {status && <p className="text-red-600 text-sm">{status}</p>}
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-black text-white px-6 py-2 rounded"
-            >
-              {isSubmitting ? "Submitting..." : "Submit for Approval"}
-            </button>
+           <button
+  type="submit"
+  disabled={isSubmitting || uploadingLogo || uploadingCover}
+  className="bg-black text-white px-6 py-2 rounded"
+>
+  {isSubmitting ? "Submitting..." : "Submit for Approval"}
+</button>
+
           </Form>
         )}
       </Formik>

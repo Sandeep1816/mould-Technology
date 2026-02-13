@@ -123,6 +123,9 @@ export default async function SupplierShowroomPage({
 
               {/* CONTACT */}
               <div className="text-sm space-y-2">
+                <p>{supplier.tradeNames}</p>
+                <p>{supplier.phoneNumber}</p>
+                <p>{supplier.email}</p>
                 {supplier.website && (
                   <p>
                     <strong>Website:</strong>{" "}

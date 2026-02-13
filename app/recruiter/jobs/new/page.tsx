@@ -11,11 +11,28 @@ export default function CreateJobPage() {
     slug: "",
     description: "",
     employmentType: "Full-time",
+    experience: "",
+    salaryRange: "",
     location: "",
+    isRemote: false,
   })
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) {
+    const { name, value, type } = e.target
+
+    setForm({
+      ...form,
+      [name]:
+        type === "checkbox"
+          ? (e.target as HTMLInputElement).checked
+          : value,
+    })
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -37,7 +54,7 @@ export default function CreateJobPage() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(form), // ✅ backend assigns companyId
+          body: JSON.stringify(form),
         }
       )
 
@@ -66,46 +83,89 @@ export default function CreateJobPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
+
+        {/* Title */}
         <input
+          name="title"
           required
           placeholder="Job Title"
           className="w-full border p-3 rounded"
           value={form.title}
-          onChange={(e) =>
-            setForm({ ...form, title: e.target.value })
-          }
+          onChange={handleChange}
         />
 
+        {/* Slug */}
         <input
+          name="slug"
           required
-          placeholder="Slug (unique)"
+          placeholder="Unique Slug (e.g. senior-mern-developer)"
           className="w-full border p-3 rounded"
           value={form.slug}
-          onChange={(e) =>
-            setForm({ ...form, slug: e.target.value })
-          }
+          onChange={handleChange}
         />
 
-        <textarea
-          required
-          placeholder="Job description"
+        {/* Employment Type */}
+        <select
+          name="employmentType"
           className="w-full border p-3 rounded"
-          rows={5}
-          value={form.description}
-          onChange={(e) =>
-            setForm({ ...form, description: e.target.value })
-          }
+          value={form.employmentType}
+          onChange={handleChange}
+        >
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+          <option value="Contract">Contract</option>
+          <option value="Internship">Internship</option>
+        </select>
+
+        {/* Experience */}
+        <input
+          name="experience"
+          placeholder="Experience (e.g. 2-5 years)"
+          className="w-full border p-3 rounded"
+          value={form.experience}
+          onChange={handleChange}
         />
 
+        {/* Salary */}
         <input
+          name="salaryRange"
+          placeholder="Salary Range (e.g. ₹6L - ₹12L)"
+          className="w-full border p-3 rounded"
+          value={form.salaryRange}
+          onChange={handleChange}
+        />
+
+        {/* Location */}
+        <input
+          name="location"
           required
           placeholder="Location"
           className="w-full border p-3 rounded"
           value={form.location}
-          onChange={(e) =>
-            setForm({ ...form, location: e.target.value })
-          }
+          onChange={handleChange}
+        />
+
+        {/* Remote Option */}
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            name="isRemote"
+            checked={form.isRemote}
+            onChange={handleChange}
+          />
+          Remote Job
+        </label>
+
+        {/* Description */}
+        <textarea
+          name="description"
+          required
+          placeholder="Job Description"
+          className="w-full border p-3 rounded"
+          rows={6}
+          value={form.description}
+          onChange={handleChange}
         />
 
         <button

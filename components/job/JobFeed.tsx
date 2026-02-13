@@ -109,12 +109,12 @@ export default function JobFeed({ isPublic = false }: { isPublic?: boolean }) {
             </button>
 
             {/* 🔐 PROTECTED */}
-            <button
+            {/* <button
               onClick={() => handleApply(job.slug)}
               className="text-gray-600 hover:text-blue-600 font-medium"
             >
               Apply
-            </button>
+            </button> */}
           </div>
         </div>
       ))}

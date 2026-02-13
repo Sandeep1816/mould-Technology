@@ -119,6 +119,13 @@ export default function AdminLayout({
             icon={<Folder size={18} />}
             active={pathname === "/admin/directories"}
           />
+
+           <SidebarLink
+            href="/admin/magazines"
+            label="Magazines"
+            icon={<Folder size={18} />}
+            active={pathname === "/admin/magazines"}
+          />
         </nav>
 
         {/* FOOTER */}

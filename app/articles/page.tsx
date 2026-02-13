@@ -1,4 +1,5 @@
 import SupplierAds from "@/components/SupplierAds"
+import MagazineGrid from "@/components/magazine/MagazineGrid"
 import type { Post } from "@/types/Post"
 import Link from "next/link"
 
@@ -100,27 +101,8 @@ const getImageUrl = (url?: string | null) => {
   <div className="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-[420px_1fr]">
 
     {/* LEFT – LATEST ISSUE */}
-    {latestArchive && (
-      <div className="p-10 flex flex-col justify-center">
-        <h2 className="text-[28px] font-bold text-[#003B5C] mb-8">
-          Latest Issue
-        </h2>
+  <MagazineGrid variant="featured" limit={1} />
 
-        <img
-          src={getImageUrl(latestArchive.imageUrl)}
-          alt={latestArchive.title}
-          className="w-[220px] shadow-xl mb-6"
-        />
-
-        <p className="text-[#003B5C] font-semibold mb-2">
-          January 2026
-        </p>
-
-        <span className="inline-block bg-[#C70000] text-white text-xs font-bold px-3 py-2 w-fit">
-          DIGITAL EDITION
-        </span>
-      </div>
-    )}
 
     {/* RIGHT – COVER STORY */}
     {latestIssue && (
@@ -301,24 +283,7 @@ const getImageUrl = (url?: string | null) => {
           Archive
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {archivePosts.map(post => (
-            <div key={post.id} className="text-center">
-              <img
-                src={getImageUrl(post.imageUrl)}
-                className="w-full mb-4 border bg-white"
-                alt={post.title}
-              />
-              <p className="font-semibold mb-2">{post.title}</p>
-              <Link
-                href={`/post/${post.slug}`}
-                className="text-[#C70000] text-sm font-bold uppercase"
-              >
-                Read Now →
-              </Link>
-            </div>
-          ))}
-        </div>
+        <MagazineGrid />
       </section>
 
     </main>

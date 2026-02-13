@@ -1,20 +1,25 @@
 "use client"
 
-import { UploadCloud } from "lucide-react"
+import { UploadCloud, FileText } from "lucide-react"
 
 type Props = {
   label: string
   value?: string
   onUpload: (file: File) => void
   height?: string
+  accept?: string
 }
 
 export default function UploadBox({
   label,
   value,
   onUpload,
-  height = "h-40"
+  height = "h-40",
+  accept = "image/*,application/pdf"
 }: Props) {
+
+  const isPdf = value?.toLowerCase().endsWith(".pdf")
+
   return (
     <div>
       <p className="font-medium mb-2">{label}</p>
@@ -22,7 +27,7 @@ export default function UploadBox({
       <label className="block cursor-pointer">
         <input
           type="file"
-          accept="image/*"
+          accept={accept}
           hidden
           onChange={e => {
             if (e.target.files && e.target.files[0]) {
@@ -33,16 +38,21 @@ export default function UploadBox({
 
         {value ? (
           <div className="relative">
-            <img
-              src={value}
-              alt="Uploaded"
-              className={`w-full ${height} object-cover rounded-lg border`}
-            />
-            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition flex items-center justify-center rounded-lg">
-              <span className="text-white text-sm">
-                Click to replace image
-              </span>
-            </div>
+            {isPdf ? (
+              <div className={`w-full ${height} flex flex-col items-center justify-center border rounded-lg bg-gray-50`}>
+                <FileText size={42} className="text-red-500 mb-2" />
+                <p className="text-sm text-gray-600">PDF Uploaded</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  Click to replace file
+                </p>
+              </div>
+            ) : (
+              <img
+                src={value}
+                alt="Uploaded"
+                className={`w-full ${height} object-cover rounded-lg border`}
+              />
+            )}
           </div>
         ) : (
           <div
@@ -52,7 +62,7 @@ export default function UploadBox({
           >
             <UploadCloud size={42} className="text-gray-400 mb-2" />
             <p className="text-gray-500 text-sm">
-              Click to upload image
+              Click to upload file
             </p>
           </div>
         )}
