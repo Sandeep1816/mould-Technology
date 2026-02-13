@@ -161,6 +161,9 @@ importers:
       react-hook-form:
         specifier: ^7.60.0
         version: 7.66.0(react@19.2.0)
+      react-pageflip:
+        specifier: ^2.0.3
+        version: 2.0.3
       react-quill-new:
         specifier: ^3.8.3
         version: 3.8.3(quill-delta@5.1.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -2049,6 +2052,9 @@ packages:
   orderedmap@2.1.1:
     resolution: {integrity: sha512-TvAWxi0nDe1j/rtMcWcIj94+Ffe6n7zhow33h40SKxmsmozs6dz/e+EajymfoFcHd7sxNn8yHM8839uixMOV6g==}
 
+  page-flip@2.0.7:
+    resolution: {integrity: sha512-96lQFUUz7r/LZzEUZJ3yBIMEKU9+m8HMFDzTvTdD6P7Ag/wXINjp9n0W7b4wanwnDbQETo4uNUoL3zMqpFxwGA==}
+
   parchment@3.0.0:
     resolution: {integrity: sha512-HUrJFQ/StvgmXRcQ1ftY6VEZUq3jA2t9ncFN4F84J/vN0/FPpQF+8FKXb3l6fLces6q0uOHj6NJn+2xvZnxO6A==}
 
@@ -2184,6 +2190,9 @@ packages:
 
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
+
+  react-pageflip@2.0.3:
+    resolution: {integrity: sha512-k81mHhRvUM52y8jyzTCh5t4O0lepkLhp+XGSUzq2C3uD+iW99Cv0jfRlqFCjZbD5N3jKkIFr7/3giucoXKDP3Q==}
 
   react-quill-new@3.8.3:
     resolution: {integrity: sha512-c96PYqFTo0pI4R3e79B3rH9LUIce1kIQbmTBu/imJQZk8305ogyLyBqKKjG2UoInDlquXqePSzmBo2aVia3ttw==}
@@ -4242,6 +4251,8 @@ snapshots:
 
   orderedmap@2.1.1: {}
 
+  page-flip@2.0.7: {}
+
   parchment@3.0.0: {}
 
   parse5@8.0.0:
@@ -4422,6 +4433,10 @@ snapshots:
   react-is@16.13.1: {}
 
   react-is@18.3.1: {}
+
+  react-pageflip@2.0.3:
+    dependencies:
+      page-flip: 2.0.7
 
   react-quill-new@3.8.3(quill-delta@5.1.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
