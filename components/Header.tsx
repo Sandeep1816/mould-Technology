@@ -120,7 +120,7 @@ export default function Header() {
       {/* LOGO */}
 <Link href="/" className="flex items-center justify-start">
   <Image
-    src="/images/moldinglogo2.png"
+    src="/images/tooling.png"
     alt="MoldMaking Technology Logo"
     width={300}
     height={127}

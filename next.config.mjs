@@ -25,6 +25,7 @@ const nextConfig = {
       "upload.wikimedia.org",
       "placehold.co",
       "randomuser.me",
+       "res.cloudinary.com",
     ],
   },
 }

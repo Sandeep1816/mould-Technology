@@ -13,6 +13,7 @@ import {
   FolderOpen,
 } from "lucide-react"
 import { useRecruiterGuard } from "@/lib/useRecruiterGuard"
+import Image from "next/image"
 
 /* ================= TYPES ================= */
 
@@ -70,51 +71,62 @@ export default function RecruiterDashboard() {
   const [recruiter, setRecruiter] = useState<Recruiter | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (!allowed) return
+useEffect(() => {
+  if (!allowed) return
 
-    async function loadAll() {
-      try {
-        const token = localStorage.getItem("token")
+  async function loadAll() {
+    try {
+      const token = localStorage.getItem("token")
 
-        /* ===== DASHBOARD DATA ===== */
-        const dashboardRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/recruiters/dashboard`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
+      /* DASHBOARD */
+      const dashboardRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/recruiters/dashboard`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
 
-        const dashboardData = await dashboardRes.json()
+      const dashboardData = await dashboardRes.json()
 
-        setDashboard({
-          jobsCount: dashboardData.jobsCount ?? 0,
-          applicationsCount: dashboardData.applicationsCount ?? 0,
-          shortlistedCount: dashboardData.shortlistedCount ?? 0,
-          recentJobs: dashboardData.recentJobs ?? [],
-          directories: dashboardData.directories ?? [],
-          articles: dashboardData.articles ?? [],
-        })
+      setDashboard({
+        jobsCount: dashboardData.jobsCount ?? 0,
+        applicationsCount: dashboardData.applicationsCount ?? 0,
+        shortlistedCount: dashboardData.shortlistedCount ?? 0,
+        recentJobs: dashboardData.recentJobs ?? [],
+        directories: dashboardData.directories ?? [],
+        articles: dashboardData.articles ?? [],
+      })
 
-        /* ===== RECRUITER PROFILE ===== */
-        const profileRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/recruiters/me`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
+      /* PROFILE */
+      const profileRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/recruiters/me`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
 
-        const recruiterData = await profileRes.json()
-        setRecruiter(recruiterData)
-      } catch (err) {
-        console.error("Dashboard load error:", err)
-      } finally {
-        setLoading(false)
-      }
+      const recruiterData = await profileRes.json()
+      setRecruiter(recruiterData)
+
+    } catch (err) {
+      console.error("Dashboard load error:", err)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    loadAll()
-  }, [allowed])
+  loadAll()
+
+  // 🔥 AUTO REFRESH WHEN PAGE FOCUSES
+  const handleFocus = () => loadAll()
+  window.addEventListener("focus", handleFocus)
+
+  return () => {
+    window.removeEventListener("focus", handleFocus)
+  }
+
+}, [allowed])
+
 
   /* ================= RENDER GUARDS ================= */
 
@@ -436,11 +448,14 @@ export default function RecruiterDashboard() {
           {/* PROFILE CARD */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
             <div className="relative inline-block mb-4">
-              <img
-                src={recruiter?.avatarUrl || "https://i.pravatar.cc/100"}
-                alt="Profile"
-                className="w-20 h-20 rounded-full mx-auto ring-4 ring-gray-100"
-              />
+             <Image
+  src={recruiter?.avatarUrl || "https://i.pravatar.cc/100"}
+  alt="Profile"
+  width={80}
+  height={80}
+  className="rounded-full mx-auto ring-4 ring-gray-100"
+/>
+
               <div className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
             </div>
 
@@ -469,6 +484,14 @@ export default function RecruiterDashboard() {
                 View Public Profile →
               </Link>
             )}
+
+            <Link
+  href="/recruiter/profile/edit"
+  className="block mt-3 text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+>
+  Edit Profile
+</Link>
+
           </div>
 
           {/* ACTIVITY */}

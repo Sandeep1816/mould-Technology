@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { Eye, EyeOff } from "lucide-react"
+
 
 type Role = "candidate" | "recruiter"
 
@@ -26,6 +28,8 @@ export default function SignupForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+
 
   useEffect(() => {
     setRole(allowedRoles[0])
@@ -199,14 +203,25 @@ export default function SignupForm() {
               className="w-full h-[50px] px-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0073FF]"
             />
 
-            <input
-              type="password"
-              placeholder="Password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full h-[50px] px-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0073FF]"
-            />
+            <div className="relative">
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="Password"
+    required
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    className="w-full h-[50px] px-4 pr-12 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0073FF]"
+  />
+
+  <button
+    type="button"
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute inset-y-0 right-4 flex items-center text-gray-500"
+  >
+    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+  </button>
+</div>
+
 
             <button
               type="submit"
