@@ -1,3 +1,39 @@
+// "use client"
+
+// import { useEffect, useState } from "react"
+// import { useRouter } from "next/navigation"
+
+// export function useRecruiterGuard(): boolean {
+//   const router = useRouter()
+//   const [checking, setChecking] = useState(true)
+// const [allowed, setAllowed] = useState(false)
+
+// useEffect(() => {
+//   const token = localStorage.getItem("token")
+//   const userRaw = localStorage.getItem("user")
+
+//   if (!token || !userRaw) {
+//     router.replace("/login")
+//     return
+//   }
+
+//   const user = JSON.parse(userRaw)
+
+//   if (user.role !== "recruiter") {
+//     router.replace("/")
+//     return
+//   }
+
+//   setAllowed(true)
+//   setChecking(false)
+// }, [])
+
+// if (checking) return false
+// return allowed
+
+// }
+
+
 "use client"
 
 import { useEffect, useState } from "react"
@@ -5,30 +41,41 @@ import { useRouter } from "next/navigation"
 
 export function useRecruiterGuard(): boolean {
   const router = useRouter()
+  const [allowed, setAllowed] = useState(false)
   const [checking, setChecking] = useState(true)
-const [allowed, setAllowed] = useState(false)
 
-useEffect(() => {
-  const token = localStorage.getItem("token")
-  const userRaw = localStorage.getItem("user")
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem("token")
+      const userRaw = localStorage.getItem("user")
 
-  if (!token || !userRaw) {
-    router.replace("/login")
-    return
-  }
+      if (!token || !userRaw) {
+        router.replace("/login")
+        return
+      }
 
-  const user = JSON.parse(userRaw)
+      let user
 
-  if (user.role !== "recruiter") {
-    router.replace("/")
-    return
-  }
+      try {
+        user = JSON.parse(userRaw)
+      } catch {
+        console.error("Invalid user JSON in localStorage")
+        localStorage.removeItem("user")
+        router.replace("/login")
+        return
+      }
 
-  setAllowed(true)
-  setChecking(false)
-}, [])
+      if (user?.role !== "recruiter") {
+        router.replace("/")
+        return
+      }
 
-if (checking) return false
-return allowed
+      setAllowed(true)
+    } finally {
+      setChecking(false)
+    }
+  }, [router])
 
+  if (checking) return false
+  return allowed
 }
