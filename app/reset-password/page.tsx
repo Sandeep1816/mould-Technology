@@ -1,6 +1,7 @@
 import AuthHero from "@/components/AuthHero"
 import ResetPasswordForm from "@/components/ResetPasswordForm"
 import Image from "next/image"
+import { Suspense } from "react"
 
 export default function ResetPasswordPage() {
   return (
@@ -12,7 +13,10 @@ export default function ResetPasswordPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 bg-white rounded-[20px] shadow-xl overflow-hidden">
 
             <div className="flex items-center justify-center p-14">
-              <ResetPasswordForm />
+              {/* ✅ WRAP WITH SUSPENSE */}
+              <Suspense fallback={<div>Loading...</div>}>
+                <ResetPasswordForm />
+              </Suspense>
             </div>
 
             <div className="hidden lg:block relative">
