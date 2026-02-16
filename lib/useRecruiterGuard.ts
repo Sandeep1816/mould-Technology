@@ -45,37 +45,39 @@ export function useRecruiterGuard(): boolean {
   const [checking, setChecking] = useState(true)
 
   useEffect(() => {
-    try {
-      const token = localStorage.getItem("token")
-      const userRaw = localStorage.getItem("user")
+    const token = localStorage.getItem("token")
+    const userRaw = localStorage.getItem("user")
 
-      if (!token || !userRaw) {
-        router.replace("/login")
-        return
-      }
-
-      let user
-
-      try {
-        user = JSON.parse(userRaw)
-      } catch {
-        console.error("Invalid user JSON in localStorage")
-        localStorage.removeItem("user")
-        router.replace("/login")
-        return
-      }
-
-      if (user?.role !== "recruiter") {
-        router.replace("/")
-        return
-      }
-
-      setAllowed(true)
-    } finally {
+    if (!token || !userRaw) {
+      router.replace("/login")
       setChecking(false)
+      return
     }
+
+    let user = null
+
+    try {
+      user = JSON.parse(userRaw)
+    } catch {
+      console.error("Corrupted user JSON. Clearing storage.")
+      localStorage.removeItem("user")
+      localStorage.removeItem("token")
+      router.replace("/login")
+      setChecking(false)
+      return
+    }
+
+    if (user?.role !== "recruiter") {
+      router.replace("/")
+      setChecking(false)
+      return
+    }
+
+    setAllowed(true)
+    setChecking(false)
   }, [router])
 
   if (checking) return false
   return allowed
 }
+

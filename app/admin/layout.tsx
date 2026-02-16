@@ -36,7 +36,28 @@ export default function AdminLayout({
       return
     }
 
-    const user = JSON.parse(userRaw)
+   if (!token || !userRaw || userRaw === "undefined") {
+  localStorage.clear()
+  router.replace("/admin/login")
+  return
+}
+
+let user = null
+
+try {
+  user = JSON.parse(userRaw)
+} catch {
+  console.error("Invalid admin JSON")
+  localStorage.clear()
+  router.replace("/admin/login")
+  return
+}
+
+if (user?.role !== "admin") {
+  router.replace("/unauthorized")
+  return
+}
+
 
     if (user.role !== "admin") {
       router.replace("/unauthorized")
