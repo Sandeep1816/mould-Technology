@@ -38,20 +38,29 @@ export default function LoginForm() {
       localStorage.setItem("token", data.token)
       localStorage.setItem("user", JSON.stringify(data.user))
 
-     // 🔁 Redirect by role
-if (data.user.role === "admin") {
-  router.push("/admin/dashboard")
-} 
-else if (data.user.role === "recruiter") {
-  router.push("/recruiter/dashboard")
-} 
-else if (data.user.role === "candidate") {
-  if (!data.user.isOnboarded) {
-    router.push("/candidate/onboarding")
-  } else {
-    router.push("/candidate/feed")
-  }
-}
+      const user = data.user
+
+      // 🔁 Redirect by role
+      if (user.role === "admin") {
+        router.push("/admin/dashboard")
+      }
+
+      else if (user.role === "recruiter") {
+        // ✅ FIXED LOGIC
+        if (!user.isOnboarded || !user.companyId) {
+          router.push("/recruiter/onboarding")
+        } else {
+          router.push("/recruiter/dashboard")
+        }
+      }
+
+      else if (user.role === "candidate") {
+        if (!user.isOnboarded) {
+          router.push("/candidate/onboarding")
+        } else {
+          router.push("/candidate/feed")
+        }
+      }
 
     } catch (err) {
       setError("Something went wrong. Try again.")
@@ -110,14 +119,12 @@ else if (data.user.role === "candidate") {
           {loading ? "Signing in..." : "Sign In"}
         </button>
 
-        {/* Divider */}
         <div className="flex items-center gap-4 my-6">
           <div className="flex-1 h-px bg-gray-200" />
           <span className="text-sm text-gray-400">or</span>
           <div className="flex-1 h-px bg-gray-200" />
         </div>
 
-        {/* Social (UI only for now) */}
         <div className="flex justify-center gap-4">
           {["facebook", "instagram", "x", "linkedin"].map((s) => (
             <div
