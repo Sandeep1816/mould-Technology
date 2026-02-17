@@ -109,7 +109,7 @@ useEffect(() => {
           {magazines.map(m => (
             <div
               key={m.id}
-              className="bg-white border rounded-xl shadow p-6 flex gap-6"
+              className="bg-white  rounded-xl shadow p-6 flex gap-6"
             >
               <div className="w-32 h-40 relative shrink-0">
                 {m.coverImageUrl ? (

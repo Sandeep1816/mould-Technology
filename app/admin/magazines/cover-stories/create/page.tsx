@@ -4,27 +4,10 @@ import { useEffect, useState } from "react"
 import UploadBox from "@/components/UploadBox"
 import { useRouter } from "next/navigation"
 
-/* ================= TYPES ================= */
-
 type Author = {
   id: number
   name: string
 }
-
-type CoverStoryForm = {
-  title: string
-  slug: string
-  shortDescription: string
-  keyCategories: string[]
-  imageBrief: string
-  fullDescription: string
-  badge: string
-  coverImageUrl?: string
-  slugImageUrls: string[]
-  authorId?: number
-}
-
-/* ================= HELPERS ================= */
 
 function generateSlug(text: string) {
   return text
@@ -34,39 +17,43 @@ function generateSlug(text: string) {
     .replace(/\s+/g, "-")
 }
 
-/* ================= COMPONENT ================= */
-
 export default function CreateCoverStoryPage() {
   const router = useRouter()
 
   const [authors, setAuthors] = useState<Author[]>([])
   const [loading, setLoading] = useState(false)
 
-  const [form, setForm] = useState<CoverStoryForm>({
+  const [form, setForm] = useState({
     title: "",
     slug: "",
     shortDescription: "",
-    keyCategories: [],
-    imageBrief: "",
     fullDescription: "",
     badge: "",
+    imageBrief: "",
     coverImageUrl: "",
-    slugImageUrls: [],
+    slugImageUrls: [] as string[],
+    authorId: "",
   })
 
-  /* ================= FETCH AUTHORS ================= */
+  /* ================= FETCH AUTHORS (FIXED) ================= */
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/authors`)
+    const token = localStorage.getItem("token")
+
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/creation-data`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(res => res.json())
       .then(data => {
-        setAuthors(Array.isArray(data) ? data : [])
+        setAuthors(Array.isArray(data.authors) ? data.authors : [])
       })
   }, [])
 
-  /* ================= UPLOAD SINGLE IMAGE ================= */
+  /* ================= IMAGE UPLOAD ================= */
 
-  async function uploadImage(file: File, field: keyof CoverStoryForm) {
+  async function uploadImage(file: File, field: string) {
     const data = new FormData()
     data.append("image", file)
 
@@ -77,13 +64,11 @@ export default function CreateCoverStoryPage() {
 
     const result = await res.json()
 
-    setForm((prev) => ({
+    setForm(prev => ({
       ...prev,
       [field]: result.imageUrl,
     }))
   }
-
-  /* ================= UPLOAD MULTIPLE IMAGES ================= */
 
   async function uploadExtraImage(file: File) {
     const data = new FormData()
@@ -96,14 +81,14 @@ export default function CreateCoverStoryPage() {
 
     const result = await res.json()
 
-    setForm((prev) => ({
+    setForm(prev => ({
       ...prev,
       slugImageUrls: [...prev.slugImageUrls, result.imageUrl],
     }))
   }
 
   function removeImage(index: number) {
-    setForm((prev) => ({
+    setForm(prev => ({
       ...prev,
       slugImageUrls: prev.slugImageUrls.filter((_, i) => i !== index),
     }))
@@ -112,29 +97,22 @@ export default function CreateCoverStoryPage() {
   /* ================= SUBMIT ================= */
 
   async function handleSubmit() {
-    try {
-      setLoading(true)
+    setLoading(true)
+    const token = localStorage.getItem("token")
 
-      const token = localStorage.getItem("token")
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/cover-stories`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        ...form,
+        authorId: Number(form.authorId),
+      }),
+    })
 
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/magazines/cover-stories`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(form),
-        }
-      )
-
-      router.push("/admin/magazines")
-    } catch (err) {
-      console.error("Create cover story error:", err)
-    } finally {
-      setLoading(false)
-    }
+    router.push("/admin/magazines")
   }
 
   /* ================= UI ================= */
@@ -172,33 +150,8 @@ export default function CreateCoverStoryPage() {
       <textarea
         placeholder="Short Description"
         className="w-full border p-3 rounded"
-        value={form.shortDescription}
         onChange={(e) =>
           setForm({ ...form, shortDescription: e.target.value })
-        }
-      />
-
-      {/* KEY CATEGORIES */}
-      <input
-        placeholder="Key Categories (comma separated)"
-        className="w-full border p-3 rounded"
-        onChange={(e) =>
-          setForm({
-            ...form,
-            keyCategories: e.target.value
-              .split(",")
-              .map((cat) => cat.trim()),
-          })
-        }
-      />
-
-      {/* IMAGE BRIEF */}
-      <textarea
-        placeholder="Brief on Image Description"
-        className="w-full border p-3 rounded"
-        value={form.imageBrief}
-        onChange={(e) =>
-          setForm({ ...form, imageBrief: e.target.value })
         }
       />
 
@@ -207,7 +160,6 @@ export default function CreateCoverStoryPage() {
         placeholder="Full Description"
         rows={6}
         className="w-full border p-3 rounded"
-        value={form.fullDescription}
         onChange={(e) =>
           setForm({ ...form, fullDescription: e.target.value })
         }
@@ -217,7 +169,6 @@ export default function CreateCoverStoryPage() {
       <input
         placeholder="Badge"
         className="w-full border p-3 rounded"
-        value={form.badge}
         onChange={(e) =>
           setForm({ ...form, badge: e.target.value })
         }
@@ -227,30 +178,26 @@ export default function CreateCoverStoryPage() {
       <UploadBox
         label="Cover Image"
         value={form.coverImageUrl}
-        height="h-52"
-        onUpload={(file) =>
-          uploadImage(file, "coverImageUrl")
-        }
+        onUpload={(file) => uploadImage(file, "coverImageUrl")}
       />
 
-      {/* ADDITIONAL IMAGES */}
+      {/* EXTRA IMAGES */}
       <UploadBox
         label="Additional Images"
         multiple
         onUpload={uploadExtraImage}
       />
 
-      {/* PREVIEW GRID */}
+      {/* PREVIEW */}
       {form.slugImageUrls.length > 0 && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {form.slugImageUrls.map((img, index) => (
             <div key={index} className="relative">
               <img
                 src={img}
-                className="w-full h-40 object-cover rounded border"
+                className="w-full h-32 object-cover rounded border"
               />
               <button
-                type="button"
                 onClick={() => removeImage(index)}
                 className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded"
               >
@@ -261,14 +208,12 @@ export default function CreateCoverStoryPage() {
         </div>
       )}
 
-      {/* AUTHOR DROPDOWN */}
+      {/* AUTHOR DROPDOWN (NOW WORKS) */}
       <select
         className="w-full border p-3 rounded"
+        value={form.authorId}
         onChange={(e) =>
-          setForm({
-            ...form,
-            authorId: Number(e.target.value),
-          })
+          setForm({ ...form, authorId: e.target.value })
         }
       >
         <option value="">Select Author</option>
@@ -282,8 +227,7 @@ export default function CreateCoverStoryPage() {
       {/* SUBMIT */}
       <button
         onClick={handleSubmit}
-        disabled={loading}
-        className="bg-black text-white px-6 py-3 rounded hover:opacity-90"
+        className="bg-black text-white px-6 py-2 rounded"
       >
         {loading ? "Creating..." : "Create Cover Story"}
       </button>

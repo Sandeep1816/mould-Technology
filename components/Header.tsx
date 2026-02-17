@@ -111,7 +111,7 @@ export default function Header() {
 
   /* ================= RENDER ================= */
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all ${isSticky ? "bg-[#0A2B57] shadow-lg" : "bg-[#0A2B57]"}`}>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all ${isSticky ? "bg-red-700 shadow-lg" : "bg-red-700"}`}>
 
       {/* ================= TOP BAR ================= */}
       <div className={`${container} ${isSticky ? "h-[80px] md:h-[100px] lg:h-[100px]" : "h-[90px] md:h-[120px] lg:h-[150px]"} transition-all`}>
@@ -248,7 +248,7 @@ export default function Header() {
       {openMega && (
         <div
           onMouseLeave={() => setOpenMega(null)}
-          className="hidden lg:block bg-[#0A2B57] border-t border-white/10"
+          className="hidden lg:block bg-red-700 border-t border-white/10"
         >
           <div className={`${container} py-10 grid grid-cols-[240px_1fr] gap-10`}>
 
@@ -324,7 +324,7 @@ export default function Header() {
           />
           
           {/* Mobile Menu Panel */}
-          <div className={`fixed ${isSticky ? "top-[80px] md:top-[100px]" : "top-[90px] md:top-[120px]"} left-0 right-0 bottom-0 bg-[#0A2B57] lg:hidden z-50 overflow-y-auto`}>
+          <div className={`fixed ${isSticky ? "top-[80px] md:top-[100px]" : "top-[90px] md:top-[120px]"} left-0 right-0 bottom-0 bg-red-700 lg:hidden z-50 overflow-y-auto`}>
             <nav className="py-4">
               
               {/* Topics Section */}

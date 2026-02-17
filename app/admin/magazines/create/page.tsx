@@ -1,13 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import UploadBox from "@/components/UploadBox"
 import { useRouter } from "next/navigation"
-
-type Author = {
-  id: number
-  name: string
-}
+import UploadBox from "@/components/UploadBox"
 
 function generateSlug(text: string) {
   return text
@@ -17,25 +12,27 @@ function generateSlug(text: string) {
     .replace(/\s+/g, "-")
 }
 
-export default function CreateCoverStoryPage() {
+export default function CreateMagazinePage() {
   const router = useRouter()
 
-  const [authors, setAuthors] = useState<Author[]>([])
-  const [loading, setLoading] = useState(false)
+  const [authors, setAuthors] = useState<any[]>([])
+  const [coverStories, setCoverStories] = useState<any[]>([])
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<any>({
     title: "",
     slug: "",
-    shortDescription: "",
-    fullDescription: "",
-    badge: "",
-    imageBrief: "",
+    description: "",
     coverImageUrl: "",
-    slugImageUrls: [] as string[],
+    pdfUrl: "",
+    flipbookPages: [],
     authorId: "",
+    coverStoryId: "",
   })
 
-  /* ================= FETCH AUTHORS (FIXED) ================= */
+  const [loading, setLoading] = useState(false)
+  const [uploadingPages, setUploadingPages] = useState(false)
+
+  /* ================= FETCH AUTHORS + COVER STORIES ================= */
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -47,13 +44,14 @@ export default function CreateCoverStoryPage() {
     })
       .then(res => res.json())
       .then(data => {
-        setAuthors(Array.isArray(data.authors) ? data.authors : [])
+        setAuthors(data.authors || [])
+        setCoverStories(data.coverStories || [])
       })
   }, [])
 
-  /* ================= IMAGE UPLOAD ================= */
+  /* ================= FILE UPLOAD ================= */
 
-  async function uploadImage(file: File, field: string) {
+  async function uploadFile(file: File, field: string) {
     const data = new FormData()
     data.append("image", file)
 
@@ -64,13 +62,15 @@ export default function CreateCoverStoryPage() {
 
     const result = await res.json()
 
-    setForm(prev => ({
+    setForm((prev: any) => ({
       ...prev,
       [field]: result.imageUrl,
     }))
   }
 
-  async function uploadExtraImage(file: File) {
+  /* ================= MULTIPLE PAGE UPLOAD ================= */
+
+  async function uploadFlipbookPage(file: File) {
     const data = new FormData()
     data.append("image", file)
 
@@ -81,26 +81,29 @@ export default function CreateCoverStoryPage() {
 
     const result = await res.json()
 
-    setForm(prev => ({
+    setForm((prev: any) => ({
       ...prev,
-      slugImageUrls: [...prev.slugImageUrls, result.imageUrl],
+      flipbookPages: [...(prev.flipbookPages || []), result.imageUrl],
     }))
   }
 
-  function removeImage(index: number) {
-    setForm(prev => ({
+  function removePage(index: number) {
+    setForm((prev: any) => ({
       ...prev,
-      slugImageUrls: prev.slugImageUrls.filter((_, i) => i !== index),
+      flipbookPages: prev.flipbookPages.filter(
+        (_: string, i: number) => i !== index
+      ),
     }))
   }
 
   /* ================= SUBMIT ================= */
 
-  async function handleSubmit() {
+  async function handleSubmit(status: "DRAFT" | "PUBLISHED") {
     setLoading(true)
+
     const token = localStorage.getItem("token")
 
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/cover-stories`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,24 +112,24 @@ export default function CreateCoverStoryPage() {
       body: JSON.stringify({
         ...form,
         authorId: Number(form.authorId),
+        coverStoryId: Number(form.coverStoryId),
+        status,
       }),
     })
 
     router.push("/admin/magazines")
   }
 
-  /* ================= UI ================= */
-
   return (
     <div className="max-w-5xl mx-auto p-10 space-y-8">
-      <h1 className="text-3xl font-bold">Create Cover Story</h1>
+      <h1 className="text-3xl font-bold">Create Magazine</h1>
 
       {/* TITLE */}
       <input
         placeholder="Title"
         className="w-full border p-3 rounded"
         value={form.title}
-        onChange={(e) => {
+        onChange={e => {
           const title = e.target.value
           setForm({
             ...form,
@@ -141,64 +144,91 @@ export default function CreateCoverStoryPage() {
         placeholder="Slug"
         className="w-full border p-3 rounded"
         value={form.slug}
-        onChange={(e) =>
+        onChange={e =>
           setForm({ ...form, slug: e.target.value })
         }
       />
 
-      {/* SHORT DESCRIPTION */}
+      {/* DESCRIPTION */}
       <textarea
-        placeholder="Short Description"
+        placeholder="Description"
         className="w-full border p-3 rounded"
-        onChange={(e) =>
-          setForm({ ...form, shortDescription: e.target.value })
+        rows={4}
+        value={form.description}
+        onChange={e =>
+          setForm({ ...form, description: e.target.value })
         }
       />
 
-      {/* FULL DESCRIPTION */}
-      <textarea
-        placeholder="Full Description"
-        rows={6}
+      {/* AUTHOR DROPDOWN */}
+      <select
         className="w-full border p-3 rounded"
-        onChange={(e) =>
-          setForm({ ...form, fullDescription: e.target.value })
+        value={form.authorId}
+        onChange={e =>
+          setForm({ ...form, authorId: e.target.value })
         }
-      />
+      >
+        <option value="">Select Author</option>
+        {authors.map(a => (
+          <option key={a.id} value={a.id}>
+            {a.name}
+          </option>
+        ))}
+      </select>
 
-      {/* BADGE */}
-      <input
-        placeholder="Badge"
+      {/* COVER STORY DROPDOWN */}
+      <select
         className="w-full border p-3 rounded"
-        onChange={(e) =>
-          setForm({ ...form, badge: e.target.value })
+        value={form.coverStoryId}
+        onChange={e =>
+          setForm({ ...form, coverStoryId: e.target.value })
         }
-      />
+      >
+        <option value="">Select Cover Story</option>
+        {coverStories.map(cs => (
+          <option key={cs.id} value={cs.id}>
+            {cs.title}
+          </option>
+        ))}
+      </select>
 
       {/* COVER IMAGE */}
       <UploadBox
         label="Cover Image"
         value={form.coverImageUrl}
-        onUpload={(file) => uploadImage(file, "coverImageUrl")}
+        height="h-52"
+        accept="image/*"
+        onUpload={(file) => uploadFile(file, "coverImageUrl")}
       />
 
-      {/* EXTRA IMAGES */}
+      {/* PDF */}
       <UploadBox
-        label="Additional Images"
-        multiple
-        onUpload={uploadExtraImage}
+        label="Magazine PDF"
+        value={form.pdfUrl}
+        height="h-40"
+        accept="application/pdf"
+        onUpload={(file) => uploadFile(file, "pdfUrl")}
       />
 
-      {/* PREVIEW */}
-      {form.slugImageUrls.length > 0 && (
+      {/* FLIPBOOK PAGES */}
+      <UploadBox
+        label="Flipbook Pages"
+        multiple
+        accept="image/*"
+        height="h-32"
+        onUpload={(file) => uploadFlipbookPage(file)}
+      />
+
+      {form.flipbookPages?.length > 0 && (
         <div className="grid grid-cols-4 gap-4">
-          {form.slugImageUrls.map((img, index) => (
+          {form.flipbookPages.map((img: string, index: number) => (
             <div key={index} className="relative">
               <img
                 src={img}
                 className="w-full h-32 object-cover rounded border"
               />
               <button
-                onClick={() => removeImage(index)}
+                onClick={() => removePage(index)}
                 className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded"
               >
                 ✕
@@ -208,29 +238,22 @@ export default function CreateCoverStoryPage() {
         </div>
       )}
 
-      {/* AUTHOR DROPDOWN (NOW WORKS) */}
-      <select
-        className="w-full border p-3 rounded"
-        value={form.authorId}
-        onChange={(e) =>
-          setForm({ ...form, authorId: e.target.value })
-        }
-      >
-        <option value="">Select Author</option>
-        {authors.map((a) => (
-          <option key={a.id} value={a.id}>
-            {a.name}
-          </option>
-        ))}
-      </select>
+      {/* BUTTONS */}
+      <div className="flex gap-4">
+        <button
+          onClick={() => handleSubmit("DRAFT")}
+          className="bg-gray-600 text-white px-6 py-2 rounded"
+        >
+          Save Draft
+        </button>
 
-      {/* SUBMIT */}
-      <button
-        onClick={handleSubmit}
-        className="bg-black text-white px-6 py-2 rounded"
-      >
-        {loading ? "Creating..." : "Create Cover Story"}
-      </button>
+        <button
+          onClick={() => handleSubmit("PUBLISHED")}
+          className="bg-black text-white px-6 py-2 rounded"
+        >
+          {loading ? "Publishing..." : "Publish"}
+        </button>
+      </div>
     </div>
   )
 }
