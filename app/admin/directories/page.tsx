@@ -84,17 +84,17 @@ export default function AdminDirectoriesPage() {
         {/* HEADER */}
         <div>
           <h1 className="text-2xl font-bold">
-            Supplier Directories
+            Supplier Listing
           </h1>
           <p className="text-sm text-gray-500">
-            Review and manage supplier listings
+            Review and manage supplier listing
           </p>
         </div>
 
         {/* STATS */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <StatCard
-            label="Total Directories"
+            label="Total Suppliers"
             value={totalDirectories}
             icon={<Building2 className="w-6 h-6 text-white" />}
             color="from-blue-500 to-blue-600"
@@ -119,7 +119,7 @@ export default function AdminDirectoriesPage() {
         <div className="bg-white rounded-xl shadow p-6">
           {directories.length === 0 && (
             <p className="text-gray-500">
-              No directories found
+              No suppliers found
             </p>
           )}
 

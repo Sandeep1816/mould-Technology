@@ -20,6 +20,11 @@ export default function AdminLayout({
 
   const [checking, setChecking] = useState(true)
   const [allowed, setAllowed] = useState(false)
+  const [articlesOpen, setArticlesOpen] = useState(
+  pathname.startsWith("/admin/posts") ||
+  pathname.startsWith("/admin/articles")
+)
+
 
   useEffect(() => {
     if (pathname === "/admin/login") {
@@ -99,12 +104,47 @@ if (user?.role !== "admin") {
             active={pathname === "/admin/dashboard"}
           />
 
-          <SidebarLink
-            href="/admin/posts"
-            label="All Posts"
-            icon={<FileText size={18} />}
-            active={pathname === "/admin/posts"}
-          />
+     {/* ================= TECH ARTICLES DROPDOWN ================= */}
+<div>
+  <button
+    onClick={() => setArticlesOpen(!articlesOpen)}
+    className={`flex items-center justify-between w-full px-4 py-2.5 rounded-md text-sm font-medium transition-all
+      ${
+        pathname.startsWith("/admin/posts") ||
+        pathname.startsWith("/admin/articles")
+          ? "bg-[#143D7A] text-white"
+          : "text-[#9FB2CC] hover:bg-[#0F3A70] hover:text-white"
+      }
+    `}
+  >
+    <div className="flex items-center gap-3">
+      <Folder size={18} />
+      <span>Tech Articles</span>
+    </div>
+    <span className="text-xs">
+      {articlesOpen ? "▾" : "▸"}
+    </span>
+  </button>
+
+  {articlesOpen && (
+    <div className="ml-6 mt-1 space-y-1">
+      <SidebarLink
+        href="/admin/posts"
+        label="All Posts"
+        icon={<FileText size={16} />}
+        active={pathname === "/admin/posts"}
+      />
+
+      <SidebarLink
+        href="/admin/articles"
+        label="Article Moderation"
+        icon={<Folder size={16} />}
+        active={pathname === "/admin/articles"}
+      />
+    </div>
+  )}
+</div>
+
 
           <SidebarLink
             href="/admin/banners"
@@ -127,23 +167,18 @@ if (user?.role !== "admin") {
             active={pathname === "/admin/jobs"}
           />
 
-          <SidebarLink
-            href="/admin/articles"
-            label="Tech Articles"
-            icon={<Folder size={18} />}
-            active={pathname === "/admin/articles"}
-          />
+       
 
           <SidebarLink
             href="/admin/directories"
-            label="Directories"
+            label="Supplier Listing"
             icon={<Folder size={18} />}
             active={pathname === "/admin/directories"}
           />
 
            <SidebarLink
             href="/admin/magazines"
-            label="Magazines"
+            label="Magazine"
             icon={<Folder size={18} />}
             active={pathname === "/admin/magazines"}
           />

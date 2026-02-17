@@ -164,14 +164,14 @@ export default function AdminJobsPage() {
         </div>
 
         {/* SEARCH */}
-        <div className="bg-white rounded-xl shadow-sm border p-4 mb-6">
+        <div className="bg-white rounded-xl shadow-sm  p-4 mb-6">
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               placeholder="Search companies..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border rounded-lg"
+              className="w-full pl-12 pr-4 py-3  rounded-lg"
             />
           </div>
         </div>
@@ -181,7 +181,7 @@ export default function AdminJobsPage() {
           {filteredCompanies.map(company => (
             <div
               key={company.id}
-              className="bg-white rounded-xl shadow-sm border overflow-hidden"
+              className="bg-white rounded-xl shadow-sm  overflow-hidden"
             >
               <button
                 onClick={() =>
@@ -265,7 +265,7 @@ function StatCard({
   color: string
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6 flex justify-between items-center">
+    <div className="bg-white rounded-xl shadow-sm  p-6 flex justify-between items-center">
       <div>
         <p className="text-sm text-gray-600 mb-1">{label}</p>
         <h3 className="text-3xl font-bold">{value}</h3>

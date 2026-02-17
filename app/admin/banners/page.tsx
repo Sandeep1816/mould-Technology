@@ -237,7 +237,7 @@ function StatCard({
   color: string
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6 flex items-center justify-between">
+    <div className="bg-white rounded-xl shadow-sm p-6 flex items-center justify-between">
       <div>
         <p className="text-sm text-gray-600 mb-1">{label}</p>
         <h3 className="text-3xl font-bold">{value}</h3>
