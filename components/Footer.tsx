@@ -12,10 +12,14 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="relative bg-gradient-to-b from-red-700 to-[#08243F] text-[#BEBEBE]">
-      
+    <footer className="relative overflow-hidden bg-black text-[#BEBEBE]">
+
+      {/* 🔴 Radial Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(254,3,64,0.12),_transparent_60%)] pointer-events-none"></div>
+
       {/* ================= FOOTER TOP ================= */}
-      <div className="pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-12 lg:pb-16">
+      <div className="relative z-10 pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-12 lg:pb-16">
+
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Mobile: Stacked Layout */}
