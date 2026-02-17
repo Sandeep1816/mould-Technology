@@ -181,9 +181,9 @@ export default async function SupplierShowroomPage({
 
             {/* RIGHT */}
             <section className="md:col-span-2">
-              <h2 className="font-semibold text-lg mb-4">
+              {/* <h2 className="font-semibold text-lg mb-4">
                 About {supplier.name}
-              </h2>
+              </h2> */}
 
               <div
                 className="prose prose-sm max-w-none text-gray-700"
