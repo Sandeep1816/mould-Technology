@@ -157,7 +157,7 @@ export default function Footer() {
             <div className="lg:col-span-4">
               <Link href="/" className="inline-block mb-6">
                 <Image
-                  src="/images/tool.png"
+                  src="/images/whitelogo.png"
                   alt="MoldMaking Technology Logo"
                   width={240}
                   height={80}
