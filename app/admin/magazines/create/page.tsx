@@ -135,12 +135,14 @@ export default function CreateMagazinePage() {
       <div>
         <p className="font-medium mb-2">Flipbook Pages (Multiple Images)</p>
 
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={(e) => handleFlipbookFiles(e.target.files)}
-        />
+       <UploadBox
+  label="Flipbook Pages"
+  multiple   // 🔥 enables multi upload
+  accept="image/*"
+  height="h-32"
+  onUpload={(file) => uploadFlipbookPage(file)}
+/>
+
 
         {uploadingPages && (
           <p className="text-sm text-gray-500 mt-2">
