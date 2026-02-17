@@ -12,7 +12,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="relative bg-gradient-to-b from-red-700 to-red-400 text-[#BEBEBE]">
+    <footer className="relative bg-gradient-to-b from-red-700 to-[#08243F] text-[#BEBEBE]">
       
       {/* ================= FOOTER TOP ================= */}
       <div className="pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-12 lg:pb-16">
