@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import UploadBox from "@/components/UploadBox"
 
 interface Company {
   id: number
@@ -15,6 +16,14 @@ interface Recruiter {
   companyId: number
 }
 
+function generateSlug(text: string) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+}
+
 export default function AdminCreateDirectoryPage() {
   const router = useRouter()
 
@@ -25,6 +34,7 @@ export default function AdminCreateDirectoryPage() {
     name: "",
     slug: "",
     description: "",
+    logoUrl: "",
     companyId: "",
     submittedById: "",
   })
@@ -34,20 +44,22 @@ export default function AdminCreateDirectoryPage() {
       ? localStorage.getItem("token")
       : null
 
-  // 🔥 Fetch companies
+  /* ================= FETCH COMPANIES ================= */
+
   useEffect(() => {
     async function fetchCompanies() {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/companies`
       )
       const data = await res.json()
-      setCompanies(data)
+      setCompanies(Array.isArray(data) ? data : [])
     }
 
     fetchCompanies()
   }, [])
 
-  // 🔥 Fetch recruiters when company changes
+  /* ================= FETCH RECRUITERS ================= */
+
   useEffect(() => {
     if (!form.companyId) return
 
@@ -60,12 +72,15 @@ export default function AdminCreateDirectoryPage() {
           },
         }
       )
+
       const data = await res.json()
-      setRecruiters(data)
+      setRecruiters(Array.isArray(data) ? data : [])
     }
 
     fetchRecruiters()
-  }, [form.companyId])
+  }, [form.companyId, token])
+
+  /* ================= SUBMIT ================= */
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -88,12 +103,14 @@ export default function AdminCreateDirectoryPage() {
 
     if (res.ok) {
       alert("Directory created successfully")
-      router.push("/admin")
+      router.push("/admin/directories")
     } else {
       const error = await res.json()
       alert(error.error || "Failed to create directory")
     }
   }
+
+  /* ================= UI ================= */
 
   return (
     <div className="p-8 max-w-3xl mx-auto">
@@ -101,7 +118,7 @@ export default function AdminCreateDirectoryPage() {
         Create Directory (Admin)
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-6">
 
         {/* Company Dropdown */}
         <div>
@@ -112,7 +129,11 @@ export default function AdminCreateDirectoryPage() {
             className="w-full border p-2 rounded"
             value={form.companyId}
             onChange={(e) =>
-              setForm({ ...form, companyId: e.target.value })
+              setForm({
+                ...form,
+                companyId: e.target.value,
+                submittedById: "", // reset recruiter when company changes
+              })
             }
             required
           >
@@ -156,9 +177,14 @@ export default function AdminCreateDirectoryPage() {
             type="text"
             className="w-full border p-2 rounded"
             value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
+            onChange={(e) => {
+              const name = e.target.value
+              setForm({
+                ...form,
+                name,
+                slug: generateSlug(name), // ✅ Auto Slug
+              })
+            }}
             required
           />
         </div>
@@ -178,6 +204,32 @@ export default function AdminCreateDirectoryPage() {
             required
           />
         </div>
+
+        {/* Logo Upload */}
+      <UploadBox
+  label="Directory Logo"
+  value={form.logoUrl}
+  onUpload={async (file) => {
+    const formData = new FormData()
+    formData.append("image", file) // ✅ must match backend
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+
+    const data = await res.json()
+
+    setForm((prev) => ({
+      ...prev,
+      logoUrl: data.imageUrl, // ✅ FIXED
+    }))
+  }}
+/>
+
 
         {/* Description */}
         <div>
@@ -201,6 +253,7 @@ export default function AdminCreateDirectoryPage() {
         >
           Create Directory
         </button>
+
       </form>
     </div>
   )
