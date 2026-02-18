@@ -45,24 +45,50 @@ text-black">
               </p>
 
               {/* Social Icons - Mobile */}
-              <div className="flex items-center justify-center sm:justify-start gap-3 mb-5">
-                {[
-                  { Icon: Facebook, href: "#" },
-                  { Icon: Instagram, href: "#" },
-                  { Icon: Twitter, href: "#" },
-                  { Icon: Linkedin, href: "#" },
-                  { Icon: Youtube, href: "#" }
-                ].map(({ Icon, href }, i) => (
-                  <Link
-                    key={i}
-                    href={href}
-                    className="w-9 h-9 flex items-center justify-center border border-white/20 rounded-md hover:bg-white/10 hover:border-white/40 transition-all duration-200"
-                    aria-label={`Social media link ${i + 1}`}
-                  >
-                    <Icon size={16} />
-                  </Link>
-                ))}
-              </div>
+             <div className="flex items-center gap-3 mb-6">
+  {[
+    {
+      Icon: Linkedin,
+      href: "#",
+      bg: "bg-[#0A66C2]",
+      hover: "hover:bg-[#084d94]",
+    },
+    {
+      Icon: Facebook,
+      href: "#",
+      bg: "bg-[#1877F2]",
+      hover: "hover:bg-[#145dbf]",
+    },
+    {
+      Icon: Youtube,
+      href: "#",
+      bg: "bg-[#FF0000]",
+      hover: "hover:bg-[#cc0000]",
+    },
+    {
+      Icon: Twitter,
+      href: "#",
+      bg: "bg-black",
+      hover: "hover:bg-gray-800",
+    },
+    {
+      Icon: Instagram,
+      href: "#",
+      bg: "bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600",
+      hover: "hover:opacity-90",
+    },
+  ].map(({ Icon, href, bg, hover }, i) => (
+    <Link
+      key={i}
+      href={href}
+      className={`w-10 h-10 flex items-center justify-center rounded-md text-white transition-all duration-300 transform hover:scale-110 ${bg} ${hover}`}
+      aria-label={`Social media link ${i + 1}`}
+    >
+      <Icon size={18} strokeWidth={2} />
+    </Link>
+  ))}
+</div>
+
 
               {/* App Store Buttons - Mobile */}
               <div className="flex flex-col sm:flex-row gap-3 justify-center sm:justify-start">
@@ -177,24 +203,50 @@ text-black">
               </p>
 
               {/* Social Icons - Desktop */}
-              <div className="flex items-center gap-3 mb-6">
-                {[
-                  { Icon: Facebook, href: "#" },
-                  { Icon: Instagram, href: "#" },
-                  { Icon: Twitter, href: "#" },
-                  { Icon: Linkedin, href: "#" },
-                  { Icon: Youtube, href: "#" }
-                ].map(({ Icon, href }, i) => (
-                  <Link
-                    key={i}
-                    href={href}
-                    className="w-10 h-10 flex items-center justify-center border border-white/20 rounded-md hover:bg-white/10 hover:border-white/40 transition-all duration-200"
-                    aria-label={`Social media link ${i + 1}`}
-                  >
-                    <Icon size={18} />
-                  </Link>
-                ))}
-              </div>
+            <div className="flex items-center gap-3 mb-6">
+  {[
+    {
+      Icon: Linkedin,
+      href: "#",
+      bg: "bg-[#0A66C2]",
+      hover: "hover:bg-[#084d94]",
+    },
+    {
+      Icon: Facebook,
+      href: "#",
+      bg: "bg-[#1877F2]",
+      hover: "hover:bg-[#145dbf]",
+    },
+    {
+      Icon: Youtube,
+      href: "#",
+      bg: "bg-[#FF0000]",
+      hover: "hover:bg-[#cc0000]",
+    },
+    {
+      Icon: Twitter,
+      href: "#",
+      bg: "bg-black",
+      hover: "hover:bg-gray-800",
+    },
+    {
+      Icon: Instagram,
+      href: "#",
+      bg: "bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600",
+      hover: "hover:opacity-90",
+    },
+  ].map(({ Icon, href, bg, hover }, i) => (
+    <Link
+      key={i}
+      href={href}
+      className={`w-10 h-10 flex items-center justify-center rounded-md text-white transition-all duration-300 transform hover:scale-110 ${bg} ${hover}`}
+      aria-label={`Social media link ${i + 1}`}
+    >
+      <Icon size={18} strokeWidth={2} />
+    </Link>
+  ))}
+</div>
+
 
               {/* App Store Buttons - Desktop */}
               <div className="flex gap-3">
