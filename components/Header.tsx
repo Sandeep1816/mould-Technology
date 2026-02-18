@@ -87,7 +87,10 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-black/90 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.3)] overflow-hidden">
+    <header className="fixed top-0 left-0 w-full z-50 
+bg-gradient-to-r from-[#9b001f] to-[#ff002f] 
+shadow-lg overflow-hidden">
+
 
       {/* 🔴 Subtle Red Glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(254,3,64,0.15),_transparent_60%)] pointer-events-none"></div>

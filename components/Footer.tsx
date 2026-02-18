@@ -12,7 +12,10 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-black text-[#BEBEBE]">
+    <footer className="relative overflow-hidden 
+bg-gradient-to-br from-[#8B0000] to-[#FF0033] 
+text-white">
+
 
       {/* 🔴 Radial Glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(254,3,64,0.12),_transparent_60%)] pointer-events-none"></div>
@@ -283,7 +286,9 @@ export default function Footer() {
       </div>
 
       {/* ================= COPYRIGHT BAR ================= */}
-      <div className="border-t border-white/10 bg-black/20">
+      <div className="border-t border-white/20 bg-white/10 backdrop-blur-md">
+
+
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs sm:text-sm">
             
