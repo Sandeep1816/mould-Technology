@@ -8,7 +8,7 @@ export default function SupplierFilters() {
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
 
       {/* HEADER */}
-      <div className="bg-gradient-to-r from-[#0b3954] to-[#087CA7] text-white px-4 sm:px-5 py-4 rounded-t-lg">
+      <div className="bg-[#0F5B78] text-white px-4 sm:px-5 py-4 rounded-t-lg">
         <h3 className="text-base sm:text-lg font-bold">Filter Suppliers</h3>
       </div>
 
@@ -19,7 +19,7 @@ export default function SupplierFilters() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input 
-              className="w-full border border-gray-300 rounded-md pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b3954] focus:border-transparent" 
+              className="w-full border border-gray-300 rounded-md pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F5B78] focus:border-transparent" 
               placeholder="Search by supplier name" 
             />
           </div>
@@ -27,7 +27,7 @@ export default function SupplierFilters() {
           <div className="relative">
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input 
-              className="w-full border border-gray-300 rounded-md pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b3954] focus:border-transparent" 
+              className="w-full border border-gray-300 rounded-md pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F5B78] focus:border-transparent" 
               placeholder="Search by location" 
             />
           </div>
@@ -35,7 +35,7 @@ export default function SupplierFilters() {
           <div className="relative">
             <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input 
-              className="w-full border border-gray-300 rounded-md pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b3954] focus:border-transparent" 
+              className="w-full border border-gray-300 rounded-md pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F5B78] focus:border-transparent" 
               placeholder="Search by product category" 
             />
           </div>
@@ -45,7 +45,7 @@ export default function SupplierFilters() {
         <label className="flex items-center gap-3 p-3 bg-amber-50 border border-amber-200 rounded-md cursor-pointer hover:bg-amber-100 transition">
           <input 
             type="checkbox" 
-            className="w-4 h-4 text-[#0b3954] border-gray-300 rounded focus:ring-2 focus:ring-[#0b3954]"
+            className="w-4 h-4 text-[#0F5B78] border-gray-300 rounded focus:ring-2 focus:ring-[#0F5B78]"
           />
           <span className="font-semibold text-sm text-amber-900 flex items-center gap-2">
             ⭐ Featured Suppliers Only
@@ -87,7 +87,7 @@ export default function SupplierFilters() {
         </div>
 
         {/* CLEAR FILTERS BUTTON */}
-        <button className="w-full mt-4 py-2.5 text-sm font-semibold text-[#0b3954] border border-[#0b3954] rounded-md hover:bg-[#0b3954] hover:text-white transition">
+        <button className="w-full mt-4 py-2.5 text-sm font-semibold text-[#0F5B78] border border-[#0F5B78] rounded-md hover:bg-[#0F5B78] hover:text-white transition">
           Clear All Filters
         </button>
       </div>
@@ -128,9 +128,9 @@ function FilterItem({ label }: { label: string }) {
     <label className="flex items-start gap-2.5 text-sm text-gray-700 cursor-pointer hover:text-gray-900 transition group">
       <input 
         type="checkbox" 
-        className="w-4 h-4 mt-0.5 text-[#0b3954] border-gray-300 rounded focus:ring-2 focus:ring-[#0b3954] cursor-pointer"
+        className="w-4 h-4 mt-0.5 text-[#0F5B78] border-gray-300 rounded focus:ring-2 focus:ring-[#0F5B78] cursor-pointer"
       />
-      <span className="leading-tight group-hover:text-[#0b3954]">{label}</span>
+      <span className="leading-tight group-hover:text-[#0F5B78]">{label}</span>
     </label>
   )
 }

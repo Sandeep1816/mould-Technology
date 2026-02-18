@@ -36,7 +36,7 @@ export default function RootLayout({
         <Header />
 
         {/* ✅ OFFSET FOR FIXED HEADER */}
-        <main className="pt-[142px]">
+        <main className="pt-[90px]">
           {children}
         </main>
 

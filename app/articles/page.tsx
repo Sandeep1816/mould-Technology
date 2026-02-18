@@ -139,7 +139,7 @@ export default async function ArticlesPage() {
         </div>
 
         {/* BOTTOM NAV */}
-        <div className="bg-[#003B5C]">
+        <div className="bg-[#0F5B78]">
           <div className="max-w-[1320px] mx-auto flex gap-10 px-10 py-4 text-white text-sm font-semibold">
             <Link href="/features">FEATURES</Link>
             <Link href="/columns">COLUMNS</Link>

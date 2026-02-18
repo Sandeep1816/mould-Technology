@@ -5,12 +5,11 @@ import CursorBall from "@/components/ui/CursorBall"
 export default function PublicFeedPage() {
   return (
     <div className="bg-[#f4f6f8] min-h-screen relative">
-         {/* CURSOR EFFECT */}
-      {/* <CursorBall /> */}
+      
 
 
       {/* ================= HERO ================= */}
-      <section className="relative bg-[#0b3954]">
+      <section className="relative bg-[#0F5B78]">
         <div className="absolute inset-0">
           <img
             src="/images/hirings.png"
