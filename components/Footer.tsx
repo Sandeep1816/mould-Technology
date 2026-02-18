@@ -13,7 +13,7 @@ import {
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden 
-bg-gradient-to-br from-[#8B0000] to-[#FF0033] 
+bg-black
 text-white">
 
 

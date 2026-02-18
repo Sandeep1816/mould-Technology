@@ -6,6 +6,7 @@ import "remixicon/fonts/remixicon.css"
 import "./globals.css"
 import Footer from "@/components/Footer"
 import Header from "@/components/Header"
+import CTASection from "@/components/CTASection"
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -34,6 +35,8 @@ export default function RootLayout({
         <main className="pt-[142px]">
           {children}
         </main>
+
+        <CTASection />
 
         <Analytics />
         <Footer />

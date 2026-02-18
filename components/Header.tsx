@@ -88,12 +88,17 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 
-bg-gradient-to-r from-[#9b001f] to-[#ff002f] 
+bg-gradient-to-br from-[#4a0012] via-[#8b0020] to-[#e50018]
 shadow-lg overflow-hidden">
 
 
+
+
+
       {/* 🔴 Subtle Red Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(254,3,64,0.15),_transparent_60%)] pointer-events-none"></div>
+       <div className="absolute inset-0 
+  bg-[radial-gradient(at_100%_0,_#fe034040,_#0000_70%)] 
+  pointer-events-none" />
 
       {/* ================= TOP BAR ================= */}
       <div className={`relative z-10 ${container} h-[90px] flex items-center`}>
