@@ -6,7 +6,7 @@ import "remixicon/fonts/remixicon.css"
 import "./globals.css"
 import Footer from "@/components/Footer"
 import Header from "@/components/Header"
-import CTASection from "@/components/CTASection"
+// import CTASection from "@/components/CTASection"
 import CursorBall from "@/components/ui/CursorBall"
 
 const interTight = Inter_Tight({
@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className="antialiased">
 
           {/* GLOBAL CURSOR */}
-             <CursorBall />
+             {/* <CursorBall /> */}
         {/* FIXED HEADER */}
         <Header />
 

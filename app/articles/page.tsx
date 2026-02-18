@@ -129,6 +129,7 @@ export default async function ArticlesPage() {
 
                 <Link
                   href={`/magazines/${latestMagazine.slug}`}
+                  //  href={`/post/${post.slug}`}
                   className="text-[#C70000] font-bold uppercase text-sm"
                 >
                   Read Issue →

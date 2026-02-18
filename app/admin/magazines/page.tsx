@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import CreateIssuePost from "@/components/CreateIssuePost" // ✅ NEW IMPORT
 
 export default function AdminMagazinesPage() {
   const [magazines, setMagazines] = useState<any[]>([])
@@ -10,40 +11,40 @@ export default function AdminMagazinesPage() {
   const [coverStories, setCoverStories] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
-useEffect(() => {
-  const token = localStorage.getItem("token")
+  const [showIssueForm, setShowIssueForm] = useState(false) // ✅ NEW STATE
 
-  async function fetchData() {
-    try {
-      const [magRes, authRes, coverRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/admin`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/authors`),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/cover-stories`),
-      ])
+  useEffect(() => {
+    const token = localStorage.getItem("token")
 
-      const mags = await magRes.json()
-      const auths = await authRes.json()
-      const covers = await coverRes.json()
+    async function fetchData() {
+      try {
+        const [magRes, authRes, coverRes] = await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/admin`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/authors`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines/cover-stories`),
+        ])
 
-      // ✅ ENSURE ARRAYS
-      setMagazines(Array.isArray(mags) ? mags : [])
-      setAuthors(Array.isArray(auths) ? auths : [])
-      setCoverStories(Array.isArray(covers) ? covers : [])
-    } catch (error) {
-      console.error("Fetch error:", error)
-      setMagazines([])
-      setAuthors([])
-      setCoverStories([])
-    } finally {
-      setLoading(false)
+        const mags = await magRes.json()
+        const auths = await authRes.json()
+        const covers = await coverRes.json()
+
+        setMagazines(Array.isArray(mags) ? mags : [])
+        setAuthors(Array.isArray(auths) ? auths : [])
+        setCoverStories(Array.isArray(covers) ? covers : [])
+      } catch (error) {
+        console.error("Fetch error:", error)
+        setMagazines([])
+        setAuthors([])
+        setCoverStories([])
+      } finally {
+        setLoading(false)
+      }
     }
-  }
 
-  fetchData()
-}, [])
-
+    fetchData()
+  }, [])
 
   async function deleteMagazine(id: number) {
     const token = localStorage.getItem("token")
@@ -94,8 +95,23 @@ useEffect(() => {
           >
             + Create Cover Story
           </Link>
+
+          {/* ✅ NEW ISSUE BUTTON (ADDED ONLY) */}
+          <button
+            onClick={() => setShowIssueForm(prev => !prev)}
+            className="bg-green-600 text-white px-5 py-2 rounded"
+          >
+            + Issue
+          </button>
         </div>
       </div>
+
+      {/* ✅ ISSUE FORM (ADDED ONLY) */}
+      {showIssueForm && (
+        <div className="bg-gray-50 p-6 rounded-xl border">
+          <CreateIssuePost />
+        </div>
+      )}
 
       {/* ================= MAGAZINES ================= */}
       <div>
