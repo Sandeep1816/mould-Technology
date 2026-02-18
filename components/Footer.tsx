@@ -13,12 +13,12 @@ import {
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden 
-bg-black
-text-white">
+bg-[#e7eaec]
+text-black">
 
 
       {/* 🔴 Radial Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(254,3,64,0.12),_transparent_60%)] pointer-events-none"></div>
+      {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(254,3,64,0.12),_transparent_60%)] pointer-events-none"></div> */}
 
       {/* ================= FOOTER TOP ================= */}
       <div className="relative z-10 pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-12 lg:pb-16">
@@ -32,7 +32,7 @@ text-white">
             <div className="text-center sm:text-left">
               <Link href="/" className="inline-block mb-4">
                 <Image
-                  src="/images/moldinglogo2.png"
+                  src="/images/tooling-red.png"
                   alt="MoldMaking Technology Logo"
                   width={200}
                   height={67}
@@ -92,64 +92,64 @@ text-white">
               
               {/* Topics */}
               <div>
-                <h5 className="text-white text-base font-bold mb-4 uppercase tracking-wide">
+                <h5 className="text-black text-base font-bold mb-4 uppercase tracking-wide">
                   Topics
                 </h5>
                 <ul className="space-y-2.5 text-sm">
-                  <li><Link href="/topics/engineer" className="hover:text-white transition-colors">Engineer</Link></li>
-                  <li><Link href="/topics/build" className="hover:text-white transition-colors">Build</Link></li>
-                  <li><Link href="/topics/maintain" className="hover:text-white transition-colors">Maintain</Link></li>
-                  <li><Link href="/topics/manage" className="hover:text-white transition-colors">Manage</Link></li>
-                  <li><Link href="/topics" className="hover:text-white transition-colors font-semibold">View All →</Link></li>
+                  <li><Link href="/topics/engineer" className="hover:text-black transition-colors">Engineer</Link></li>
+                  <li><Link href="/topics/build" className="hover:text-black transition-colors">Build</Link></li>
+                  <li><Link href="/topics/maintain" className="hover:text-black transition-colors">Maintain</Link></li>
+                  <li><Link href="/topics/manage" className="hover:text-black transition-colors">Manage</Link></li>
+                  <li><Link href="/topics" className="hover:text-black transition-colors font-semibold">View All →</Link></li>
                 </ul>
               </div>
 
               {/* Resources */}
               <div>
-                <h5 className="text-white text-base font-bold mb-4 uppercase tracking-wide">
+                <h5 className="text-black text-base font-bold mb-4 uppercase tracking-wide">
                   Resources
                 </h5>
                 <ul className="space-y-2.5 text-sm">
-                  <li><Link href="/mmtchats" className="hover:text-white transition-colors">MMT Chats</Link></li>
-                  <li><Link href="/videos" className="hover:text-white transition-colors">Videos</Link></li>
-                  <li><Link href="/news" className="hover:text-white transition-colors">News</Link></li>
-                  <li><Link href="/products" className="hover:text-white transition-colors">Products</Link></li>
-                  <li><Link href="/podcast" className="hover:text-white transition-colors">Podcast</Link></li>
+                  <li><Link href="/mmtchats" className="hover:text-black transition-colors">MMT Chats</Link></li>
+                  <li><Link href="/videos" className="hover:text-black transition-colors">Videos</Link></li>
+                  <li><Link href="/news" className="hover:text-black transition-colors">News</Link></li>
+                  <li><Link href="/products" className="hover:text-black transition-colors">Products</Link></li>
+                  <li><Link href="/podcast" className="hover:text-black transition-colors">Podcast</Link></li>
                 </ul>
               </div>
 
               {/* Magazine */}
               <div>
-                <h5 className="text-white text-base font-bold mb-4 uppercase tracking-wide">
+                <h5 className="text-black text-base font-bold mb-4 uppercase tracking-wide">
                   Magazine
                 </h5>
                 <ul className="space-y-2.5 text-sm">
-                  <li><Link href="/articles" className="hover:text-white transition-colors">Latest Issue</Link></li>
-                  <li><Link href="/" className="hover:text-white transition-colors">Archives</Link></li>
-                  <li><Link href="/subscribe" className="hover:text-white transition-colors">Subscribe</Link></li>
-                  <li><Link href="/" className="hover:text-white transition-colors">Renew</Link></li>
+                  <li><Link href="/articles" className="hover:text-black transition-colors">Latest Issue</Link></li>
+                  <li><Link href="/" className="hover:text-black transition-colors">Archives</Link></li>
+                  <li><Link href="/subscribe" className="hover:text-black transition-colors">Subscribe</Link></li>
+                  <li><Link href="/" className="hover:text-black transition-colors">Renew</Link></li>
                 </ul>
               </div>
 
               {/* Calendar */}
               <div>
-                <h5 className="text-white text-base font-bold mb-4 uppercase tracking-wide">
+                <h5 className="text-black text-base font-bold mb-4 uppercase tracking-wide">
                   Calendar
                 </h5>
                 <ul className="space-y-2.5 text-sm">
-                  <li><Link href="/webinars" className="hover:text-white transition-colors">Webinars</Link></li>
-                  <li><Link href="/events" className="hover:text-white transition-colors">Events</Link></li>
+                  <li><Link href="/webinars" className="hover:text-black transition-colors">Webinars</Link></li>
+                  <li><Link href="/events" className="hover:text-black transition-colors">Events</Link></li>
                 </ul>
               </div>
 
               {/* More */}
               <div className="col-span-2 sm:col-span-1">
-                <h5 className="text-white text-base font-bold mb-4 uppercase tracking-wide">
+                <h5 className="text-black text-base font-bold mb-4 uppercase tracking-wide">
                   More
                 </h5>
                 <ul className="space-y-2.5 text-sm">
-                  <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                  <li><Link href="/suppliers" className="hover:text-white transition-colors">Find a Supplier</Link></li>
+                  <li><Link href="/contact" className="hover:text-black transition-colors">Contact Us</Link></li>
+                  <li><Link href="/suppliers" className="hover:text-black transition-colors">Find a Supplier</Link></li>
                 </ul>
               </div>
 
@@ -164,7 +164,7 @@ text-white">
             <div className="lg:col-span-4">
               <Link href="/" className="inline-block mb-6">
                 <Image
-                  src="/images/whitelogo.png"
+                  src="/images/tooling-red.png"
                   alt="MoldMaking Technology Logo"
                   width={240}
                   height={80}
@@ -221,62 +221,62 @@ text-white">
 
             {/* TOPICS - Desktop */}
             <div className="lg:col-span-2">
-              <h5 className="text-white text-lg font-bold mb-6 uppercase tracking-wide">
+              <h5 className="text-black text-lg font-bold mb-6 uppercase tracking-wide">
                 Topics
               </h5>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/topics/engineer" className="hover:text-white hover:translate-x-1 inline-block transition-all">Engineer</Link></li>
-                <li><Link href="/topics/build" className="hover:text-white hover:translate-x-1 inline-block transition-all">Build</Link></li>
-                <li><Link href="/topics/maintain" className="hover:text-white hover:translate-x-1 inline-block transition-all">Maintain</Link></li>
-                <li><Link href="/topics/manage" className="hover:text-white hover:translate-x-1 inline-block transition-all">Manage</Link></li>
-                <li><Link href="/topics" className="hover:text-white hover:translate-x-1 inline-block transition-all font-semibold">View All →</Link></li>
+                <li><Link href="/topics/engineer" className="hover:text-black hover:translate-x-1 inline-block transition-all">Engineer</Link></li>
+                <li><Link href="/topics/build" className="hover:text-black hover:translate-x-1 inline-block transition-all">Build</Link></li>
+                <li><Link href="/topics/maintain" className="hover:text-black hover:translate-x-1 inline-block transition-all">Maintain</Link></li>
+                <li><Link href="/topics/manage" className="hover:text-black hover:translate-x-1 inline-block transition-all">Manage</Link></li>
+                <li><Link href="/topics" className="hover:text-black hover:translate-x-1 inline-block transition-all font-semibold">View All →</Link></li>
               </ul>
             </div>
 
             {/* RESOURCES - Desktop */}
             <div className="lg:col-span-2">
-              <h5 className="text-white text-lg font-bold mb-6 uppercase tracking-wide">
+              <h5 className="text-black text-lg font-bold mb-6 uppercase tracking-wide">
                 Resources
               </h5>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/mmtchats" className="hover:text-white hover:translate-x-1 inline-block transition-all">MMT Chats</Link></li>
-                <li><Link href="/videos" className="hover:text-white hover:translate-x-1 inline-block transition-all">Videos</Link></li>
-                <li><Link href="/news" className="hover:text-white hover:translate-x-1 inline-block transition-all">News</Link></li>
-                <li><Link href="/products" className="hover:text-white hover:translate-x-1 inline-block transition-all">Products</Link></li>
-                <li><Link href="/podcast" className="hover:text-white hover:translate-x-1 inline-block transition-all">Podcast</Link></li>
+                <li><Link href="/mmtchats" className="hover:text-black hover:translate-x-1 inline-block transition-all">MMT Chats</Link></li>
+                <li><Link href="/videos" className="hover:text-black hover:translate-x-1 inline-block transition-all">Videos</Link></li>
+                <li><Link href="/news" className="hover:text-black hover:translate-x-1 inline-block transition-all">News</Link></li>
+                <li><Link href="/products" className="hover:text-black hover:translate-x-1 inline-block transition-all">Products</Link></li>
+                <li><Link href="/podcast" className="hover:text-black hover:translate-x-1 inline-block transition-all">Podcast</Link></li>
               </ul>
             </div>
 
             {/* MAGAZINE - Desktop */}
             <div className="lg:col-span-2">
-              <h5 className="text-white text-lg font-bold mb-6 uppercase tracking-wide">
+              <h5 className="text-black text-lg font-bold mb-6 uppercase tracking-wide">
                 Magazine
               </h5>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/articles" className="hover:text-white hover:translate-x-1 inline-block transition-all">Latest Issue</Link></li>
-                <li><Link href="/" className="hover:text-white hover:translate-x-1 inline-block transition-all">Archives</Link></li>
-                <li><Link href="/subscribe" className="hover:text-white hover:translate-x-1 inline-block transition-all">Subscribe</Link></li>
-                <li><Link href="/" className="hover:text-white hover:translate-x-1 inline-block transition-all">Renew Subscription</Link></li>
-                <li><Link href="/" className="hover:text-white hover:translate-x-1 inline-block transition-all">Customer Service</Link></li>
+                <li><Link href="/articles" className="hover:text-black hover:translate-x-1 inline-block transition-all">Latest Issue</Link></li>
+                <li><Link href="/" className="hover:text-black hover:translate-x-1 inline-block transition-all">Archives</Link></li>
+                <li><Link href="/subscribe" className="hover:text-black hover:translate-x-1 inline-block transition-all">Subscribe</Link></li>
+                <li><Link href="/" className="hover:text-black hover:translate-x-1 inline-block transition-all">Renew Subscription</Link></li>
+                <li><Link href="/" className="hover:text-black hover:translate-x-1 inline-block transition-all">Customer Service</Link></li>
               </ul>
             </div>
 
             {/* MORE + CALENDAR - Desktop */}
             <div className="lg:col-span-2">
-              <h5 className="text-white text-lg font-bold mb-6 uppercase tracking-wide">
+              <h5 className="text-black text-lg font-bold mb-6 uppercase tracking-wide">
                 More
               </h5>
               <ul className="space-y-3 text-sm mb-8">
-                <li><Link href="/contact" className="hover:text-white hover:translate-x-1 inline-block transition-all">Contact Us</Link></li>
-                <li><Link href="/suppliers" className="hover:text-white hover:translate-x-1 inline-block transition-all">Find a Supplier</Link></li>
+                <li><Link href="/contact" className="hover:text-black hover:translate-x-1 inline-block transition-all">Contact Us</Link></li>
+                <li><Link href="/suppliers" className="hover:text-black hover:translate-x-1 inline-block transition-all">Find a Supplier</Link></li>
               </ul>
 
-              <h5 className="text-white text-lg font-bold mb-6 uppercase tracking-wide">
+              <h5 className="text-black text-lg font-bold mb-6 uppercase tracking-wide">
                 Calendar
               </h5>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/webinars" className="hover:text-white hover:translate-x-1 inline-block transition-all">Webinars</Link></li>
-                <li><Link href="/events" className="hover:text-white hover:translate-x-1 inline-block transition-all">Events</Link></li>
+                <li><Link href="/webinars" className="hover:text-black hover:translate-x-1 inline-block transition-all">Webinars</Link></li>
+                <li><Link href="/events" className="hover:text-black hover:translate-x-1 inline-block transition-all">Events</Link></li>
               </ul>
             </div>
 
@@ -286,7 +286,7 @@ text-white">
       </div>
 
       {/* ================= COPYRIGHT BAR ================= */}
-      <div className="border-t border-white/20 bg-white/10 backdrop-blur-md">
+      <div className="border-t border-white/20 bg-[#0F5B78] backdrop-blur-md">
 
 
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
@@ -294,7 +294,7 @@ text-white">
             
             <Link 
               href="/terms" 
-              className="hover:text-white transition-colors order-2 sm:order-1"
+              className="hover:text-black transition-colors order-2 sm:order-1"
             >
               Terms & Agreements
             </Link>
@@ -305,7 +305,7 @@ text-white">
 
             <Link 
               href="/privacy-policy" 
-              className="hover:text-white transition-colors order-3"
+              className="hover:text-black transition-colors order-3"
             >
               Privacy Policy
             </Link>

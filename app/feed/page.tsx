@@ -6,7 +6,7 @@ export default function PublicFeedPage() {
   return (
     <div className="bg-[#f4f6f8] min-h-screen relative">
          {/* CURSOR EFFECT */}
-      <CursorBall />
+      {/* <CursorBall /> */}
 
 
       {/* ================= HERO ================= */}

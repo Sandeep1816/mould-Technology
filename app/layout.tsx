@@ -7,6 +7,7 @@ import "./globals.css"
 import Footer from "@/components/Footer"
 import Header from "@/components/Header"
 import CTASection from "@/components/CTASection"
+import CursorBall from "@/components/ui/CursorBall"
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -28,6 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={interTight.variable}>
       <body className="antialiased">
+
+          {/* GLOBAL CURSOR */}
+             <CursorBall />
         {/* FIXED HEADER */}
         <Header />
 
@@ -36,7 +40,7 @@ export default function RootLayout({
           {children}
         </main>
 
-        <CTASection />
+        {/* <CTASection /> */}
 
         <Analytics />
         <Footer />

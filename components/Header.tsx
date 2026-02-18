@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, X, ChevronDown, ChevronRight } from "lucide-react"
+import { Menu, X, ChevronDown } from "lucide-react"
 import { useState, useEffect } from "react"
 import type { Post } from "@/types/Post"
 
@@ -35,8 +35,6 @@ const RESOURCES = [
 export default function Header() {
   const [openMega, setOpenMega] = useState<MegaType>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [mobileActiveMenu, setMobileActiveMenu] = useState<MegaType>(null)
-
   const [user, setUser] = useState<User | null>(null)
   const [openUserMenu, setOpenUserMenu] = useState(false)
 
@@ -61,14 +59,7 @@ export default function Header() {
   }, [])
 
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "unset"
-    }
-    return () => {
-      document.body.style.overflow = "unset"
-    }
+    document.body.style.overflow = isMenuOpen ? "hidden" : "unset"
   }, [isMenuOpen])
 
   const slugOf = (post: Post) =>
@@ -87,27 +78,16 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 
-bg-gradient-to-br from-[#4a0012] via-[#8b0020] to-[#e50018]
-shadow-lg overflow-hidden">
-
-
-
-
-
-      {/* 🔴 Subtle Red Glow */}
-       <div className="absolute inset-0 
-  bg-[radial-gradient(at_100%_0,_#fe034040,_#0000_70%)] 
-  pointer-events-none" />
+    <header className="fixed top-0 left-0 w-full z-50 bg-[#0F5B78] shadow-lg">
 
       {/* ================= TOP BAR ================= */}
-      <div className={`relative z-10 ${container} h-[90px] flex items-center`}>
+      <div className={`${container} h-[90px] flex items-center`}>
         <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[320px_1fr_auto] items-center w-full gap-6 lg:gap-10">
 
           {/* LOGO */}
-          <Link href="/" className="flex items-center justify-start">
+          <Link href="/" className="flex items-center">
             <Image
-              src="/images/whitelogo.png"
+              src="/images/tooling_white.png"
               alt="MoldMaking Technology Logo"
               width={300}
               height={127}
@@ -117,53 +97,144 @@ shadow-lg overflow-hidden">
           </Link>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden lg:flex justify-center gap-6 xl:gap-8 text-white font-medium text-sm xl:text-base">
+          <nav className="hidden lg:flex justify-center gap-8 text-white font-semibold text-sm tracking-wide">
+
+            {/* Topics */}
             <button
               onMouseEnter={() => {
                 setOpenMega("topics")
                 setActiveSlug("engineer")
               }}
-              className="flex items-center gap-1 hover:text-[#0073FF] transition-colors"
+              className="group relative flex items-center gap-1"
             >
               Topics <ChevronDown size={14} />
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
             </button>
 
+            {/* Resources */}
             <button
               onMouseEnter={() => {
                 setOpenMega("resources")
                 setActiveSlug("webinars")
               }}
-              className="flex items-center gap-1 hover:text-[#0073FF] transition-colors"
+              className="group relative flex items-center gap-1"
             >
               Resources <ChevronDown size={14} />
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
             </button>
 
-            <Link href="/articles" className="hover:text-[#0073FF]">Magazine</Link>
-            <Link href="/suppliers" className="hover:text-[#0073FF]">Directory</Link>
-            <Link href="/mmtchats" className="hover:text-[#0073FF]">MMT CHATS</Link>
-            <Link href="/events" className="hover:text-[#0073FF]">Events</Link>
-            <Link href="/feed" className="hover:text-[#0073FF]">Jobs</Link>
+            <Link href="/articles" className="group relative">
+              Magazine
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
+            </Link>
+
+            <Link href="/suppliers" className="group relative">
+              Directory
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
+            </Link>
+
+            <Link href="/mmtchats" className="group relative">
+              MMT Chats
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
+            </Link>
+
+            <Link href="/events" className="group relative">
+              Events
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
+            </Link>
+
+            <Link href="/feed" className="group relative">
+              Jobs
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
+            </Link>
+
           </nav>
 
           {/* RIGHT SIDE */}
-          <div className="flex items-center justify-end gap-3">
+         {/* RIGHT SIDE */}
+<div className="flex items-center justify-end gap-3 relative">
 
-            {!user && (
-              <Link
-                href="/login"
-                className="hidden md:flex h-10 px-5 bg-[#0073FF] text-white rounded-md font-semibold items-center hover:bg-[#0060DD] transition-colors"
-              >
-                Login
-              </Link>
-            )}
+  {!user && (
+    <Link
+      href="/login"
+      className="hidden md:flex h-10 px-5 bg-[#E11D2E] text-white rounded-md font-semibold items-center hover:bg-[#C41524] transition-colors shadow-md"
+    >
+      Login
+    </Link>
+  )}
+
+  {user && (
+    <div className="relative hidden md:block">
+      <button
+        onClick={() => setOpenUserMenu(!openUserMenu)}
+        className="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-md text-white hover:bg-white/20 transition border border-white/20"
+      >
+        <img
+          src="https://i.pravatar.cc/40"
+          alt="User avatar"
+          className="w-8 h-8 rounded-full border-2 border-white/30"
+        />
+
+        <div className="text-left">
+          <p className="text-sm font-semibold leading-tight">
+            {user.email.split("@")[0]}
+          </p>
+          <p className="text-xs text-gray-300 capitalize">
+            {user.role}
+          </p>
+        </div>
+
+        <ChevronDown size={14} />
+      </button>
+
+      {openUserMenu && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setOpenUserMenu(false)}
+          />
+
+          {/* Dropdown */}
+          <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-2xl border border-gray-200 text-black z-50 overflow-hidden">
+
+            <Link
+              href={
+                user.role === "admin"
+                  ? "/admin/dashboard"
+                  : user.role === "recruiter"
+                  ? "/recruiter/dashboard"
+                  : "/candidate/feed"
+              }
+              className="block px-4 py-3 hover:bg-gray-100 text-sm transition border-b"
+              onClick={() => setOpenUserMenu(false)}
+            >
+              Dashboard
+            </Link>
 
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden h-10 w-10 border border-white/30 rounded-md flex items-center justify-center text-white hover:bg-white/10 transition-colors"
+              onClick={handleLogout}
+              className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition font-medium"
             >
-              {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              Logout
             </button>
+
           </div>
+        </>
+      )}
+    </div>
+  )}
+
+  {/* MOBILE MENU BUTTON */}
+  <button
+    onClick={() => setIsMenuOpen(!isMenuOpen)}
+    className="lg:hidden h-10 w-10 border border-white/30 rounded-md flex items-center justify-center text-white hover:bg-white/10 transition-colors"
+  >
+    {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+  </button>
+
+</div>
+
         </div>
       </div>
 
@@ -171,18 +242,18 @@ shadow-lg overflow-hidden">
       {openMega && (
         <div
           onMouseLeave={() => setOpenMega(null)}
-          className="hidden lg:block bg-black/95 border-t border-white/10 backdrop-blur-xl"
+          className="hidden lg:block bg-[#0A4A6A] border-t border-white/10"
         >
           <div className={`${container} py-10 grid grid-cols-[240px_1fr] gap-10`}>
 
-            <aside className="bg-[#0A4A6A] rounded-lg overflow-hidden shadow-xl">
+            <aside className="bg-[#083A54] rounded-lg overflow-hidden shadow-xl">
               {(openMega === "topics" ? TOPICS : RESOURCES).map(item => (
                 <button
                   key={item.slug}
                   onMouseEnter={() => setActiveSlug(item.slug)}
                   className={`w-full px-5 py-4 text-left uppercase font-bold flex justify-between transition-colors ${
                     activeSlug === item.slug
-                      ? "bg-[#003B5C] text-white"
+                      ? "bg-[#062E45] text-white"
                       : "text-white hover:bg-[#0F5D86]"
                   }`}
                 >
@@ -203,7 +274,7 @@ shadow-lg overflow-hidden">
                       />
                     </Link>
 
-                    <h4 className="text-sm font-semibold text-white leading-snug hover:text-[#0073FF]">
+                    <h4 className="text-sm font-semibold text-white leading-snug hover:text-[#E11D2E]">
                       <Link href={`/post/${post.slug}`}>
                         {post.title}
                       </Link>
@@ -216,6 +287,77 @@ shadow-lg overflow-hidden">
           </div>
         </div>
       )}
+
+      {/* ================= MOBILE MENU ================= */}
+{isMenuOpen && (
+  <>
+    {/* Backdrop */}
+    <div
+      className="fixed inset-0 bg-black/50 lg:hidden z-40"
+      onClick={() => setIsMenuOpen(false)}
+    />
+
+    {/* Mobile Menu Panel */}
+    <div className="fixed top-[90px] left-0 right-0 bottom-0 bg-[#0F5B78] lg:hidden z-50 overflow-y-auto">
+      <nav className="py-4 text-white font-semibold">
+
+        <Link
+          href="/articles"
+          className="block px-6 py-4 border-b border-white/10 hover:bg-white/10 transition"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          Magazine
+        </Link>
+
+        <Link
+          href="/suppliers"
+          className="block px-6 py-4 border-b border-white/10 hover:bg-white/10 transition"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          Directory
+        </Link>
+
+        <Link
+          href="/mmtchats"
+          className="block px-6 py-4 border-b border-white/10 hover:bg-white/10 transition"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          MMT Chats
+        </Link>
+
+        <Link
+          href="/events"
+          className="block px-6 py-4 border-b border-white/10 hover:bg-white/10 transition"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          Events
+        </Link>
+
+        <Link
+          href="/feed"
+          className="block px-6 py-4 border-b border-white/10 hover:bg-white/10 transition"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          Jobs
+        </Link>
+
+        {!user && (
+          <div className="px-6 py-5">
+            <Link
+              href="/login"
+              className="block w-full py-3 bg-[#E11D2E] text-white rounded-md text-center font-semibold hover:bg-[#C41524] transition"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Login
+            </Link>
+          </div>
+        )}
+
+      </nav>
+    </div>
+  </>
+)}
+
     </header>
   )
 }
