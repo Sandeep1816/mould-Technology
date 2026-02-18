@@ -81,7 +81,8 @@ export default async function SupplierShowroomPage({
   /* ================= UI ================= */
 
   return (
-    <div className="bg-[#f5f6f7] min-h-screen">
+    <div className=" min-h-screen">
+      {/* bg-[#f5f6f7] */}
 
       {/* HERO */}
       <div className="relative h-[300px] bg-black">

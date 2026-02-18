@@ -338,7 +338,7 @@ text-black">
       </div>
 
       {/* ================= COPYRIGHT BAR ================= */}
-      <div className="border-t border-white/20 bg-[#0F5B78] backdrop-blur-md">
+      <div className="border-t border-white/20 bg-[#2a3d47] backdrop-blur-md text-white">
 
 
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
@@ -346,7 +346,7 @@ text-black">
             
             <Link 
               href="/terms" 
-              className="hover:text-black transition-colors order-2 sm:order-1"
+              className="hover:text-white transition-colors order-2 sm:order-1"
             >
               Terms & Agreements
             </Link>

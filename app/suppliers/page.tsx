@@ -95,7 +95,8 @@ export default function SuppliersPage() {
   }
 
   return (
-    <div className="bg-[#f5f6f7] min-h-screen">
+    <div className=" min-h-screen">
+      {/* bg-[#f5f6f7] */}
 
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-0 pb-4 md:py-6">
 
