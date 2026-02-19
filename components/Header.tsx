@@ -84,7 +84,7 @@ export default function Header() {
       <div className="flex h-[90px] w-full">
 
         {/* LEFT WHITE LOGO SECTION */}
-        <div className="bg-white flex items-center px-6 shrink-0 border-r border-gray-200">
+        <div className="bg-white flex items-center px-[45px] shrink-0 border-r border-gray-200">
           <Link href="/" className="flex items-center">
             <Image
               src="/images/tooling-red.png"
