@@ -1,19 +1,27 @@
-export type Supplier = {
+type Supplier = {
   id: number
+  companyId: number
   name: string
-  location: string
+  slug: string
   description: string
-
-  logo?: string        // image url
-  featured?: boolean  // for "Featured Suppliers" toggle
-
-  categories?: string[] // used for left filters
-
-  socials?: {
+  website?: string
+  logoUrl?: string
+  coverImageUrl?: string
+  phoneNumber?: string
+  email?: string
+  tradeNames?: string[]
+  videoGallery?: string[]
+  socialLinks?: {
     facebook?: string
     linkedin?: string
     twitter?: string
     youtube?: string
+  }
+  company?: {
+    id: number
+    name: string
+    location?: string
+    industry?: string
     website?: string
   }
 }

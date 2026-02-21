@@ -26,7 +26,7 @@ export default function VideoGallery({
         <div className="md:col-span-2">
           <iframe
             key={activeVideo}
-            className="w-full aspect-video rounded border"
+            className="w-full aspect-video rounded "
             src={`https://www.youtube.com/embed/${activeVideo}`}
             allowFullScreen
           />
@@ -41,7 +41,7 @@ export default function VideoGallery({
               <div
                 key={idx}
                 onClick={() => setActiveVideo(id)}
-                className={`cursor-pointer border rounded overflow-hidden transition
+                className={`cursor-pointer  rounded overflow-hidden transition
                   ${
                     activeVideo === id
                       ? "border-blue-600 ring-2 ring-blue-200"
