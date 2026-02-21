@@ -34,7 +34,7 @@ export default function CreateIssuePost() {
       .then(([a, c]) => {
         setAuthors(a.data || a);
 
-        const allowedCategories = ["product", "department", "inthisissue"];
+        const allowedCategories = [ "inthisissue", "whatsnew"];
 
         const filtered = (c.data || c).filter((cat: any) =>
           allowedCategories.includes(cat.slug?.toLowerCase())

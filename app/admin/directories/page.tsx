@@ -92,13 +92,25 @@ export default function AdminDirectoriesPage() {
     </p>
   </div>
 
-  <Link
-    href="/admin/directories/company-dashboard"
-    className="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition"
-  >
-    + Create Supplier
-  </Link>
+  <div className="flex gap-3">
+    {/* OLD BUTTON */}
+    <Link
+      href="/admin/directories/company-dashboard"
+      className="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+    >
+      + Create Supplier
+    </Link>
+
+    {/* ✅ NEW BUTTON */}
+    <Link
+      href="/admin/directories/full-setup"
+      className="bg-purple-600 text-white px-5 py-2 rounded-lg shadow hover:bg-purple-700 transition"
+    >
+      + Create Company Supplier Listing
+    </Link>
+  </div>
 </div>
+
 
 
         {/* STATS */}

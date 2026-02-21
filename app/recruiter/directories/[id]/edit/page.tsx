@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import RichTextEditor from "@/components/RichTextField"
+import UploadBox from "@/components/UploadBox"
 
 export default function EditDirectoryPage() {
   const router = useRouter()
@@ -26,7 +27,14 @@ export default function EditDirectoryPage() {
         )
 
         const data = await res.json()
-        setDirectory(data)
+
+        setDirectory({
+          ...data,
+          tradeNames: data.tradeNames || [""],
+          videoGallery: data.videoGallery || [""],
+          productSupplies: data.productSupplies || [""],
+          socialLinks: data.socialLinks || {},
+        })
       } catch {
         alert("Unable to load directory")
       } finally {
@@ -69,29 +77,80 @@ export default function EditDirectoryPage() {
   if (!directory) return <div className="p-10">Directory not found</div>
 
   return (
-    <div className="max-w-3xl mx-auto p-10">
-      <h1 className="text-2xl font-bold mb-6">
-        Edit Supplier Directory
-      </h1>
+    <div className="max-w-4xl mx-auto p-10 space-y-6">
+      <h1 className="text-2xl font-bold">Edit Supplier Directory</h1>
 
+      {/* NAME */}
       <input
-        className="input mb-4"
+        className="input"
         value={directory.name}
-        onChange={(e) => setDirectory({ ...directory, name: e.target.value })}
+        onChange={(e) =>
+          setDirectory({ ...directory, name: e.target.value })
+        }
       />
 
+      {/* SLUG (READ ONLY) */}
+      <input className="input bg-gray-100" value={directory.slug} disabled />
+
+      {/* PHONE */}
       <input
-        className="input mb-4 bg-gray-100"
-        value={directory.slug}
-        disabled
+        className="input"
+        placeholder="Phone Number"
+        value={directory.phoneNumber || ""}
+        onChange={(e) =>
+          setDirectory({ ...directory, phoneNumber: e.target.value })
+        }
+      />
+
+      {/* EMAIL */}
+      <input
+        className="input"
+        placeholder="Email"
+        value={directory.email || ""}
+        onChange={(e) =>
+          setDirectory({ ...directory, email: e.target.value })
+        }
+      />
+
+      {/* WEBSITE */}
+      <input
+        className="input"
+        placeholder="Website"
+        value={directory.website || ""}
+        onChange={(e) =>
+          setDirectory({ ...directory, website: e.target.value })
+        }
       />
 
       {/* DESCRIPTION */}
-      <RichTextEditor name="description" />
+      <RichTextEditor
+        value={directory.description}
+        onChange={(val: string) =>
+          setDirectory({ ...directory, description: val })
+        }
+      />
+
+      {/* LOGO */}
+      <UploadBox
+        label="Company Logo"
+        value={directory.logoUrl}
+        onUpload={(file) =>
+          handleImageUpload(file, directory, setDirectory, "logoUrl")
+        }
+      />
+
+      {/* COVER IMAGE */}
+      <UploadBox
+        label="Cover Image"
+        value={directory.coverImageUrl}
+        onUpload={(file) =>
+          handleImageUpload(file, directory, setDirectory, "coverImageUrl")
+        }
+      />
 
       {/* PRODUCT SUPPLIES */}
       <Section title="Product Supplies">
-        {(directory.productSupplies || []).map((item: string, i: number) => (
+        {directory.productSupplies.map((item: string, i: number) => (
           <input
             key={i}
             className="input"
@@ -100,6 +159,38 @@ export default function EditDirectoryPage() {
               const arr = [...directory.productSupplies]
               arr[i] = e.target.value
               setDirectory({ ...directory, productSupplies: arr })
+            }}
+          />
+        ))}
+      </Section>
+
+      {/* TRADE NAMES */}
+      <Section title="Trade Names">
+        {directory.tradeNames.map((item: string, i: number) => (
+          <input
+            key={i}
+            className="input"
+            value={item}
+            onChange={(e) => {
+              const arr = [...directory.tradeNames]
+              arr[i] = e.target.value
+              setDirectory({ ...directory, tradeNames: arr })
+            }}
+          />
+        ))}
+      </Section>
+
+      {/* VIDEO GALLERY */}
+      <Section title="YouTube Video Links">
+        {directory.videoGallery.map((item: string, i: number) => (
+          <input
+            key={i}
+            className="input"
+            value={item}
+            onChange={(e) => {
+              const arr = [...directory.videoGallery]
+              arr[i] = e.target.value
+              setDirectory({ ...directory, videoGallery: arr })
             }}
           />
         ))}
@@ -129,7 +220,7 @@ export default function EditDirectoryPage() {
       <button
         onClick={saveChanges}
         disabled={saving}
-        className="mt-6 bg-black text-white px-6 py-2 rounded"
+        className="bg-black text-white px-6 py-2 rounded"
       >
         {saving ? "Saving..." : "Save Changes"}
       </button>
@@ -137,9 +228,36 @@ export default function EditDirectoryPage() {
   )
 }
 
+/* ---------------- IMAGE UPLOAD ---------------- */
+async function handleImageUpload(
+  file: File,
+  directory: any,
+  setDirectory: any,
+  field: "logoUrl" | "coverImageUrl"
+) {
+  const formData = new FormData()
+  formData.append("image", file)
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  )
+
+  const data = await res.json()
+
+  setDirectory({
+    ...directory,
+    [field]: data.imageUrl,
+  })
+}
+
+/* ---------------- SECTION ---------------- */
 function Section({ title, children }: any) {
   return (
-    <div className="mt-6 space-y-2">
+    <div className="space-y-2">
       <h3 className="font-semibold">{title}</h3>
       {children}
     </div>

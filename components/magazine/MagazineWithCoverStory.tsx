@@ -1,0 +1,113 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import Link from "next/link"
+
+type CoverStory = {
+  id: number
+  title: string
+  slug: string
+  shortDescription?: string
+  badge?: string
+  coverImageUrl?: string
+}
+
+type Magazine = {
+  id: number
+  title: string
+  slug: string
+  coverImageUrl?: string
+  createdAt?: string
+  coverStory?: CoverStory
+}
+
+export default function MagazineWithCoverStory() {
+  const [magazine, setMagazine] = useState<Magazine | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/magazines`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.length > 0) {
+          setMagazine(data[0])
+        }
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) return <p className="p-10">Loading...</p>
+  if (!magazine) return null
+
+  return (
+    <section className="bg-[#E9ECEF]">
+      <div className="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-[420px_1fr]">
+
+        {/* ================= LEFT – LATEST ISSUE ================= */}
+        <div className="p-10 flex flex-col justify-center ">
+          <h2 className="text-[28px] font-bold text-[#003B5C] mb-8">
+            Latest Issue
+          </h2>
+
+          <Link href={`/magazines/${magazine.slug}`}>
+            <img
+              src={magazine.coverImageUrl}
+              alt={magazine.title}
+              className="w-[220px] shadow-xl mb-6 cursor-pointer"
+            />
+          </Link>
+
+          {magazine.createdAt && (
+            <p className="text-[#003B5C] font-semibold mb-2">
+              {new Date(magazine.createdAt).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
+          )}
+
+          <span className="inline-block bg-[#C70000] text-white text-xs font-bold px-3 py-2 w-fit">
+            DIGITAL EDITION
+          </span>
+        </div>
+
+        {/* ================= RIGHT – COVER STORY HERO ================= */}
+        {magazine.coverStory && (
+          <div className="relative h-[520px]">
+            <img
+              src={magazine.coverStory.coverImageUrl}
+              alt={magazine.coverStory.title}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+
+            <div className="absolute inset-0 bg-black/50" />
+
+            <div className="absolute bottom-0 left-0 p-10 max-w-3xl text-white">
+              {magazine.coverStory.badge && (
+                <span className="inline-block bg-[#0072BC] text-xs font-bold px-3 py-1 mb-4 uppercase">
+                  {magazine.coverStory.badge}
+                </span>
+              )}
+
+              <h2 className="text-[28px] font-bold leading-snug mb-3">
+                {magazine.coverStory.title}
+              </h2>
+
+              <p className="text-sm text-gray-200 mb-4">
+                {magazine.coverStory.shortDescription}
+              </p>
+
+              <Link
+                href={`/magazines/${magazine.slug}/cover-story/${magazine.coverStory.slug}`}
+                className="text-[#C70000] font-bold uppercase text-sm"
+              >
+                Read More →
+              </Link>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </section>
+  )
+}
