@@ -11,6 +11,7 @@ import {
   Phone,
   Mail,
 } from "lucide-react"
+import ClaimCompanyBanner from "@/components/ClaimCompanyBanner"
 
 /* ================= TYPES ================= */
 
@@ -230,6 +231,10 @@ export default async function SupplierShowroomPage({
               />
             </section>
           </div>
+
+          {/* Update Your Listing  */}
+          <ClaimCompanyBanner />
+
 
           {/* VIDEO GALLERY */}
           {supplier.videoGallery && supplier.videoGallery.length > 0 && (
