@@ -5,7 +5,8 @@ import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik"
 import * as Yup from "yup"
 import RichTextEditor from "@/components/RichTextField"
 import UploadBox from "@/components/UploadBox"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { Country, State, City } from "country-state-city"
 
 /* ---------------- SLUG HELPER ---------------- */
 function slugify(text: string) {
@@ -32,71 +33,127 @@ const DirectorySchema = Yup.object({
 
   tradeNames: Yup.array().of(Yup.string()).min(1),
   videoGallery: Yup.array().of(Yup.string().url()),
-
-  // ✅ NEW
   productSupplies: Yup.array().of(Yup.string().min(2)),
+
   socialLinks: Yup.object({
     facebook: Yup.string().url().nullable(),
     linkedin: Yup.string().url().nullable(),
     twitter: Yup.string().url().nullable(),
     youtube: Yup.string().url().nullable(),
   }),
+
+  // ✅ NEW FIELDS
+  country: Yup.string().required("Country required"),
+  state: Yup.string().required("State required"),
+  city: Yup.string().required("City required"),
+  address: Yup.string().min(10).required("Address required"),
+  industryId: Yup.number().required("Industry required"),
 })
 
-/* ---------------- PAGE ---------------- */
 export default function AddDirectoryPage() {
   const router = useRouter()
-const [uploadingLogo, setUploadingLogo] = useState(false)
-const [uploadingCover, setUploadingCover] = useState(false)
-const [uploadError, setUploadError] = useState("")
 
+  const [uploadingLogo, setUploadingLogo] = useState(false)
+  const [uploadingCover, setUploadingCover] = useState(false)
+  const [uploadError, setUploadError] = useState("")
 
-  // 🔥 CLOUDINARY UPLOAD FUNCTION
- const handleImageUpload = async (
-  file: File,
-  setFieldValue: any,
-  fieldName: "logoUrl" | "coverImageUrl",
-  type: "logo" | "cover"
-) => {
-  if (type === "logo") setUploadingLogo(true)
-  if (type === "cover") setUploadingCover(true)
+  /* ================= INDUSTRY CASCADE ================= */
+  const [industryLevels, setIndustryLevels] = useState<any[][]>([])
+  const [industrySelected, setIndustrySelected] = useState<number[]>([])
 
-  setUploadError("")
+  useEffect(() => {
+    async function fetchIndustries() {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/industries`
+      )
+      const data = await res.json()
+      const list = Array.isArray(data) ? data : data.data ?? []
+      setIndustryLevels([list])
+    }
+    fetchIndustries()
+  }, [])
 
-  try {
-    const formData = new FormData()
-    formData.append("image", file)
+  const handleIndustrySelect = async (
+    levelIndex: number,
+    id: number,
+    setFieldValue: any
+  ) => {
+    const newSelected = [...industrySelected.slice(0, levelIndex), id]
+    const newLevels = industryLevels.slice(0, levelIndex + 1)
+
+    setIndustrySelected(newSelected)
+    setIndustryLevels(newLevels)
+    setFieldValue("industryId", "")
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
+      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/industries/${id}/children`
     )
+    const children = await res.json()
 
-    if (!res.ok) {
-      throw new Error("Image upload failed")
+    if (children.length > 0) {
+      setIndustryLevels([...newLevels, children])
+    } else {
+      setFieldValue("industryId", id)
     }
-
-    const data = await res.json()
-
-    // ✅ Dynamically set field
-    setFieldValue(fieldName, data.imageUrl)
-
-  } catch (err: any) {
-    setUploadError(err.message)
-  } finally {
-    if (type === "logo") setUploadingLogo(false)
-    if (type === "cover") setUploadingCover(false)
   }
-}
 
+  /* ================= IMAGE UPLOAD ================= */
+  const handleImageUpload = async (
+    file: File,
+    setFieldValue: any,
+    fieldName: "logoUrl" | "coverImageUrl",
+    type: "logo" | "cover"
+  ) => {
+    if (type === "logo") setUploadingLogo(true)
+    if (type === "cover") setUploadingCover(true)
 
+    setUploadError("")
 
+    try {
+      const formData = new FormData()
+      formData.append("image", file)
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
+        { method: "POST", body: formData }
+      )
+
+      if (!res.ok) throw new Error("Image upload failed")
+
+      const data = await res.json()
+      setFieldValue(fieldName, data.imageUrl)
+
+    } catch (err: any) {
+      setUploadError(err.message)
+    } finally {
+      if (type === "logo") setUploadingLogo(false)
+      if (type === "cover") setUploadingCover(false)
+    }
+  }
+
+  /* ================= SUBMIT ================= */
   async function submit(values: any, { setSubmitting, setStatus }: any) {
     try {
       const token = localStorage.getItem("token")
+
+      const selectedCountry = Country.getAllCountries().find(
+        c => c.isoCode === values.country
+      )
+
+      const selectedState = State.getStatesOfCountry(values.country).find(
+        s => s.isoCode === values.state
+      )
+
+      const location = [
+        values.city,
+        selectedState?.name,
+        selectedCountry?.name,
+      ].filter(Boolean).join(", ")
+
+      const payload = {
+        ...values,
+        location,
+      }
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/suppliers`,
@@ -106,7 +163,7 @@ const [uploadError, setUploadError] = useState("")
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(values),
+          body: JSON.stringify(payload),
         }
       )
 
@@ -118,6 +175,8 @@ const [uploadError, setUploadError] = useState("")
       setSubmitting(false)
     }
   }
+
+  const countries = Country.getAllCountries()
 
   return (
     <div className="max-w-3xl mx-auto p-10">
@@ -137,8 +196,6 @@ const [uploadError, setUploadError] = useState("")
           coverImageUrl: "",
           tradeNames: [""],
           videoGallery: [""],
-
-          // ✅ NEW
           productSupplies: [""],
           socialLinks: {
             facebook: "",
@@ -146,193 +203,218 @@ const [uploadError, setUploadError] = useState("")
             twitter: "",
             youtube: "",
           },
+
+          // NEW
+          country: "",
+          state: "",
+          city: "",
+          address: "",
+          industryId: "",
         }}
         validationSchema={DirectorySchema}
         onSubmit={submit}
       >
-        {({ isSubmitting, setFieldValue, values, status }) => (
-          <Form className="space-y-6 bg-white p-6 rounded-xl shadow">
+        {({ isSubmitting, setFieldValue, values, status }) => {
 
-            {/* COMPANY NAME */}
-            <div>
-              <label className="label">Company Name</label>
-              <Field
-                name="name"
-                className="input"
-                onChange={(e: any) => {
-                  const name = e.target.value
-                  setFieldValue("name", name)
-                  if (!values.slug || values.slug === slugify(values.name)) {
-                    setFieldValue("slug", slugify(name))
-                  }
-                }}
-              />
-              <ErrorMessage name="name" component="p" className="error" />
-            </div>
+          const states = values.country
+            ? State.getStatesOfCountry(values.country)
+            : []
 
-            {/* SLUG */}
-            <div>
-              <label className="label">Slug</label>
-              <Field name="slug" className="input" />
-              <ErrorMessage name="slug" component="p" className="error" />
-              <p className="text-xs text-gray-400 mt-1">
-                URL: /suppliers/{values.slug || "your-company"}
-              </p>
-            </div>
+          const cities = values.state
+            ? City.getCitiesOfState(values.country, values.state)
+            : []
 
-            <FieldBlock label="Phone Number" name="phoneNumber" />
-            <FieldBlock label="Email" name="email" />
+          return (
+           <Form className="space-y-6 bg-white p-6 rounded-xl shadow">
 
-            {/* DESCRIPTION */}
-            <div>
-              <label className="label">Description</label>
-              <RichTextEditor name="description" />
-              <ErrorMessage name="description" component="p" className="error" />
-            </div>
+  {/* NAME + SLUG */}
+  <div className="grid grid-cols-2 gap-4">
+    <div>
+      <label className="label">Company Name</label>
+      <Field
+        name="name"
+        className="input"
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const val = e.target.value
+          setFieldValue("name", val)
+          setFieldValue("slug", slugify(val))
+        }}
+      />
+      <ErrorMessage name="name" component="p" className="error" />
+    </div>
+    <div>
+      <label className="label">Slug</label>
+      <Field name="slug" className="input" />
+      <ErrorMessage name="slug" component="p" className="error" />
+    </div>
+  </div>
 
- {/* 🔥 LOGO + COVER IMAGE ROW */}
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {/* PHONE + EMAIL */}
+  <div className="grid grid-cols-2 gap-4">
+    <FieldBlock label="Phone Number" name="phoneNumber" />
+    <FieldBlock label="Email" name="email" />
+  </div>
 
-  {/* LOGO */}
+  {/* COUNTRY + STATE */}
+  <div className="grid grid-cols-2 gap-4">
+    <div>
+      <label className="label">Country</label>
+      <Field as="select" name="country" className="input">
+        <option value="">Select Country</option>
+        {countries.map(c => (
+          <option key={c.isoCode} value={c.isoCode}>{c.name}</option>
+        ))}
+      </Field>
+      <ErrorMessage name="country" component="p" className="error" />
+    </div>
+    <div>
+      <label className="label">State</label>
+      <Field as="select" name="state" className="input">
+        <option value="">Select State</option>
+        {states.map(s => (
+          <option key={s.isoCode} value={s.isoCode}>{s.name}</option>
+        ))}
+      </Field>
+      <ErrorMessage name="state" component="p" className="error" />
+    </div>
+  </div>
+
+  {/* CITY + ADDRESS */}
+  <div className="grid grid-cols-2 gap-4">
+    <div>
+      <label className="label">City</label>
+      <Field as="select" name="city" className="input">
+        <option value="">Select City</option>
+        {cities.map(c => (
+          <option key={c.name} value={c.name}>{c.name}</option>
+        ))}
+      </Field>
+      <ErrorMessage name="city" component="p" className="error" />
+    </div>
+    <FieldBlock label="Full Address" name="address" />
+  </div>
+
+  {/* INDUSTRY + WEBSITE */}
+  <div className="grid grid-cols-2 gap-4">
+    <div>
+      <label className="label">Industry</label>
+      {industryLevels.map((levelOptions, levelIndex) => (
+        <select
+          key={levelIndex}
+          className="input mb-2"
+          value={industrySelected[levelIndex] ?? ""}
+          onChange={(e) =>
+            handleIndustrySelect(levelIndex, Number(e.target.value), setFieldValue)
+          }
+        >
+          <option value="">Select Industry</option>
+          {levelOptions.map((industry: any) => (
+            <option key={industry.id} value={industry.id}>{industry.name}</option>
+          ))}
+        </select>
+      ))}
+      <ErrorMessage name="industryId" component="p" className="error" />
+    </div>
+    <FieldBlock label="Website" name="website" />
+  </div>
+
+  {/* DESCRIPTION - full width */}
   <div>
+    <label className="label">Description</label>
+    <RichTextEditor name="description" />
+  </div>
+
+  {/* IMAGE UPLOADS - full width */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
     <UploadBox
       label="Company Logo"
       value={values.logoUrl}
       onUpload={(file) =>
         handleImageUpload(file, setFieldValue, "logoUrl", "logo")
       }
-      height="h-40"
     />
-
-    {uploadingLogo && (
-      <p className="text-sm text-gray-500 mt-2">
-        Uploading logo...
-      </p>
-    )}
   </div>
 
-  {/* COVER IMAGE */}
-  <div>
-    <UploadBox
-      label="Cover Image"
-      value={values.coverImageUrl}
-      onUpload={(file) =>
-        handleImageUpload(file, setFieldValue, "coverImageUrl", "cover")
-      }
-      height="h-40"
-    />
+  {/* PRODUCT SUPPLIES - full width */}
+  <Section title="Product Supplies / Services">
+    <FieldArray name="productSupplies">
+      {({ push, remove }) => (
+        <>
+          {values.productSupplies.map((_: any, i: number) => (
+            <div key={i} className="flex gap-2">
+              <Field name={`productSupplies.${i}`} className="input flex-1" />
+              {i > 0 && <button type="button" onClick={() => remove(i)}>✕</button>}
+            </div>
+          ))}
+          <button type="button" onClick={() => push("")}>+ Add product</button>
+        </>
+      )}
+    </FieldArray>
+  </Section>
 
-    {uploadingCover && (
-      <p className="text-sm text-gray-500 mt-2">
-        Uploading cover image...
-      </p>
-    )}
-  </div>
+  {/* SOCIAL LINKS */}
+  <Section title="Social Media Links">
+    <div className="grid grid-cols-2 gap-4">
+      <FieldBlock label="Facebook" name="socialLinks.facebook" />
+      <FieldBlock label="LinkedIn" name="socialLinks.linkedin" />
+      <FieldBlock label="Twitter" name="socialLinks.twitter" />
+      <FieldBlock label="YouTube" name="socialLinks.youtube" />
+    </div>
+  </Section>
 
-</div>
+  {/* TRADE NAMES - full width */}
+  <Section title="Trade Names">
+    <FieldArray name="tradeNames">
+      {({ push, remove }) => (
+        <>
+          {values.tradeNames.map((_: any, i: number) => (
+            <div key={i} className="flex gap-2">
+              <Field name={`tradeNames.${i}`} className="input flex-1" />
+              {i > 0 && <button type="button" onClick={() => remove(i)}>✕</button>}
+            </div>
+          ))}
+          <button type="button" onClick={() => push("")}>+ Add trade name</button>
+        </>
+      )}
+    </FieldArray>
+  </Section>
 
+  {/* VIDEO GALLERY - full width */}
+  <Section title="YouTube Video Gallery">
+    <FieldArray name="videoGallery">
+      {({ push, remove }) => (
+        <>
+          {values.videoGallery.map((_: any, i: number) => (
+            <div key={i} className="flex gap-2">
+              <Field name={`videoGallery.${i}`} className="input flex-1" />
+              {i > 0 && <button type="button" onClick={() => remove(i)}>✕</button>}
+            </div>
+          ))}
+          <button type="button" onClick={() => push("")}>+ Add video</button>
+        </>
+      )}
+    </FieldArray>
+  </Section>
 
+  {status && <p className="text-red-600 text-sm">{status}</p>}
 
+  <button
+    type="submit"
+    disabled={isSubmitting || uploadingLogo || uploadingCover}
+    className="bg-black text-white px-6 py-2 rounded"
+  >
+    {isSubmitting ? "Submitting..." : "Submit for Approval"}
+  </button>
 
-
-
-            {/* PRODUCT SUPPLIES */}
-            <Section title="Product Supplies / Services">
-              <FieldArray name="productSupplies">
-                {({ push, remove }) => (
-                  <>
-                    {values.productSupplies.map((_: any, i: number) => (
-                      <div key={i} className="flex gap-2">
-                        <Field
-                          name={`productSupplies.${i}`}
-                          className="input flex-1"
-                          placeholder="e.g. Injection Molds"
-                        />
-                        {i > 0 && (
-                          <button type="button" onClick={() => remove(i)}>✕</button>
-                        )}
-                      </div>
-                    ))}
-                    <button type="button" onClick={() => push("")} className="text-sm text-blue-600">
-                      + Add product
-                    </button>
-                  </>
-                )}
-              </FieldArray>
-            </Section>
-
-            {/* SOCIAL LINKS */}
-            <Section title="Social Media Links">
-              <FieldBlock label="Facebook" name="socialLinks.facebook" />
-              <FieldBlock label="LinkedIn" name="socialLinks.linkedin" />
-              <FieldBlock label="Twitter / X" name="socialLinks.twitter" />
-              <FieldBlock label="YouTube" name="socialLinks.youtube" />
-            </Section>
-
-            {/* TRADE NAMES */}
-            <Section title="Trade Names">
-              <FieldArray name="tradeNames">
-                {({ push, remove }) => (
-                  <>
-                    {values.tradeNames.map((_: any, i: number) => (
-                      <div key={i} className="flex gap-2">
-                        <Field name={`tradeNames.${i}`} className="input flex-1" />
-                        {i > 0 && (
-                          <button type="button" onClick={() => remove(i)}>✕</button>
-                        )}
-                      </div>
-                    ))}
-                    <button type="button" onClick={() => push("")} className="text-sm text-blue-600">
-                      + Add trade name
-                    </button>
-                  </>
-                )}
-              </FieldArray>
-            </Section>
-
-            {/* VIDEO GALLERY */}
-            <Section title="YouTube Video Gallery">
-              <FieldArray name="videoGallery">
-                {({ push, remove }) => (
-                  <>
-                    {values.videoGallery.map((_: any, i: number) => (
-                      <div key={i} className="flex gap-2">
-                        <Field name={`videoGallery.${i}`} className="input flex-1" />
-                        {i > 0 && (
-                          <button type="button" onClick={() => remove(i)}>✕</button>
-                        )}
-                      </div>
-                    ))}
-                    <button type="button" onClick={() => push("")} className="text-sm text-blue-600">
-                      + Add video
-                    </button>
-                  </>
-                )}
-              </FieldArray>
-            </Section>
-
-            <FieldBlock label="Website" name="website" />
-            {/* <FieldBlock label="Logo URL" name="logoUrl" /> */}
-            {/* <FieldBlock label="Cover Image URL" name="coverImageUrl" /> */}
-
-            {status && <p className="text-red-600 text-sm">{status}</p>}
-
-           <button
-  type="submit"
-  disabled={isSubmitting || uploadingLogo || uploadingCover}
-  className="bg-black text-white px-6 py-2 rounded"
->
-  {isSubmitting ? "Submitting..." : "Submit for Approval"}
-</button>
-
-          </Form>
-        )}
+</Form>
+          )
+        }}
       </Formik>
     </div>
   )
 }
 
-/* ---------------- HELPERS ---------------- */
+/* HELPERS */
 function FieldBlock({ label, name }: any) {
   return (
     <div>
