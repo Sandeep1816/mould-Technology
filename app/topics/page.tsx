@@ -116,7 +116,7 @@ export default async function TopicsPage() {
     "Articles",
     "News",
     "Products",
-    "MMT Chats",
+    "Industry Talks",
     "Video",
     "Podcast",
     "Webinars",

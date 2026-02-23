@@ -152,7 +152,7 @@ export default function RecruiterOnboardingPage() {
           />
 
           <input
-            placeholder="Company location"
+            placeholder="Company location "
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             className="w-full h-12 px-4 border rounded"

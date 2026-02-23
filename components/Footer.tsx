@@ -136,7 +136,7 @@ text-black">
                   Resources
                 </h5>
                 <ul className="space-y-2.5 text-sm">
-                  <li><Link href="/mmtchats" className="hover:text-black transition-colors">MMT Chats</Link></li>
+                  <li><Link href="/mmtchats" className="hover:text-black transition-colors">Industry Talks</Link></li>
                   <li><Link href="/videos" className="hover:text-black transition-colors">Videos</Link></li>
                   <li><Link href="/news" className="hover:text-black transition-colors">News</Link></li>
                   <li><Link href="/products" className="hover:text-black transition-colors">Products</Link></li>
@@ -291,7 +291,7 @@ text-black">
                 Resources
               </h5>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/mmtchats" className="hover:text-black hover:translate-x-1 inline-block transition-all">MMT Chats</Link></li>
+                <li><Link href="/mmtchats" className="hover:text-black hover:translate-x-1 inline-block transition-all">Industry Talks</Link></li>
                 <li><Link href="/videos" className="hover:text-black hover:translate-x-1 inline-block transition-all">Videos</Link></li>
                 <li><Link href="/news" className="hover:text-black hover:translate-x-1 inline-block transition-all">News</Link></li>
                 <li><Link href="/products" className="hover:text-black hover:translate-x-1 inline-block transition-all">Products</Link></li>

@@ -42,6 +42,7 @@ export default function AdminDirectoriesPage() {
     })
       .then(res => res.json())
       .then(data => {
+        console.log("API RESPONSE:", data)
         setDirectories(data)
         setLoading(false)
       })
@@ -186,7 +187,7 @@ export default function AdminDirectoriesPage() {
                     <td>{dir.submittedBy?.email || "—"}</td>
 
                     <td className="text-xs text-gray-500">
-                      {new Date(dir.createdAt).toLocaleDateString()}
+                     {new Date(dir.createdAt).toISOString().split("T")[0]}
                     </td>
 
                     <td className="text-right">

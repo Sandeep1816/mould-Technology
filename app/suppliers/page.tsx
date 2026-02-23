@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react"
 import SupplierRowCard from "./SupplierRowCard"
 import SupplierFilters from "./SupplierFilters"
@@ -15,92 +15,120 @@ type Supplier = {
   logoUrl?: string
 }
 
+type FilterState = {
+  name: string
+  location: string
+  category: string
+  featuredOnly: boolean
+  industryId: number | null
+}
+
 const PER_PAGE = 15
 
 export default function SuppliersPage() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([])
+  const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [showFilters, setShowFilters] = useState(false)
+  const [sortBy, setSortBy] = useState("alphabetical")
 
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/suppliers`)
-      .then(res => res.json())
-      .then(data => {
+  const [activeFilters, setActiveFilters] = useState<FilterState>({
+    name: "",
+    location: "",
+    category: "",
+    featuredOnly: false,
+    industryId: null,
+  })
+
+  // ✅ Fetch suppliers from backend with filter params
+  const fetchSuppliers = useCallback(async (filters: FilterState, page: number, sort: string) => {
+    setLoading(true)
+    try {
+      const params = new URLSearchParams()
+
+      if (filters.name)        params.set("name", filters.name)
+      if (filters.location)    params.set("location", filters.location)
+      if (filters.category)    params.set("category", filters.category)
+      if (filters.featuredOnly) params.set("featured", "true")
+      if (filters.industryId)  params.set("industryId", String(filters.industryId))
+
+      params.set("page", String(page))
+      params.set("limit", String(PER_PAGE))
+      params.set("sort", sort)
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/suppliers?${params.toString()}`
+      )
+      const data = await res.json()
+
+      // Handle both { data: [], total: N } and plain []
+      if (Array.isArray(data)) {
         setSuppliers(data)
-        setLoading(false)
-      })
+        setTotal(data.length)
+      } else {
+        setSuppliers(data.data ?? [])
+        setTotal(data.total ?? 0)
+      }
+    } catch (err) {
+      console.error("Failed to fetch suppliers", err)
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
-  // Prevent body scroll when mobile filters are open
+  // Initial load
   useEffect(() => {
-    if (showFilters) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "unset"
-    }
-    return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [showFilters])
+    fetchSuppliers(activeFilters, currentPage, sortBy)
+  }, [])
 
-  const totalPages = Math.ceil(suppliers.length / PER_PAGE)
-
-  const startIndex = (currentPage - 1) * PER_PAGE
-  const endIndex = startIndex + PER_PAGE
-  const visibleSuppliers = suppliers.slice(startIndex, endIndex)
-
-  // Scroll to top when page changes
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  // When filters change — reset to page 1
+  const handleFilterChange = (filters: FilterState) => {
+    setActiveFilters(filters)
+    setCurrentPage(1)
+    fetchSuppliers(filters, 1, sortBy)
   }
 
-  // Generate pagination numbers with ellipsis
+  // When sort changes
+  const handleSortChange = (sort: string) => {
+    setSortBy(sort)
+    fetchSuppliers(activeFilters, currentPage, sort)
+  }
+
+  // Prevent body scroll when mobile filters open
+  useEffect(() => {
+    document.body.style.overflow = showFilters ? "hidden" : "unset"
+    return () => { document.body.style.overflow = "unset" }
+  }, [showFilters])
+
+  const totalPages = Math.ceil(total / PER_PAGE)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    fetchSuppliers(activeFilters, page, sortBy)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
   const getPaginationNumbers = () => {
-    const pages = []
-    const showEllipsisStart = currentPage > 3
-    const showEllipsisEnd = currentPage < totalPages - 2
-
+    const pages: (number | string)[] = []
     if (totalPages <= 7) {
-      // Show all pages if 7 or fewer
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i)
-      }
+      for (let i = 1; i <= totalPages; i++) pages.push(i)
     } else {
-      // Always show first page
       pages.push(1)
-
-      if (showEllipsisStart) {
-        pages.push('...')
-      }
-
-      // Show pages around current
+      if (currentPage > 3) pages.push("...")
       const start = Math.max(2, currentPage - 1)
       const end = Math.min(totalPages - 1, currentPage + 1)
-
-      for (let i = start; i <= end; i++) {
-        pages.push(i)
-      }
-
-      if (showEllipsisEnd) {
-        pages.push('...')
-      }
-
-      // Always show last page
+      for (let i = start; i <= end; i++) pages.push(i)
+      if (currentPage < totalPages - 2) pages.push("...")
       pages.push(totalPages)
     }
-
     return pages
   }
 
   return (
-    <div className=" min-h-screen">
-      {/* bg-[#f5f6f7] */}
-
+    <div className="min-h-screen">
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-0 pb-4 md:py-6">
 
-        
         {/* MOBILE FILTER BUTTON */}
         <button
           onClick={() => setShowFilters(true)}
@@ -112,42 +140,34 @@ export default function SuppliersPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
 
-          {/* LEFT FILTERS - DESKTOP */}
+          {/* LEFT FILTERS — DESKTOP */}
           <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-24">
-              <SupplierFilters />
+              <SupplierFilters onFilterChange={handleFilterChange} />
             </div>
           </aside>
 
-          {/* LEFT FILTERS - MOBILE MODAL */}
+          {/* LEFT FILTERS — MOBILE MODAL */}
           {showFilters && (
             <>
-              {/* Backdrop */}
-              <div 
+              <div
                 className="fixed inset-0 bg-black/50 z-50 lg:hidden"
                 onClick={() => setShowFilters(false)}
               />
-              
-              {/* Filter Panel */}
               <div className="fixed inset-y-0 left-0 w-full sm:w-[400px] bg-white z-50 overflow-y-auto lg:hidden">
                 <div className="sticky top-0 bg-white border-b px-4 py-4 flex items-center justify-between">
                   <h3 className="text-lg font-bold text-[#0b3954]">Filters</h3>
-                  <button
-                    onClick={() => setShowFilters(false)}
-                    className="text-gray-500 hover:text-gray-700 text-2xl"
-                  >
-                    ×
-                  </button>
+                  <button onClick={() => setShowFilters(false)} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
                 </div>
                 <div className="p-4">
-                  <SupplierFilters />
+                  <SupplierFilters onFilterChange={(f) => { handleFilterChange(f); setShowFilters(false) }} />
                 </div>
                 <div className="sticky bottom-0 bg-white border-t p-4">
                   <button
                     onClick={() => setShowFilters(false)}
                     className="w-full bg-[#0b3954] text-white py-3 rounded font-semibold hover:bg-[#0a2f42] transition-colors"
                   >
-                    Apply Filters
+                    View Results
                   </button>
                 </div>
               </div>
@@ -176,26 +196,26 @@ export default function SuppliersPage() {
             <div className="text-sm text-gray-600">
               <span className="underline cursor-pointer hover:text-gray-800">Home</span>
               <span className="mx-2">›</span>
-              <span className="font-medium text-gray-800">
-                Find a Supplier
-              </span>
+              <span className="font-medium text-gray-800">Find a Supplier</span>
             </div>
 
             {/* SEARCH HEADER */}
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-[#0b3954]">
-                  Search Results
-                </h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-[#0b3954]">Search Results</h2>
                 <p className="text-gray-600 mt-1 text-sm md:text-base">
-                  {suppliers.length} total supplier{suppliers.length !== 1 ? 's' : ''}
+                  {loading ? "Loading..." : `${total} total supplier${total !== 1 ? "s" : ""}`}
                 </p>
               </div>
 
-              <select className="border border-gray-300 px-3 py-2 text-sm rounded focus:outline-none focus:ring-2 focus:ring-[#0b3954]">
-                <option>Alphabetical</option>
-                <option>Most Recent</option>
-                <option>Most Popular</option>
+              <select
+                className="border border-gray-300 px-3 py-2 text-sm rounded focus:outline-none focus:ring-2 focus:ring-[#0b3954]"
+                value={sortBy}
+                onChange={e => handleSortChange(e.target.value)}
+              >
+                <option value="alphabetical">Alphabetical</option>
+                <option value="newest">Most Recent</option>
+                <option value="popular">Most Popular</option>
               </select>
             </div>
 
@@ -207,107 +227,72 @@ export default function SuppliersPage() {
                   <p className="text-gray-600">Loading suppliers...</p>
                 </div>
               </div>
-            ) : visibleSuppliers.length > 0 ? (
+            ) : suppliers.length > 0 ? (
               <div className="space-y-4">
-                {visibleSuppliers.map(s => (
+                {suppliers.map(s => (
                   <SupplierRowCard key={s.id} supplier={s} />
                 ))}
               </div>
             ) : (
               <div className="text-center py-20">
-                <p className="text-gray-600">No suppliers found.</p>
+                <p className="text-gray-500 text-lg">No suppliers found.</p>
+                <p className="text-gray-400 text-sm mt-1">Try adjusting your filters.</p>
               </div>
             )}
 
             {/* PAGINATION */}
             {totalPages > 1 && (
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 pb-20 lg:pb-6">
-                
-                {/* Page Info - Mobile */}
-                <div className="text-sm text-gray-600 sm:hidden">
-                  Page {currentPage} of {totalPages}
-                </div>
+                <div className="text-sm text-gray-600 sm:hidden">Page {currentPage} of {totalPages}</div>
 
-                {/* Pagination Buttons */}
                 <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center">
-                  
-                  {/* Previous Button */}
                   <button
                     onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
                     className={`w-9 h-9 sm:w-10 sm:h-10 border flex items-center justify-center text-sm font-semibold rounded transition-colors
-                      ${
-                        currentPage === 1
-                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : "bg-white text-[#0b3954] hover:bg-gray-100"
-                      }
-                    `}
-                    aria-label="Previous page"
+                      ${currentPage === 1 ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white text-[#0b3954] hover:bg-gray-100"}`}
                   >
                     <ChevronLeft size={16} />
                   </button>
 
-                  {/* Page Numbers */}
-                  {getPaginationNumbers().map((page, idx) => {
-                    if (page === '...') {
-                      return (
-                        <span key={`ellipsis-${idx}`} className="px-2 text-gray-500">
-                          ...
-                        </span>
-                      )
-                    }
-
-                    return (
+                  {getPaginationNumbers().map((page, idx) =>
+                    page === "..." ? (
+                      <span key={`e-${idx}`} className="px-2 text-gray-500">...</span>
+                    ) : (
                       <button
                         key={page}
                         onClick={() => handlePageChange(page as number)}
                         className={`w-9 h-9 sm:w-10 sm:h-10 border text-sm font-semibold rounded transition-colors
-                          ${
-                            page === currentPage
-                              ? "bg-[#0b3954] text-white"
-                              : "bg-white text-[#0b3954] hover:bg-gray-100"
-                          }
-                        `}
+                          ${page === currentPage ? "bg-[#0b3954] text-white" : "bg-white text-[#0b3954] hover:bg-gray-100"}`}
                       >
                         {page}
                       </button>
                     )
-                  })}
+                  )}
 
-                  {/* Next Button */}
                   <button
                     onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
                     className={`w-9 h-9 sm:w-10 sm:h-10 border flex items-center justify-center text-sm font-semibold rounded transition-colors
-                      ${
-                        currentPage === totalPages
-                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : "bg-white text-[#0b3954] hover:bg-gray-100"
-                      }
-                    `}
-                    aria-label="Next page"
+                      ${currentPage === totalPages ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white text-[#0b3954] hover:bg-gray-100"}`}
                   >
                     <ChevronRight size={16} />
                   </button>
                 </div>
 
-                {/* Page Info - Desktop */}
-                <div className="hidden sm:block text-sm text-gray-600">
-                  Page {currentPage} of {totalPages}
-                </div>
+                <div className="hidden sm:block text-sm text-gray-600">Page {currentPage} of {totalPages}</div>
               </div>
             )}
-
           </main>
 
-          {/* RIGHT ADS - DESKTOP */}
+          {/* RIGHT ADS — DESKTOP */}
           <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-24">
               <SupplierAds />
             </div>
           </aside>
 
-          {/* RIGHT ADS - MOBILE (Below content) */}
+          {/* RIGHT ADS — MOBILE */}
           <div className="lg:hidden">
             <SupplierAds />
           </div>
