@@ -1,6 +1,60 @@
+// "use client";
+
+// import { useEffect, useState } from "react";
+
+// type Banner = {
+//   id: number;
+//   title: string;
+//   imageUrl: string;
+//   targetUrl?: string;
+// };
+
+// export default function TrendingAd() {
+//   const [banner, setBanner] = useState<Banner | null>(null);
+
+//   useEffect(() => {
+//     fetch(
+//       `${process.env.NEXT_PUBLIC_API_URL}/api/banners?placement=HOME_MIDDLE`
+//     )
+//       .then((res) => res.json())
+//       .then((data) => {
+//         if (data?.length > 0) {
+//           setBanner(data[0]); // take first active banner
+//         }
+//       });
+//   }, []);
+
+//   if (!banner) return null; // no ad → no section
+
+//   return (
+//     <section className="py-[80px] w-full bg-[#F7F7F7]">
+//       <div className="max-w-[1320px] mx-auto px-[12px]">
+//         <p className="text-center text-[#616C74] text-sm mb-4">
+//           Advertisement
+//         </p>
+
+//         <div className="rounded-xl overflow-hidden">
+//           <a
+//             href={`${process.env.NEXT_PUBLIC_API_URL}/api/banners/${banner.id}/click`}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//           >
+//             <img
+//               src={banner.imageUrl}
+//               alt={banner.title}
+//               className="w-full h-[218px] object-cover"
+//             />
+//           </a>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+
 "use client";
 
-import { useEffect, useState } from "react";
+import Image from "next/image";
 
 type Banner = {
   id: number;
@@ -9,22 +63,12 @@ type Banner = {
   targetUrl?: string;
 };
 
-export default function TrendingAd() {
-  const [banner, setBanner] = useState<Banner | null>(null);
+type Props = {
+  banner: Banner | null;
+};
 
-  useEffect(() => {
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/banners?placement=HOME_MIDDLE`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.length > 0) {
-          setBanner(data[0]); // take first active banner
-        }
-      });
-  }, []);
-
-  if (!banner) return null; // no ad → no section
+export default function TrendingAd({ banner }: Props) {
+  if (!banner) return null;
 
   return (
     <section className="py-[80px] w-full bg-[#F7F7F7]">
@@ -39,11 +83,16 @@ export default function TrendingAd() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img
-              src={banner.imageUrl}
-              alt={banner.title}
-              className="w-full h-[218px] object-cover"
-            />
+            <div className="relative w-full h-[218px]">
+              <Image
+                src={banner.imageUrl}
+                alt={banner.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 1200px"
+                quality={70}
+                className="object-cover"
+              />
+            </div>
           </a>
         </div>
       </div>

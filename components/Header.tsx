@@ -50,7 +50,7 @@ export default function Header() {
   }, [])
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=50`)
       .then(res => res.json())
       .then(data => {
         const posts = Array.isArray(data?.data) ? data.data : []

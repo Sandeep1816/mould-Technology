@@ -3,7 +3,7 @@ import type { Post } from "@/types/Post"
 
 export default async function VideosPage() {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=50`,
     { cache: "no-store" }
   )
 

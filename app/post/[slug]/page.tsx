@@ -70,7 +70,7 @@ export default function PostDetailsPage() {
     async function fetchPost() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=50`,
           { cache: "no-store" }
         )
         const data = await res.json()

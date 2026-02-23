@@ -2,45 +2,33 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 import type { Post } from "@/types/Post"
 
 type LatestHeroProps = {
   post: Post
+  posts: Post[]
 }
 
-export default function LatestHero({ post }: LatestHeroProps) {
-  const [latestPosts, setLatestPosts] = useState<Post[]>([])
+export default function LatestHero({ post, posts }: LatestHeroProps) {
 
-  useEffect(() => {
-    async function fetchLatest() {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
-        )
-        const data = await res.json()
-        const all: Post[] = data.data || data
+  /* ================= FILTER LATEST SIDEBAR ================= */
 
-        const filtered = all
-          .filter((p) =>
-            typeof p.category === "object"
-              ? p.category?.slug?.toLowerCase() === "latest"
-              : String(p.category || "").toLowerCase() === "latest"
-          )
-          .filter((p) => p.id !== post.id)
-          .slice(0, 3)
+  const latestPosts = useMemo(() => {
+    return posts
+      .filter((p) =>
+        typeof p.category === "object"
+          ? p.category?.slug?.toLowerCase() === "latest"
+          : String(p.category || "").toLowerCase() === "latest"
+      )
+      .filter((p) => p.id !== post.id)
+      .slice(0, 3)
+  }, [posts, post.id])
 
-        setLatestPosts(filtered)
-      } catch (err) {
-        console.error("Failed to load latest posts", err)
-      }
-    }
-
-    fetchLatest()
-  }, [post.id])
+  /* ================= HERO IMAGE ================= */
 
   const imageUrl =
-    post.imageUrl && post.imageUrl.startsWith("http")
+    post.imageUrl?.startsWith("http")
       ? post.imageUrl
       : post.imageUrl
       ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
@@ -55,11 +43,10 @@ export default function LatestHero({ post }: LatestHeroProps) {
     : "Today"
 
   return (
-    /* 🔹 SAME TOP SPACING AS Tooling Trends */
     <section className="pt-[40px] w-full">
-      {/* 🔹 BOOTSTRAP CONTAINER EQUIVALENT */}
       <div className="max-w-[1320px] mx-auto px-[12px]">
         <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-8 items-start">
+
           {/* ================= LEFT FEATURED CARD ================= */}
           <Link
             href={`/post/${post.slug}`}
@@ -69,10 +56,13 @@ export default function LatestHero({ post }: LatestHeroProps) {
               src={imageUrl}
               alt={post.title}
               fill
+              priority
+              quality={75}
+              sizes="(max-width: 1024px) 100vw, 900px"
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
 
-            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
             <div className="absolute bottom-0 p-6 text-white max-w-[90%]">
               {typeof post.category === "object" && post.category?.name && (
@@ -88,10 +78,12 @@ export default function LatestHero({ post }: LatestHeroProps) {
               <div className="flex items-center gap-4 text-sm text-gray-300">
                 {post.author?.name && (
                   <span className="flex items-center gap-2">
-                    <img
+                    <Image
                       src={post.author.avatarUrl || "/avatar-placeholder.png"}
                       alt={post.author.name}
-                      className="w-6 h-6 rounded-full border border-white/30"
+                      width={24}
+                      height={24}
+                      className="rounded-full border border-white/30"
                     />
                     <span>By {post.author.name}</span>
                   </span>
@@ -110,7 +102,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
           <div className="space-y-6">
             {latestPosts.map((item) => {
               const thumb =
-                item.imageUrl && item.imageUrl.startsWith("http")
+                item.imageUrl?.startsWith("http")
                   ? item.imageUrl
                   : item.imageUrl
                   ? `${process.env.NEXT_PUBLIC_API_URL}${item.imageUrl}`
@@ -134,6 +126,8 @@ export default function LatestHero({ post }: LatestHeroProps) {
                       src={thumb}
                       alt={item.title}
                       fill
+                      sizes="88px"
+                      quality={70}
                       className="object-cover"
                     />
                   </div>
@@ -152,13 +146,15 @@ export default function LatestHero({ post }: LatestHeroProps) {
                     <div className="flex items-center gap-3 text-xs text-gray-400 mt-2">
                       {item.author?.name && (
                         <span className="flex items-center gap-1">
-                          <img
+                          <Image
                             src={
                               item.author.avatarUrl ||
                               "/avatar-placeholder.png"
                             }
                             alt={item.author.name}
-                            className="w-5 h-5 rounded-full"
+                            width={20}
+                            height={20}
+                            className="rounded-full"
                           />
                           <span>{item.author.name}</span>
                         </span>
@@ -175,6 +171,7 @@ export default function LatestHero({ post }: LatestHeroProps) {
               )
             })}
           </div>
+
         </div>
       </div>
     </section>

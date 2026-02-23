@@ -5,7 +5,7 @@ import NewsletterForm from "@/components/news/NewsletterForm"
 
 export default async function NewsPage() {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=50`,
     { cache: "no-store" }
   )
 

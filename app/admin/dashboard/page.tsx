@@ -8,7 +8,7 @@ export default function DashboardPage() {
     async function fetchStats() {
       try {
         const [p, c, a] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=50`),
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`),
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/authors`),
         ]);

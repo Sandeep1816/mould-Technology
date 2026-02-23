@@ -22,7 +22,7 @@ export default function RelatedPostsCarousel() {
     async function fetchRelated() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=1000`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=50`
         )
         const data = await res.json()
         const allPosts = Array.isArray(data.data) ? data.data : []
