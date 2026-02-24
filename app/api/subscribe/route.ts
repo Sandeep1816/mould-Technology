@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     // 2️⃣ Send Thank-You Email (Using Your HTML Template)
     await transporter.sendMail({
-      from: `"MoldMaking Technology" <${process.env.EMAIL_USER}>`,
+      from: `"Tooling Technology" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "🎉 Thank You for Subscribing!",
       html: MMTThankYouEmail({ firstName }), // ⭐ TEMPLATE USED HERE

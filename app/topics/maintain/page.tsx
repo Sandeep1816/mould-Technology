@@ -76,7 +76,7 @@ export default async function MaintainPage() {
       {/* ================= BUILD PAGE CONTENT ================= */}
      <TopicListing
   posts={maintainPosts}
-  title="Maintain For Moldmaking"
+  title="Maintain For Toolmaking"
   description="Processes, best practices, and tooling strategies used to build, validate, and launch production molds."
   sectionTitle="Latest Build Articles"
 />

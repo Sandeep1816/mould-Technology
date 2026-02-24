@@ -333,46 +333,53 @@ export default function TrendingSection({ posts }: Props) {
           </Link>
         </div>
 
-        {/* TOP 3 SMALL POSTS */}
-        <div className="relative py-8">
-          <span className="absolute top-0 left-0 w-full h-px bg-white/10" />
-          <span className="absolute bottom-0 left-0 w-full h-px bg-white/10" />
+    {/* TOP 3 SMALL POSTS */}
+<div className="relative py-8">
+  <span className="absolute top-0 left-0 w-full h-px bg-white/10" />
+  <span className="absolute bottom-0 left-0 w-full h-px bg-white/10" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[s1, s2, s3].map(
-              (post, i) =>
-                post && (() => {
-                  const tag = getTag(post);
-                  return (
-                    <div key={i} className="flex gap-4">
-                      <Image
-                        src={imageUrl(post)}
-                        alt={post.title}
-                        width={90}
-                        height={90}
-                        sizes="90px"
-                        quality={70}
-                        className="rounded-lg object-cover"
-                      />
-                      <div>
-                        {tag.text && (
-                          <span
-                            className={`${tag.color} inline-block mb-2 text-xs font-bold px-3 py-1 rounded text-black`}
-                          >
-                            {tag.text}
-                          </span>
-                        )}
-                        <h3 className="text-[16px] font-semibold leading-snug">
-                          {post.title}
-                        </h3>
-                        <Meta post={post} />
-                      </div>
-                    </div>
-                  );
-                })()
-            )}
-          </div>
-        </div>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    {[s1, s2, s3].map(
+      (post, i) =>
+        post && (() => {
+          const tag = getTag(post);
+          return (
+            <Link
+              key={i}
+              href={`/post/${post.slug}`}
+              className="flex gap-4 group hover:opacity-90 transition"
+            >
+              <Image
+                src={imageUrl(post)}
+                alt={post.title}
+                width={90}
+                height={90}
+                sizes="90px"
+                quality={70}
+                className="rounded-lg object-cover"
+              />
+
+              <div>
+                {tag.text && (
+                  <span
+                    className={`${tag.color} inline-block mb-2 text-xs font-bold px-3 py-1 rounded text-black`}
+                  >
+                    {tag.text}
+                  </span>
+                )}
+
+                <h3 className="text-[16px] font-semibold leading-snug group-hover:text-gray-300 transition">
+                  {post.title}
+                </h3>
+
+                <Meta post={post} />
+              </div>
+            </Link>
+          );
+        })()
+    )}
+  </div>
+</div>
 
         {/* FEATURE POSTS */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

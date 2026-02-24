@@ -91,7 +91,7 @@ if (user?.role !== "admin") {
       Admin Panel
     </h1>
     <p className="text-xs text-white/70 mt-1">
-      Mold Technology
+      Tooling Trends
     </p>
   </div>
 

@@ -51,7 +51,7 @@ export default function ContentGateModal({ isOpen, onClose, onSubmit }: ContentG
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-[#003049] to-[#0077b6] text-white p-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Welcome to MoldMaking Technology!</h2>
+          <h2 className="text-2xl font-bold">Welcome to Tooling Technology!</h2>
           <button onClick={onClose} className="text-white hover:bg-white hover:bg-opacity-20 p-1 rounded transition">
             <X size={24} />
           </button>
@@ -152,7 +152,7 @@ export default function ContentGateModal({ isOpen, onClose, onSubmit }: ContentG
 
             {/* Privacy notice */}
             <p className="text-xs text-gray-600 text-center mt-4">
-              Your email address will be used to communicate with you about MoldMaking Technology subscription offers,
+              Your email address will be used to communicate with you about Tooling Technology subscription offers,
               related products and services. Refer to our{" "}
               <a href="#" className="text-[#0077b6] hover:underline">
                 Privacy Policy

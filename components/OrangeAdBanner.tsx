@@ -10,7 +10,7 @@ export default function OrangeAdBanner() {
         {/* Left Text Content */}
         <div className="flex-1">
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
-            SWAP MOLD VERSION FASTER
+            SWAP ToolingVERSION FASTER
           </h2>
           <p className="text-lg md:text-xl">
             Directly Through the parting Line
@@ -24,7 +24,7 @@ export default function OrangeAdBanner() {
           <div className="relative w-full max-w-[300px] h-40">
             <Image
               src="/industrial-mold-tool-product.jpg"
-              alt="CUMSA Mold Tool"
+              alt="CUMSA ToolingTool"
               fill
               className="object-contain"
               sizes="(max-width: 768px) 100vw, 300px"

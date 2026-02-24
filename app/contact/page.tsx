@@ -94,7 +94,7 @@ export default function ContactPage() {
               <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   { label: "Full Name*", type: "text", placeholder: "Robot fox" },
-                  { label: "Email Address*", type: "email", placeholder: "info@example.com" },
+                  { label: "Email Address*", type: "email", placeholder: "info@toolingtrends.com" },
                   { label: "Phone Number*", type: "text", placeholder: "(480) 555-0103" },
                   { label: "Website*", type: "text", placeholder: "www.toolingtrends.com" },
                 ].map((field, i) => (

@@ -75,7 +75,7 @@ export default async function BuildPage() {
       {/* ================= BUILD PAGE CONTENT ================= */}
      <TopicListing
   posts={buildPosts}
-  title="Build For Moldmaking"
+  title="Build For Toolmaking"
   description="Processes, best practices, and tooling strategies used to build, validate, and launch production molds."
   sectionTitle="Latest Build Articles"
 />

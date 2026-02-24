@@ -96,7 +96,7 @@ export default function PostDetailsPage() {
   if (!post) return <Loader />
 
   const embedUrl = getYoutubeEmbed(post.youtubeUrl)
-  const isVideo = post.category?.slug === "videos"
+  const isVideo = post.category?.slug === "video"
 
   const imageUrl =
     post.imageUrl?.startsWith("http")

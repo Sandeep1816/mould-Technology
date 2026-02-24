@@ -23,7 +23,7 @@ export const MMTThankYouEmail = ({
           <tr>
             <td style="background:#004d73;padding:20px;text-align:center;">
               <h1 style="color:#ffffff;margin:0;font-size:26px;font-weight:700;">
-                MoldMaking Technology
+                Tooling Technology
               </h1>
             </td>
           </tr>
@@ -36,8 +36,8 @@ export const MMTThankYouEmail = ({
               </p>
 
               <p style="font-size:16px;color:#333;line-height:1.6;">
-                Thank you for subscribing to <strong>MoldMaking Technology</strong>.
-                You're now part of a community committed to innovation in mold design,
+                Thank you for subscribing to <strong>Tooling Technology</strong>.
+                You're now part of a community committed to innovation in Toolingdesign,
                 machining, and tooling excellence.
               </p>
 
@@ -49,7 +49,7 @@ export const MMTThankYouEmail = ({
                 <li>Latest industry news</li>
                 <li>Expert insights and technical articles</li>
                 <li>Event updates and webinars</li>
-                <li>Design, machining & mold maintenance strategies</li>
+                <li>Design, machining & Tooling maintenance strategies</li>
               </ul>
 
               <div style="background:#004d73;color:white;margin:25px 0;padding:18px;border-radius:6px;text-align:center;font-size:17px;">
@@ -59,8 +59,8 @@ export const MMTThankYouEmail = ({
               <p style="font-size:15px;color:#555;line-height:1.6;">
                 If you have any questions, feel free to reach us at:
                 <br />
-                <a href="mailto:info@moldmakingtechnology.com" style="color:#004d73;font-weight:bold;text-decoration:none;">
-                  info@moldmakingtechnology.com
+                <a href="mailto:info@toolingtechnology.com" style="color:#004d73;font-weight:bold;text-decoration:none;">
+                  info@toolingtechnology.com
                 </a>
               </p>
             </td>
@@ -70,7 +70,7 @@ export const MMTThankYouEmail = ({
           <tr>
             <td style="background:#00344f;padding:20px;text-align:center;">
               <p style="color:white;margin:0;font-size:12px;">
-                © 2025 MoldMaking Technology. All rights reserved.
+                © 2025 Tooling Technology. All rights reserved.
               </p>
             </td>
           </tr>

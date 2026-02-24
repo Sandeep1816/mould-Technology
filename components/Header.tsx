@@ -17,10 +17,12 @@ type User = {
 
 /* ================= MENUS ================= */
 const TOPICS = [
-  { label: "Engineer", slug: "engineer" },
-  { label: "Build", slug: "build" },
-  { label: "Maintain", slug: "maintain" },
-  { label: "Manage", slug: "manage" },
+  { label: "Machining", slug: "engineer" },
+  { label: "Cutting Tools ", slug: "build" },
+  { label: "Surface Engineering", slug: "maintain" },
+  { label: "Smart Manufacturing", slug: "manage" },
+  { label: "Advanced Manufacturing", slug: "maintain" },
+  { label: "Maintenance & Operations", slug: "manage" },
 ]
 
 const RESOURCES = [
@@ -28,8 +30,8 @@ const RESOURCES = [
   { label: "Videos", slug: "videos" },
   { label: "Events", slug: "events" },
   { label: "Suppliers", slug: "suppliers" },
-  { label: "Basics", slug: "basics" },
-  { label: "Mold Design & Optimization", slug: "mold-design-optimization" },
+  // { label: "Basics", slug: "basics" },
+  { label: "ToolingDesign & Optimization", slug: "mold-design-optimization" },
 ]
 
 export default function Header() {
@@ -88,7 +90,7 @@ export default function Header() {
           <Link href="/" className="flex items-center">
             <Image
               src="/images/tooling-red.png"
-              alt="MoldMaking Technology Logo"
+              alt="Tooling Technology Logo"
               width={300}
               height={127}
               priority
@@ -259,7 +261,7 @@ export default function Header() {
                 <button
                   key={item.slug}
                   onMouseEnter={() => setActiveSlug(item.slug)}
-                  className={`w-full px-5 py-4 text-left uppercase font-bold transition-colors ${
+                  className={`w-full px-5 py-4 text-left  font-bold transition-colors ${
                     activeSlug === item.slug
                       ? "bg-[#062E45] text-white"
                       : "text-white hover:bg-[#0F5D86]"

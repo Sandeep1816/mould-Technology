@@ -9,6 +9,14 @@ type LatestHeroProps = {
   post: Post
   posts: Post[]
 }
+const CATEGORY_COLORS: Record<string, string> = {
+  basics: "bg-[#0073ff]",
+  trending: "bg-[#F59E0B]",
+  latest: "bg-[#F69C00]",
+  video: "bg-[#EF4444]",
+  engineering: "bg-[#2563EB]",
+};
+
 
 export default function LatestHero({ post, posts }: LatestHeroProps) {
 
@@ -42,6 +50,34 @@ export default function LatestHero({ post, posts }: LatestHeroProps) {
       })
     : "Today"
 
+    const getTag = (item: Post) => {
+  const badge = item?.badge?.trim();
+
+  const slug =
+    typeof item.category === "object"
+      ? item.category?.slug?.toLowerCase() || ""
+      : String(item.category || "").toLowerCase();
+
+  const categoryName =
+    typeof item.category === "object"
+      ? item.category?.name || ""
+      : String(item.category || "");
+
+  const text = badge || categoryName;
+
+  const matchedKey = Object.keys(CATEGORY_COLORS).find((key) =>
+    slug.includes(key)
+  );
+
+  const color = matchedKey
+    ? CATEGORY_COLORS[matchedKey]
+    : "bg-[#0073ff]";
+
+  return { text, color };
+};
+
+
+
   return (
     <section className="pt-[40px] w-full">
       <div className="max-w-[1320px] mx-auto px-[12px]">
@@ -65,11 +101,16 @@ export default function LatestHero({ post, posts }: LatestHeroProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
             <div className="absolute bottom-0 p-6 text-white max-w-[90%]">
-              {typeof post.category === "object" && post.category?.name && (
-                <span className="inline-block bg-orange-500 text-xs font-semibold px-3 py-1 rounded-full mb-3">
-                  {post.category.name}
-                </span>
-              )}
+             {(() => {
+  const tag = getTag(post);
+  return tag.text ? (
+    <span
+      className={`inline-block ${tag.color} text-xs font-semibold px-3 py-1 rounded-full mb-3 text-white`}
+    >
+      {tag.text}
+    </span>
+  ) : null;
+})()}
 
               <h1 className="text-white text-2xl md:text-3xl font-bold leading-snug mb-3">
                 {post.title}
@@ -133,11 +174,16 @@ export default function LatestHero({ post, posts }: LatestHeroProps) {
                   </div>
 
                   <div className="flex-1">
-                    {typeof item.category === "object" && item.category?.name && (
-                      <span className="inline-block text-xs font-semibold px-2 py-1 rounded bg-green-500 text-white mb-2">
-                        {item.category.name}
-                      </span>
-                    )}
+                    {(() => {
+  const tag = getTag(item);
+  return tag.text ? (
+    <span
+      className={`inline-block text-xs font-semibold px-2 py-1 rounded ${tag.color} text-white mb-2`}
+    >
+      {tag.text}
+    </span>
+  ) : null;
+})()}
 
                     <h3 className="text-[17px] font-semibold leading-snug text-[#121213] group-hover:text-blue-600 transition">
                       {item.title}

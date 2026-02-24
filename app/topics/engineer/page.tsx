@@ -77,8 +77,8 @@ export default async function EngineerPage() {
       {/* ================= ENGINEER PAGE CONTENT ================= */}
      <TopicListing
   posts={engineerPosts}
-  title="Engineering For Moldmaking"
-  description="Strategies to de-risk launches through part and mold simulation, additive manufacturing or conformal cooling, and troubleshooting during tool validation."
+  title="Engineering For Toolmaking"
+  description="Strategies to de-risk launches through part and Toolingsimulation, additive manufacturing or conformal cooling, and troubleshooting during tool validation."
   sectionTitle="Latest Engineer Articles"
 />
 

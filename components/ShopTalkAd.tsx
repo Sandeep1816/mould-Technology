@@ -19,7 +19,7 @@ export default function ShopTalkAd() {
           <div className="flex gap-8 text-sm">
             <div>
               <p className="font-bold">Presented by</p>
-              <p className="text-lg font-bold">MoldMaking TECHNOLOGY.</p>
+              <p className="text-lg font-bold">Tooling Technology.</p>
             </div>
             <div>
               <p className="font-bold">Sponsored by</p>

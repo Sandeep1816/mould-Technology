@@ -28,7 +28,7 @@ export default function Sidebar() {
           <ul className="space-y-2 text-sm">
             <li>
               <a href="#" className="text-blue-600 hover:underline">
-                Mold Manufacturing
+                ToolingManufacturing
               </a>
             </li>
             <li>

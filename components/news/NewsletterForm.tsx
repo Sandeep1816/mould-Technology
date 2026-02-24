@@ -38,7 +38,7 @@ export default function NewsletterForm() {
           </h2>
 
           <p className="text-gray-600 mb-8">
-            MoldMaking Technology magazine is devoted to the moldmaking industry.
+            Tooling Technology magazine is devoted to the Toolmaking industry.
             Find out the processes and strategies shops around the world use to
             become more effective and efficient.
           </p>

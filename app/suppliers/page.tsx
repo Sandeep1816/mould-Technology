@@ -181,13 +181,13 @@ export default function SuppliersPage() {
             <div className="relative w-full h-[96px] sm:h-[140px] md:h-[160px] rounded-lg overflow-hidden">
               <img
                 src="/images/search-landscape.jpg"
-                alt="Find a MoldMaking Technology Supplier"
+                alt="Find a Tooling Technology Supplier"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute inset-0 flex items-center justify-center px-4">
                 <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold text-center">
-                  Find a MoldMaking Technology Supplier
+                  Find a Tooling Technology Supplier
                 </h1>
               </div>
             </div>

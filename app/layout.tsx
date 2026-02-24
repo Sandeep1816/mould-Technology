@@ -17,7 +17,7 @@ const interTight = Inter_Tight({
 })
 
 export const metadata: Metadata = {
-  title: "Mould Technology",
+  title: "Tooling Trends - Industrial & Manufacturing Technology News",
   description: "Industrial & Manufacturing Technology News",
 }
 

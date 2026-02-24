@@ -19,19 +19,19 @@ export default function MMTThankYouPage() {
         </h2>
 
         <p className="text-lg text-gray-800 font-semibold mb-4">
-          Welcome to the MoldMaking Technology Community
+          Welcome to the Tooling Technology Community
         </p>
 
         <p className="text-gray-600 leading-relaxed mb-8">
           Thank you for subscribing to MMT. You’ll now receive industry insights,  
-          mold design news, machining techniques, and much more — straight to your inbox.
+          tooling design news, machining techniques, and much more — straight to your inbox.
         </p>
 
         {/* Divider */}
         <div className="w-full h-[1px] bg-gray-200 my-6" />
 
         <p className="text-gray-500 text-sm mb-10">
-          Stay updated with the latest in moldmaking, manufacturing,  
+          Stay updated with the latest in Toolmaking, manufacturing,  
           and advanced tooling technology.
         </p>
 

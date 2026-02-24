@@ -93,7 +93,7 @@ export default function SubscribeModal({ isOpen, onClose }: SubscribeModalProps)
                     </h2>
                     
                     <p className="text-blue-100 text-lg mb-8 leading-relaxed">
-                      Join the MoldMaking Technology Community
+                      Join the Tooling Technology Community
                     </p>
 
                     {/* Newsletter Preview Description */}
@@ -179,7 +179,7 @@ export default function SubscribeModal({ isOpen, onClose }: SubscribeModalProps)
                     className="mt-1 w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-2 focus:ring-red-600 cursor-pointer"
                   />
                   <label htmlFor="terms" className="text-sm text-gray-700 leading-relaxed">
-                    I agree to receive emails from MoldMaking Technology and accept the <a href="#" className="text-red-600 font-semibold hover:underline">privacy policy</a>
+                    I agree to receive emails from Tooling Technology and accept the <a href="#" className="text-red-600 font-semibold hover:underline">privacy policy</a>
                   </label>
                 </div>
 

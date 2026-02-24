@@ -43,13 +43,13 @@ export default function SubscribePage() {
         {/* LEFT AREA */}
         <div>
           <h1 className="text-6xl font-semibold leading-tight mb-8">
-            Subscribe to MoldMaking Technology
+            Subscribe to Tooling Technology
           </h1>
 
           <p className="text-gray-700 text-xl leading-relaxed mb-10 max-w-[650px]">
-            MoldMaking Technology magazine addresses the complete lifecycle of
-            the manufacture and maintenance of a mold – from design to first shot –
-            by providing solutions and strategies to moldmaking professionals
+            Tooling Technology magazine addresses the complete lifecycle of
+            the manufacture and maintenance of a Tooling– from design to first shot –
+            by providing solutions and strategies to Toolmaking professionals
             charged with designing, building and repairing molds.
           </p>
 
@@ -62,12 +62,12 @@ export default function SubscribePage() {
 
           <label className="flex items-center gap-3 mb-3 text-lg">
             <input type="checkbox" className="w-5 h-5" />
-            Subscribe me to the <b><i>MoldMaking Technology</i></b> newsletter
+            Subscribe me to the <b><i>Tooling Technology</i></b> newsletter
           </label>
 
           <label className="flex items-center gap-3 mb-3 text-lg">
             <input type="checkbox" className="w-5 h-5" defaultChecked />
-            Subscribe me to <b><i>MoldMaking Technology</i></b> magazine
+            Subscribe me to <b><i>Tooling Technology</i></b> magazine
           </label>
         </div>
 
@@ -76,7 +76,7 @@ export default function SubscribePage() {
   <div className="relative w-[450px] h-[550px]">
     <Image
       src="/recycled-materials-manufacturing.jpg"
-      alt="Mold manufacturing process"
+      alt="Toolingmanufacturing process"
       fill
       className="object-contain"
       priority
@@ -161,7 +161,7 @@ export default function SubscribePage() {
                     disabled={isSubmitting}
                     className="bg-[#004d73] hover:bg-[#003a59] text-white text-xl font-bold px-16 py-4 rounded shadow-md"
                   >
-                    Subscribe To MoldMaking Technology
+                    Subscribe To Tooling Technology
                   </button>
                 </div>
 

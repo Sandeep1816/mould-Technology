@@ -174,7 +174,7 @@ export default function NewsProductsSection({
                     "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif",
                 }}
               >
-                SWAP MOLD VERSION FASTER
+                SWAP ToolingVERSION FASTER
               </h4>
 
               <p

@@ -44,11 +44,11 @@ export default function EngineerListing({ posts }: Props) {
               className="text-[36px] font-bold text-[#003B5C] mb-4 leading-tight"
               style={{ fontFamily: "Oswald, Helvetica Neue, Helvetica, Arial, sans-serif" }}
             >
-              Engineering For Moldmaking
+              Engineering For Toolmaking
             </h1>
 
             <p className="text-[15px] text-[#333] leading-relaxed">
-              Strategies to de-risk launches through part and mold simulation,
+              Strategies to de-risk launches through part and Toolingsimulation,
               additive manufacturing or conformal cooling, and troubleshooting
               during tool validation are all parts of the engineering required
               to design a good mold.

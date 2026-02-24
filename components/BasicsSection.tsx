@@ -121,6 +121,16 @@ import { useMemo } from "react";
 import type { Post } from "../types/Post";
 import SupplierAds from "@/components/SupplierAds";
 
+/* ================= CATEGORY COLORS ================= */
+
+const CATEGORY_COLORS: Record<string, string> = {
+  basics: "bg-[#0073ff]",
+  trending: "bg-[#F59E0B]",
+  latest: "bg-[#F69C00]",
+  video: "bg-[#EF4444]",
+  engineering: "bg-[#2563EB]",
+};
+
 type Props = {
   posts: Post[];
 };
@@ -141,12 +151,42 @@ export default function BasicsSection({ posts }: Props) {
 
   if (!basicsPosts.length) return null;
 
+  /* ================= IMAGE HELPER ================= */
+
   const imageUrl = (post: Post) =>
     post.imageUrl?.startsWith("http")
       ? post.imageUrl
       : post.imageUrl
       ? `${process.env.NEXT_PUBLIC_API_URL}${post.imageUrl}`
       : "/placeholder.jpg";
+
+  /* ================= UPDATED TAG LOGIC ================= */
+
+ const getTag = (post: Post) => {
+  const badge = post?.badge?.trim();
+
+  const slug =
+    typeof post?.category === "object"
+      ? post?.category?.slug?.toLowerCase() || ""
+      : String(post?.category || "").toLowerCase();
+
+  // COLOR strictly from category
+  const matchedKey = Object.keys(CATEGORY_COLORS).find((key) =>
+    slug.includes(key)
+  );
+
+  const color =
+    matchedKey
+      ? CATEGORY_COLORS[matchedKey]
+      : "bg-[#0073ff]"; // fallback blue
+
+  return {
+    text: badge, // ONLY badge
+    color,
+  };
+};
+
+  /* ================= RENDER ================= */
 
   return (
     <section className="bg-[#f7f7f7] py-12 sm:py-16">
@@ -171,48 +211,54 @@ export default function BasicsSection({ posts }: Props) {
 
           {/* LEFT CONTENT */}
           <div className="space-y-10">
-            {basicsPosts.map((post) => (
-              <article
-                key={post.id}
-                className="flex flex-col sm:flex-row gap-5 pb-10 border-b border-[#e5e5e5]"
-              >
-                {/* IMAGE */}
-                <Link
-                  href={`/post/${post.slug}`}
-                  className="relative w-full sm:w-[260px] h-[200px] sm:h-[170px] shrink-0 overflow-hidden rounded-md"
+            {basicsPosts.map((post) => {
+              const tag = getTag(post);
+
+              return (
+                <article
+                  key={post.id}
+                  className="flex flex-col sm:flex-row gap-5 pb-10 border-b border-[#e5e5e5]"
                 >
-                  <Image
-                    src={imageUrl(post)}
-                    alt={post.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 260px"
-                    quality={70}
-                    className="object-cover hover:scale-105 transition"
-                  />
-                </Link>
+                  {/* IMAGE */}
+                  <Link
+                    href={`/post/${post.slug}`}
+                    className="relative w-full sm:w-[260px] h-[200px] sm:h-[170px] shrink-0 overflow-hidden rounded-md"
+                  >
+                    <Image
+                      src={imageUrl(post)}
+                      alt={post.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 260px"
+                      quality={70}
+                      className="object-cover hover:scale-105 transition"
+                    />
+                  </Link>
 
-                {/* CONTENT */}
-                <div className="flex-1">
-                  <span className="inline-block mb-2 text-[11px] font-bold uppercase bg-[#0073ff] text-white px-3 py-[2px]">
-                    {typeof post.category === "object"
-                      ? post.category?.name
-                      : post.category}
-                  </span>
+                  {/* CONTENT */}
+                  <div className="flex-1">
+                    {tag.text && (
+                      <span
+                        className={`${tag.color} inline-block mb-2 text-[11px] font-bold uppercase text-white px-3 py-[2px]`}
+                      >
+                        {tag.text}
+                      </span>
+                    )}
 
-                  <h3 className="text-lg sm:text-xl font-semibold text-[#121213] leading-snug">
-                    <Link href={`/post/${post.slug}`}>
-                      {post.title}
-                    </Link>
-                  </h3>
+                    <h3 className="text-lg sm:text-xl font-semibold text-[#121213] leading-snug">
+                      <Link href={`/post/${post.slug}`}>
+                        {post.title}
+                      </Link>
+                    </h3>
 
-                  {post.excerpt && (
-                    <p className="mt-3 text-sm sm:text-[15px] text-[#616c74] leading-relaxed line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                  )}
-                </div>
-              </article>
-            ))}
+                    {post.excerpt && (
+                      <p className="mt-3 text-sm sm:text-[15px] text-[#616c74] leading-relaxed line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           {/* RIGHT SIDEBAR */}

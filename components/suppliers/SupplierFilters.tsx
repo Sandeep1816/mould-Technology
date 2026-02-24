@@ -17,7 +17,7 @@ export default function SupplierFilters() {
           "Additive Manufacturing",
           "Automation & AI",
           "Materials",
-          "Mold Making",
+          "ToolingMaking",
           "Metalworking",
           "Workholding",
         ].map((cat) => (

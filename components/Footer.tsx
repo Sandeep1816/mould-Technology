@@ -33,7 +33,7 @@ text-black">
               <Link href="/" className="inline-block mb-4">
                 <Image
                   src="/images/tooling-red.png"
-                  alt="MoldMaking Technology Logo"
+                  alt="Tooling Technology Logo"
                   width={200}
                   height={67}
                   className="w-auto h-14 sm:h-16"
@@ -41,7 +41,7 @@ text-black">
               </Link>
 
               <p className="text-sm leading-relaxed mb-5 max-w-md mx-auto sm:mx-0">
-                MoldMaking Technology addresses the complete life cycle of mold manufacturing and maintenance—providing solutions to professionals charged with designing, building and repairing molds.
+                Tooling Technology addresses the complete life cycle of Toolingmanufacturing and maintenance—providing solutions to professionals charged with designing, building and repairing molds.
               </p>
 
               {/* Social Icons - Mobile */}
@@ -191,7 +191,7 @@ text-black">
               <Link href="/" className="inline-block mb-6">
                 <Image
                   src="/images/tooling-red.png"
-                  alt="MoldMaking Technology Logo"
+                  alt="Tooling Technology Logo"
                   width={240}
                   height={80}
                   className="w-auto h-20"
@@ -199,7 +199,7 @@ text-black">
               </Link>
 
               <p className="text-sm leading-relaxed mb-6 max-w-sm">
-                MoldMaking Technology addresses the complete life cycle of the manufacture and maintenance of a mold—from design to first shot—by providing solutions and strategies to moldmaking professionals charged with designing, building and repairing molds.
+                Tooling Technology addresses the complete life cycle of the manufacture and maintenance of a mold—from design to first shot—by providing solutions and strategies to Toolmaking professionals charged with designing, building and repairing molds.
               </p>
 
               {/* Social Icons - Desktop */}
