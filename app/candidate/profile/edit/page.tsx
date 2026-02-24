@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
@@ -85,11 +85,15 @@ export default function EditCandidateProfilePage() {
 
         {/* ================= AVATAR ================= */}
         <div className="flex items-center gap-4">
-          <img
-            src={profile.avatarUrl || "https://i.pravatar.cc/100"}
-            className="w-20 h-20 rounded-full object-cover border"
-            alt="Avatar"
-          />
+       <div className="relative w-20 h-20">
+  <Image
+    src={profile.avatarUrl || "https://i.pravatar.cc/100"}
+    alt="Avatar"
+    fill
+    className="rounded-full object-cover border"
+    sizes="80px"
+  />
+</div>
 
           <label className="text-sm cursor-pointer">
             <span className="text-blue-600 hover:underline">

@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { MapPin, CheckCircle, Pencil } from "lucide-react"
 import Link from "next/link"
 
@@ -51,10 +52,15 @@ export default async function CandidateProfilePage(props: {
             <div className="p-6 relative">
 
               {/* AVATAR */}
-              <img
-                src={candidate.avatarUrl || "https://i.pravatar.cc/180"}
-                className="w-40 h-40 rounded-full border-4 border-white absolute -top-20 left-6 bg-white"
-              />
+              <div className="relative w-40 h-40 absolute -top-20 left-6">
+  <Image
+    src={candidate.avatarUrl || "https://i.pravatar.cc/180"}
+    alt={candidate.fullName || candidate.username}
+    fill
+    className="rounded-full border-4 border-white object-cover bg-white"
+    sizes="160px"
+  />
+</div>
 
               <div className="pt-24 flex justify-between gap-6">
 

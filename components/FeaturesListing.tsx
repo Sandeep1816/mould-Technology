@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import type { Post } from "@/types/Post"
 
@@ -22,6 +23,7 @@ export default function FeaturesListing({ posts }: Props) {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10">
+
         {/* LEFT – FEATURE LIST */}
         <div className="space-y-10">
           {posts.map((post) => {
@@ -46,15 +48,18 @@ export default function FeaturesListing({ posts }: Props) {
                 className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 pb-10 border-b border-gray-200"
               >
                 {/* IMAGE */}
-                <img
-                  src={imageUrl}
-                  alt={post.title}
-                  className="w-full h-[180px] object-contain border bg-white"
-                />
+                <div className="relative w-full h-[180px] border bg-white">
+                  <Image
+                    src={imageUrl}
+                    alt={post.title}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width:768px) 100vw, 260px"
+                  />
+                </div>
 
                 {/* CONTENT */}
                 <div>
-                  {/* BADGE + DATE */}
                   <div className="flex items-center gap-3 mb-2">
                     <span className="bg-gray-700 text-white text-xs px-2 py-1 font-bold uppercase">
                       {post.badge || "Feature"}
@@ -64,7 +69,6 @@ export default function FeaturesListing({ posts }: Props) {
                     </span>
                   </div>
 
-                  {/* TITLE */}
                   <h2
                     className="text-[22px] font-bold text-gray-900 leading-snug mb-3"
                     style={{
@@ -75,7 +79,6 @@ export default function FeaturesListing({ posts }: Props) {
                     {post.title}
                   </h2>
 
-                  {/* EXCERPT */}
                   <p className="text-gray-600 text-[15px] leading-relaxed mb-4">
                     {post.excerpt ||
                       post.content
@@ -83,7 +86,6 @@ export default function FeaturesListing({ posts }: Props) {
                         .substring(0, 160) + "..."}
                   </p>
 
-                  {/* CTA */}
                   <Link
                     href={`/post/${post.slug}`}
                     className="text-[#0072BC] font-bold text-sm uppercase hover:underline"
@@ -106,13 +108,21 @@ export default function FeaturesListing({ posts }: Props) {
           )}
         </div>
 
-        {/* RIGHT – ADS (SAME AS PRODUCTS) */}
+        {/* RIGHT – ADS */}
         <aside className="space-y-6 sticky top-24 h-fit">
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-          <img src="/advertisement-banner.jpg" className="w-full border" />
+          {[1, 2, 3, 4].map((_, i) => (
+            <div key={i} className="relative w-full h-[200px] border">
+              <Image
+                src="/advertisement-banner.jpg"
+                alt="Advertisement"
+                fill
+                className="object-cover"
+                sizes="300px"
+              />
+            </div>
+          ))}
         </aside>
+
       </div>
     </section>
   )

@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import Link from "next/link"
 import type { Post } from "@/types/Post"
 
@@ -51,13 +51,17 @@ export default function ArchiveListing({ posts }: Props) {
             return (
               <div key={post.id} className="text-center">
                 {/* COVER IMAGE */}
-                <Link href={`/post/${post.slug}`}>
-                  <img
-                    src={imageUrl}
-                    alt={post.title}
-                    className="mx-auto mb-5 max-h-[420px] shadow-lg hover:scale-[1.02] transition-transform"
-                  />
-                </Link>
+               <Link href={`/post/${post.slug}`}>
+  <div className="relative w-full h-[420px] mb-5 shadow-lg overflow-hidden">
+    <Image
+      src={imageUrl}
+      alt={post.title}
+      fill
+      className="object-contain hover:scale-[1.02] transition-transform"
+      sizes="(max-width:768px) 100vw, 400px"
+    />
+  </div>
+</Link>
 
                 {/* DATE */}
                 <h3 className="text-[18px] font-semibold text-[#6B7280] mb-2">
@@ -87,11 +91,19 @@ export default function ArchiveListing({ posts }: Props) {
         </div>
 
         {/* RIGHT – ADS */}
-        <aside className="space-y-6 sticky top-24 h-fit">
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-        </aside>
+       <aside className="space-y-6 sticky top-24 h-fit">
+  {[1, 2, 3].map((_, i) => (
+    <div key={i} className="relative w-full h-[200px] border">
+      <Image
+        src="/advertisement-banner.jpg"
+        alt="Advertisement"
+        fill
+        className="object-cover"
+        sizes="300px"
+      />
+    </div>
+  ))}
+</aside>
       </div>
 
       {/* MOBILE SEE MORE */}

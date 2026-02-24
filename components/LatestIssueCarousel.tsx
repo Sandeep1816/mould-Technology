@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image"
 
 import { useState } from "react"
 import Link from "next/link"
@@ -53,8 +54,15 @@ export default function LatestIssueCarousel({ posts }: LatestIssueCarouselProps)
               return (
                 <div key={idx} className="flex-shrink-0 w-1/5 bg-white rounded-lg overflow-hidden shadow-lg">
                   {/* Card Image */}
-                  <img src={imageUrl || "/placeholder.svg"} alt={post.title} className="w-full h-48 object-cover" />
-
+                  <div className="relative w-full h-48">
+  <Image
+    src={imageUrl || "/placeholder.svg"}
+    alt={post.title}
+    fill
+    className="object-cover"
+    sizes="(max-width: 1024px) 50vw, 20vw"
+  />
+</div>
                   {/* Card Content */}
                   <div className="p-4">
                     <h3 className="text-lg font-bold text-gray-900 line-clamp-3 mb-3">{post.title}</h3>

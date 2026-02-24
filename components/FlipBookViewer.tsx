@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import dynamic from "next/dynamic"
 import { useEffect, useRef, useState } from "react"
 import { Maximize2, X } from "lucide-react"
@@ -103,11 +103,16 @@ export default function FlipBookViewer({ pages }: Props) {
           >
             {pages.map((page, index) => (
               <div key={index} className="bg-white">
-                <img
-                  src={page}
-                  alt={`Page ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
+                <div className="relative w-full h-full">
+  <Image
+    src={page}
+    alt={`Page ${index + 1}`}
+    fill
+    className="object-cover"
+    unoptimized
+    sizes="100vw"
+  />
+</div>
               </div>
             ))}
           </HTMLFlipBook>
@@ -150,11 +155,16 @@ export default function FlipBookViewer({ pages }: Props) {
       >
         {pages.map((page, index) => (
           <div key={index} className="bg-white">
-            <img
-              src={page}
-              alt={`Page ${index + 1}`}
-              className="w-full h-full object-cover"
-            />
+           <div className="relative w-full h-full">
+  <Image
+    src={page}
+    alt={`Page ${index + 1}`}
+    fill
+    className="object-cover"
+    unoptimized
+    sizes="100vw"
+  />
+</div>
           </div>
         ))}
       </HTMLFlipBook>

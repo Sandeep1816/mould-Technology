@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import SupplierAds from "@/components/SupplierAds"
 
@@ -63,12 +64,16 @@ export default function MagazineArchive() {
 
                   <Link href={`/magazines/${mag.slug}`}>
                     {mag.coverImageUrl && (
-                      <img
-                        src={mag.coverImageUrl}
-                        alt={mag.title}
-                        className="mx-auto h-[300px] object-contain drop-shadow-md transition-transform duration-300 hover:scale-105"
-                      />
-                    )}
+  <div className="relative mx-auto w-full h-[300px]">
+    <Image
+      src={mag.coverImageUrl}
+      alt={mag.title}
+      fill
+      className="object-contain drop-shadow-md transition-transform duration-300 hover:scale-105"
+      sizes="(max-width:768px) 100vw, 300px"
+    />
+  </div>
+)}
                   </Link>
 
                   <h3 className="mt-6 text-[16px] font-semibold text-gray-700">

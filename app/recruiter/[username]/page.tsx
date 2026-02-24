@@ -1,3 +1,5 @@
+
+import Image from "next/image"
 import { MapPin, Link2, CheckCircle } from "lucide-react"
 import Link from "next/link"
 import RecruiterJobPosts from "./RecruiterJobPosts"
@@ -44,11 +46,18 @@ export default async function RecruiterProfilePage(props: {
           <div className="flex gap-6">
 
             {/* Avatar */}
-            <img
-              src={recruiter.avatarUrl || "https://i.pravatar.cc/160"}
-              alt={recruiter.username}
-              className="w-36 h-36 rounded-full border-4 border-white"
-            />
+           <div className="relative w-36 h-36">
+  <Image
+    src={
+      recruiter.avatarUrl ||
+      "https://i.pravatar.cc/160"
+    }
+    alt={recruiter.username}
+    fill
+    className="rounded-full border-4 border-white object-cover"
+    sizes="144px"
+  />
+</div>
 
             {/* Info */}
             <div className="flex-1">

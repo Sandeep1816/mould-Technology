@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { MapPin, Briefcase, CheckCircle } from "lucide-react"
@@ -93,10 +93,18 @@ export default function CompanyProfilePage(props: {
           <div className="h-48 bg-gradient-to-r from-slate-800 to-slate-900" />
 
           <div className="p-6 flex gap-6">
-            <img
-              src={company.logoUrl || "https://ui-avatars.com/api/?name=Company"}
-              className="w-28 h-28 rounded-lg bg-white border -mt-16"
-            />
+           <div className="relative w-28 h-28 -mt-16">
+  <Image
+    src={
+      company.logoUrl ||
+      "https://ui-avatars.com/api/?name=Company"
+    }
+    alt={company.name}
+    fill
+    className="rounded-lg bg-white border object-contain"
+    sizes="112px"
+  />
+</div>
 
             <div className="flex-1">
               <h1 className="text-2xl font-bold flex items-center gap-2">

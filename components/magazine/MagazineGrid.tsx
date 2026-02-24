@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 
@@ -53,13 +53,18 @@ export default function MagazineGrid({
           Latest Issue
         </h2>
 
-        <Link href={`/magazines/${mag.slug}`}>
-          <img
-            src={mag.coverImageUrl}
-            alt={mag.title}
-            className="w-[220px] shadow-xl mb-6 cursor-pointer"
-          />
-        </Link>
+       <Link href={`/magazines/${mag.slug}`}>
+  <div className="relative w-[220px] h-[300px] mb-6">
+    <Image
+      src={mag.coverImageUrl || "/placeholder.svg"}
+      alt={mag.title}
+      fill
+      priority
+      className="object-contain shadow-xl cursor-pointer"
+      sizes="220px"
+    />
+  </div>
+</Link>
 
         <p className="text-[#003B5C] font-semibold mb-2">
           {mag.createdAt
@@ -89,11 +94,16 @@ export default function MagazineGrid({
           <Link key={mag.id} href={`/magazines/${mag.slug}`}>
             <div className=" overflow-hidden shadow hover:shadow-lg transition cursor-pointer">
               {mag.coverImageUrl && (
-                <img
-                  src={mag.coverImageUrl}
-                  className="h-64 w-full object-cover"
-                />
-              )}
+  <div className="relative w-full h-64">
+    <Image
+      src={mag.coverImageUrl}
+      alt={mag.title}
+      fill
+      className="object-cover"
+      sizes="(max-width:768px) 100vw, 33vw"
+    />
+  </div>
+)}
               <div className="p-4">
                 <h3 className="font-semibold text-lg">{mag.title}</h3>
               </div>

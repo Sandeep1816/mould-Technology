@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 
 type ArticleCardProps = {
   post: any
@@ -27,11 +28,15 @@ export default function ArticleCard({ post }: ArticleCardProps) {
       <div className="flex gap-6 pb-8 border-b border-gray-200 group cursor-pointer">
         {/* Thumbnail */}
         <div className="flex-shrink-0">
-          <img
-            src={imageUrl || "/placeholder.svg"}
-            alt={post.title}
-            className="w-24 h-24 object-cover border border-gray-300 group-hover:opacity-80 transition-opacity"
-          />
+          <div className="relative w-24 h-24">
+  <Image
+    src={imageUrl || "/placeholder.svg"}
+    alt={post.title}
+    fill
+    className="object-cover border border-gray-300 group-hover:opacity-80 transition-opacity"
+    sizes="96px"
+  />
+</div>
         </div>
 
         {/* Content */}

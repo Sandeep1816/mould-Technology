@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { useEffect, useState } from "react"
 import UploadBox from "@/components/UploadBox"
 import { useRouter } from "next/navigation"
@@ -193,10 +193,15 @@ export default function CreateCoverStoryPage() {
         <div className="grid grid-cols-4 gap-4">
           {form.slugImageUrls.map((img, index) => (
             <div key={index} className="relative">
-              <img
-                src={img}
-                className="w-full h-32 object-cover rounded border"
-              />
+             <div className="relative w-full h-32">
+  <Image
+    src={img}
+    alt={`Preview ${index + 1}`}
+    fill
+    className="object-cover rounded border"
+    sizes="(max-width: 768px) 100vw, 200px"
+  />
+</div>
               <button
                 onClick={() => removeImage(index)}
                 className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded"

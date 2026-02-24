@@ -175,11 +175,15 @@ export default function Header() {
             onClick={() => setOpenUserMenu(!openUserMenu)}
             className="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-md text-white hover:bg-white/20 transition border border-white/20"
           >
-            <img
-              src="https://i.pravatar.cc/40"
-              alt="User avatar"
-              className="w-8 h-8 rounded-full border-2 border-white/30"
-            />
+           <div className="relative w-8 h-8">
+  <Image
+    src="https://i.pravatar.cc/40"
+    alt="User avatar"
+    fill
+    className="rounded-full object-cover border-2 border-white/30"
+    sizes="32px"
+  />
+</div>
 
             <div className="text-left">
               <p className="text-sm font-semibold leading-tight">
@@ -270,11 +274,15 @@ export default function Header() {
               {filteredPosts.map(post => (
                 <article key={post.id}>
                   <Link href={`/post/${post.slug}`}>
-                    <img
-                      src={post.imageUrl || "/placeholder.svg"}
-                      alt={post.title}
-                      className="w-full h-40 object-cover mb-3 rounded hover:opacity-90 transition-opacity"
-                    />
+                    <div className="relative w-full h-40 mb-3">
+  <Image
+    src={post.imageUrl || "/placeholder.svg"}
+    alt={post.title}
+    fill
+    className="object-cover rounded hover:opacity-90 transition-opacity"
+    sizes="(max-width:1024px) 100vw, 25vw"
+  />
+</div>
                   </Link>
 
                   <h4 className="text-sm font-semibold text-white leading-snug hover:text-[#E11D2E]">

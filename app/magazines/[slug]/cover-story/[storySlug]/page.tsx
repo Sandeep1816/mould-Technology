@@ -1,16 +1,17 @@
+import Image from "next/image"
+
 type Props = {
-  params: Promise<{
+  params: {
     slug: string
     storySlug: string
-  }>
+  }
 }
 
 async function getStory(storySlug: string) {
- const res = await fetch(
-  `${process.env.NEXT_PUBLIC_API_URL}/api/magazines/cover-stories/${storySlug}`,
-  { cache: "no-store" }
-)
-
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/magazines/cover-stories/${storySlug}`,
+    { cache: "no-store" }
+  )
 
   if (!res.ok) throw new Error("Failed to fetch story")
 
@@ -18,7 +19,7 @@ async function getStory(storySlug: string) {
 }
 
 export default async function CoverStoryPage({ params }: Props) {
-  const { storySlug } = await params
+  const { storySlug } = params
   const story = await getStory(storySlug)
 
   const publishedDate = new Date(story.createdAt).toLocaleDateString(
@@ -31,10 +32,14 @@ export default async function CoverStoryPage({ params }: Props) {
 
       {/* ================= HERO SECTION ================= */}
       <section className="relative w-full h-[520px] overflow-hidden">
-        <img
-          src={story.coverImageUrl}
+        
+        <Image
+          src={story.coverImageUrl || "/placeholder.svg"}
           alt={story.title}
-          className="w-full h-full object-cover"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
         />
 
         {/* White Overlay Card */}
@@ -82,7 +87,7 @@ export default async function CoverStoryPage({ params }: Props) {
           />
         </article>
 
-        {/* SIDEBAR (You can add ads here later) */}
+        {/* SIDEBAR */}
         <aside>
           <div className="bg-white p-6 shadow">
             <h3 className="font-semibold mb-4">

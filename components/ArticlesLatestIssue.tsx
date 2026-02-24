@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import Link from "next/link"
 import { Post } from "@/types/Post"
 
@@ -16,11 +16,16 @@ export default function ArticlesLatestIssue({ post }: { post: Post }) {
           Latest Issue
         </h2>
 
-        <img
-          src="/magazine-cover.jpg"
-          alt="Magazine Cover"
-          className="w-48 shadow-lg mb-6"
-        />
+       <div className="relative w-48 h-[300px] mb-6">
+  <Image
+    src="/magazine-cover.jpg"
+    alt="Magazine Cover"
+    fill
+    className="object-cover shadow-lg"
+    priority
+    sizes="192px"
+  />
+</div>
 
         <p className="text-lg font-semibold">January 2026</p>
 

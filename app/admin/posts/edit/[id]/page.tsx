@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { useEffect, useState, FormEvent, ChangeEvent } from "react"
 import { useRouter, useParams } from "next/navigation"
 import dynamic from "next/dynamic"
@@ -190,12 +190,16 @@ export default function EditPost() {
 
         <input type="file" accept="image/*" onChange={handleFileChange} />
         {form.imageUrl && (
-          <img
-            src={form.imageUrl}
-            className="rounded max-h-56 object-cover"
-            alt="Post"
-          />
-        )}
+  <div className="relative w-full h-56">
+    <Image
+      src={form.imageUrl}
+      alt="Post"
+      fill
+      className="rounded object-cover"
+      sizes="(max-width: 768px) 100vw, 600px"
+    />
+  </div>
+)}
 
         <select
           name="categoryId"

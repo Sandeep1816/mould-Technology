@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 
@@ -106,12 +106,16 @@ export default function RecruiterArticlesPage() {
             >
               {/* IMAGE */}
               {article.imageUrl && (
-                <img
-                  src={article.imageUrl}
-                  alt={article.title}
-                  className="w-full h-40 object-cover"
-                />
-              )}
+  <div className="relative w-full h-40">
+    <Image
+      src={article.imageUrl}
+      alt={article.title}
+      fill
+      className="object-cover"
+      sizes="(max-width:768px) 100vw, 50vw"
+    />
+  </div>
+)}
 
               <div className="p-5 space-y-3">
 

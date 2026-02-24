@@ -1,4 +1,4 @@
-type Supplier = {
+export type Supplier = {
   id: number
   companyId: number
   name: string

@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Post } from "../types/Post";
@@ -76,11 +76,15 @@ function PopularNewsSidebar() {
             href={`/post/${post.slug}`}
             className="flex gap-4"
           >
-            <img
-              src={imageUrl(post)}
-              alt={post.title}
-              className="w-[80px] h-[80px] rounded-md object-cover"
-            />
+           <div className="relative w-[80px] h-[80px] shrink-0">
+  <Image
+    src={imageUrl(post)}
+    alt={post.title}
+    fill
+    className="rounded-md object-cover"
+    sizes="80px"
+  />
+</div>
 
             <div>
                 {(post.badge || post.category) && (

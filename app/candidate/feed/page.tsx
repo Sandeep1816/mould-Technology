@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import Link from "next/link"
 import { useCandidateGuard } from "@/lib/useCandidateGuard"
 import JobFeed from "@/components/job/JobFeed"
@@ -18,11 +18,15 @@ export default function CandidateFeedPage() {
           <div className="bg-white rounded-lg overflow-hidden shadow-sm">
             <div className="h-16 bg-gradient-to-r from-blue-600 to-indigo-600" />
             <div className="flex flex-col items-center -mt-8 pb-4">
-              <img
-                src="https://i.pravatar.cc/100"
-                className="w-16 h-16 rounded-full border-2 border-white"
-                alt="Profile"
-              />
+              <div className="relative w-16 h-16">
+  <Image
+    src="https://i.pravatar.cc/100"
+    alt="Profile"
+    fill
+    className="rounded-full border-2 border-white object-cover"
+    sizes="64px"
+  />
+</div>
               <h3 className="font-semibold mt-2">Candidate</h3>
               <p className="text-xs text-gray-500">
                 Aspiring Professional
@@ -60,11 +64,15 @@ export default function CandidateFeedPage() {
           {/* SEARCH BAR (unchanged UI) */}
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex items-center gap-3">
-              <img
-                src="https://i.pravatar.cc/40"
-                className="w-10 h-10 rounded-full"
-                alt="User"
-              />
+             <div className="relative w-10 h-10">
+  <Image
+    src="https://i.pravatar.cc/40"
+    alt="User"
+    fill
+    className="rounded-full object-cover"
+    sizes="40px"
+  />
+</div>
               <input
                 disabled
                 placeholder="Search jobs, companies, locations"

@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { Post } from "@/types/Post"
 
@@ -19,6 +20,7 @@ export default function PodcastListing({ posts }: Props) {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10">
+
         {/* LEFT – PODCAST LIST */}
         <div className="space-y-10">
           {posts.map((post) => {
@@ -43,14 +45,17 @@ export default function PodcastListing({ posts }: Props) {
                 className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 pb-10 border-b border-gray-200"
               >
                 {/* IMAGE + PLAY ICON */}
-                <div className="relative">
-                  <img
+                <div className="relative w-full h-[160px]">
+                  <Image
                     src={imageUrl}
                     alt={post.title}
-                    className="w-full h-[160px] object-cover rounded-sm"
+                    fill
+                    className="object-cover rounded-sm"
+                    sizes="(max-width:768px) 100vw, 260px"
                   />
+
                   <span className="absolute inset-0 flex items-center justify-center">
-                    <span className="w-14 h-14 bg-black/70 rounded-full flex items-center justify-center">
+                    <span className="w-14 h-14 bg-black/70 rounded-full flex items-center justify-center text-white text-xl">
                       ▶
                     </span>
                   </span>
@@ -89,10 +94,19 @@ export default function PodcastListing({ posts }: Props) {
 
         {/* RIGHT – ADS (Sticky) */}
         <aside className="space-y-6 sticky top-24 h-fit">
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-          <img src="/advertisement-banner.jpg" className="w-full border" />
+          {[1, 2, 3].map((_, i) => (
+            <div key={i} className="relative w-full h-[200px] border">
+              <Image
+                src="/advertisement-banner.jpg"
+                alt="Advertisement"
+                fill
+                className="object-cover"
+                sizes="300px"
+              />
+            </div>
+          ))}
         </aside>
+
       </div>
     </section>
   )

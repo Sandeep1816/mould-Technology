@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 
 const categories = [
@@ -22,11 +22,13 @@ export default function ExploreCategories() {
             href={`/category/${cat.name.toLowerCase()}`}
             className="relative block h-[70px] rounded-lg overflow-hidden group"
           >
-            <img
-              src={cat.bg}
-              alt={cat.name}
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition"
-            />
+            <Image
+  src={cat.bg}
+  alt={cat.name}
+  fill
+  className="object-cover group-hover:scale-105 transition"
+  sizes="(max-width:768px) 100vw, 300px"
+/>
 
             <div className="absolute inset-0 bg-black/50" />
 

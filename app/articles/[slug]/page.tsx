@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Post } from "@/types/Post";
 
 type Props = {
@@ -31,11 +32,16 @@ export default async function ArticleDetailPage({ params }: Props) {
         {post.title}
       </h1>
 
-      <img
-        src={getImageUrl(post.imageUrl)}
-        className="w-full max-h-[520px] object-cover mb-8"
-        alt={post.title}
-      />
+     <div className="relative w-full h-[520px] mb-8">
+  <Image
+    src={getImageUrl(post.imageUrl)}
+    alt={post.title}
+    fill
+    className="object-cover"
+    sizes="(max-width: 768px) 100vw, 1320px"
+    priority
+  />
+</div>
 
       <article
         className="prose max-w-none"

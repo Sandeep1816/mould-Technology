@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import * as Yup from "yup"
 
@@ -19,11 +19,16 @@ export default function NewsletterForm() {
 
         {/* LEFT IMAGE */}
         <div>
-          <img
-            src="/images/moldnews.png"
-            alt="MMT Newsletter"
-            className="max-w-full"
-          />
+          <div className="relative w-full h-[420px]">
+  <Image
+    src="/images/moldnews.png"
+    alt="MMT Newsletter"
+    fill
+    className="object-contain"
+    sizes="(max-width: 1024px) 100vw, 360px"
+    priority
+  />
+</div>
         </div>
 
         {/* FORM */}

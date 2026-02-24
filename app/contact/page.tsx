@@ -11,7 +11,9 @@ export default function ContactPage() {
       <section className="relative bg-[#f8f9fb] py-24 text-center">
         <h1 className="text-4xl font-semibold text-[#121213]">Contact</h1>
         <div className="mt-2 text-sm text-[#616C74]">
-          <Link href="/" className="hover:text-blue-600">Tooling Trends</Link>
+          <Link href="/" className="hover:text-blue-600">
+            Tooling Trends
+          </Link>
           <span className="mx-2">→</span>
           <span className="text-blue-600">Contact</span>
         </div>
@@ -22,7 +24,6 @@ export default function ContactPage() {
         <div className="max-w-[1320px] mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-            {/* CARD */}
             {[
               {
                 title: "California",
@@ -50,9 +51,10 @@ export default function ContactPage() {
                 <div className="relative w-full h-[220px] rounded-full overflow-hidden mx-auto mb-6">
                   <Image
                     src={item.img}
-                    alt={item.title}
+                    alt={`${item.title} office`}
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 </div>
 
@@ -90,44 +92,28 @@ export default function ContactPage() {
               </h2>
 
               <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="text-sm text-[#121213]">Full Name*</label>
-                  <input
-                    type="text"
-                    placeholder="Robot fox"
-                    className="mt-2 w-full rounded-lg border px-4 py-3 text-sm outline-none focus:border-blue-600"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm text-[#121213]">Email Address*</label>
-                  <input
-                    type="email"
-                    placeholder="info@example.com"
-                    className="mt-2 w-full rounded-lg border px-4 py-3 text-sm outline-none focus:border-blue-600"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm text-[#121213]">Phone Number*</label>
-                  <input
-                    type="text"
-                    placeholder="(480) 555-0103"
-                    className="mt-2 w-full rounded-lg border px-4 py-3 text-sm outline-none focus:border-blue-600"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm text-[#121213]">Website*</label>
-                  <input
-                    type="text"
-                    placeholder="www.toolingtrends.com"
-                    className="mt-2 w-full rounded-lg border px-4 py-3 text-sm outline-none focus:border-blue-600"
-                  />
-                </div>
+                {[
+                  { label: "Full Name*", type: "text", placeholder: "Robot fox" },
+                  { label: "Email Address*", type: "email", placeholder: "info@example.com" },
+                  { label: "Phone Number*", type: "text", placeholder: "(480) 555-0103" },
+                  { label: "Website*", type: "text", placeholder: "www.toolingtrends.com" },
+                ].map((field, i) => (
+                  <div key={i}>
+                    <label className="text-sm text-[#121213]">
+                      {field.label}
+                    </label>
+                    <input
+                      type={field.type}
+                      placeholder={field.placeholder}
+                      className="mt-2 w-full rounded-lg border px-4 py-3 text-sm outline-none focus:border-blue-600"
+                    />
+                  </div>
+                ))}
 
                 <div className="md:col-span-2">
-                  <label className="text-sm text-[#121213]">Message*</label>
+                  <label className="text-sm text-[#121213]">
+                    Message*
+                  </label>
                   <textarea
                     rows={6}
                     placeholder="Type here..."
@@ -150,9 +136,10 @@ export default function ContactPage() {
             <div className="relative w-full h-[520px] rounded-2xl overflow-hidden">
               <Image
                 src="/images/contact.png"
-                alt="Contact support"
+                alt="Customer support representative"
                 fill
                 className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
 

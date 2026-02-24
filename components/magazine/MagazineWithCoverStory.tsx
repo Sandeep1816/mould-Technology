@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 
 type CoverStory = {
   id: number
@@ -44,17 +45,22 @@ export default function MagazineWithCoverStory() {
       <div className="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-[420px_1fr]">
 
         {/* ================= LEFT – LATEST ISSUE ================= */}
-        <div className="p-10 flex flex-col justify-center ">
+        <div className="p-10 flex flex-col justify-center">
           <h2 className="text-[28px] font-bold text-[#003B5C] mb-8">
             Latest Issue
           </h2>
 
           <Link href={`/magazines/${magazine.slug}`}>
-            <img
-              src={magazine.coverImageUrl}
-              alt={magazine.title}
-              className="w-[220px] shadow-xl mb-6 cursor-pointer"
-            />
+            <div className="relative w-[220px] h-[300px] mb-6 cursor-pointer shadow-xl">
+              <Image
+                src={magazine.coverImageUrl || "/placeholder.jpg"}
+                alt={magazine.title}
+                fill
+                className="object-cover"
+                sizes="220px"
+                priority
+              />
+            </div>
           </Link>
 
           {magazine.createdAt && (
@@ -74,10 +80,12 @@ export default function MagazineWithCoverStory() {
         {/* ================= RIGHT – COVER STORY HERO ================= */}
         {magazine.coverStory && (
           <div className="relative h-[520px]">
-            <img
-              src={magazine.coverStory.coverImageUrl}
+            <Image
+              src={magazine.coverStory.coverImageUrl || "/placeholder.jpg"}
               alt={magazine.coverStory.title}
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 70vw"
             />
 
             <div className="absolute inset-0 bg-black/50" />
@@ -106,7 +114,6 @@ export default function MagazineWithCoverStory() {
             </div>
           </div>
         )}
-
       </div>
     </section>
   )

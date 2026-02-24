@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import type { Post } from "@/types/Post"
 import SupplierAds from "@/components/SupplierAds"
@@ -22,12 +23,10 @@ export default async function VideosPage() {
     return `${process.env.NEXT_PUBLIC_API_URL}${url}`
   }
 
-  // ================= WHAT'S NEW =================
   const whatsNewPosts = posts
     .filter((p) => slugOf(p).includes("whatsnew"))
     .slice(0, 5)
 
-  // ================= VIDEO POSTS =================
   const videoPosts = posts.filter(
     (p) =>
       slugOf(p).includes("video") ||
@@ -86,11 +85,13 @@ export default async function VideosPage() {
                 className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 pb-10 border-b"
               >
                 {/* VIDEO THUMB */}
-                <div className="relative">
-                  <img
+                <div className="relative w-full h-[160px]">
+                  <Image
                     src={getImageUrl(post.imageUrl)}
                     alt={post.title}
-                    className="w-full h-[160px] object-cover rounded"
+                    fill
+                    className="object-cover rounded"
+                    sizes="(max-width: 768px) 100vw, 260px"
                   />
 
                   {/* PLAY ICON */}
@@ -158,6 +159,7 @@ export default async function VideosPage() {
           <aside className="space-y-6 sticky top-24">
             <SupplierAds />
           </aside>
+
         </div>
       </section>
     </main>

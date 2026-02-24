@@ -1,5 +1,6 @@
 import Link from "next/link"
 import SupplierAds from "@/components/SupplierAds"
+import Image from "next/image"
 import type { Post } from "@/types/Post"
 
 type Props = {
@@ -46,11 +47,15 @@ const remainingIssues = inThisIssuePosts
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-14">
           {remainingIssues.map((post) => (
             <article key={post.id}>
-              <img
-                src={getImageUrl(post.imageUrl)}
-                alt={post.title}
-                className="w-full aspect-[16/9] object-cover rounded mb-4"
-              />
+             <div className="relative w-full aspect-[16/9] mb-4">
+  <Image
+    src={getImageUrl(post.imageUrl)}
+    alt={post.title}
+    fill
+    className="object-cover rounded"
+    sizes="(max-width:768px) 100vw, 50vw"
+  />
+</div>
 
               <div className="flex items-center gap-4 mb-3">
                 <span className="bg-[#0072BC] text-white text-xs font-bold px-3 py-1 uppercase">

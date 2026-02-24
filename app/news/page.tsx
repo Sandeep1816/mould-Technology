@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import type { Post } from "@/types/Post"
 import SupplierAds from "@/components/SupplierAds"
 import NewsletterForm from "@/components/news/NewsletterForm"
@@ -67,11 +68,15 @@ export default async function NewsPage() {
                 key={post.id}
                 className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 pb-10 border-b"
               >
-                <img
-                  src={getImage(post.imageUrl)}
-                  alt={post.title}
-                  className="w-full h-[160px] object-cover rounded"
-                />
+               <div className="relative w-full h-[160px]">
+  <Image
+    src={getImage(post.imageUrl)}
+    alt={post.title}
+    fill
+    className="object-cover rounded"
+    sizes="(max-width:768px) 100vw, 260px"
+  />
+</div>
 
                 <div>
                   <span className="text-xs text-gray-500 block mb-1">

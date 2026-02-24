@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { BANNER_PLACEMENTS } from "@/lib/bannerPlacements";
@@ -115,10 +115,15 @@ export default function BannerReorderPage() {
                           {index + 1}
                         </span>
 
-                        <img
-                          src={b.imageUrl}
-                          className="h-14 rounded"
-                        />
+                        <div className="relative w-24 h-14">
+  <Image
+    src={b.imageUrl}
+    alt={b.title || "Banner"}
+    fill
+    className="object-cover rounded"
+    sizes="96px"
+  />
+</div>
 
                         <div>
                           <p className="font-medium">{b.title}</p>

@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { BANNER_PLACEMENTS } from "@/lib/bannerPlacements"
@@ -163,12 +163,16 @@ export default function BannerListPage() {
                 <td className="p-3 font-medium">{b.position}</td>
 
                 <td className="p-3">
-                  <img
-                    src={b.imageUrl}
-                    alt={b.title}
-                    className="h-14 rounded border"
-                  />
-                </td>
+  <div className="relative w-24 h-14">
+    <Image
+      src={b.imageUrl}
+      alt={b.title || "Banner"}
+      fill
+      className="object-cover rounded border"
+      sizes="96px"
+    />
+  </div>
+</td>
 
                 <td className="p-3 font-medium">{b.title}</td>
 

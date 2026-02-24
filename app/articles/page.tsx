@@ -1,3 +1,4 @@
+import Image from "next/image"
 import SupplierAds from "@/components/SupplierAds"
 import MagazineGrid from "@/components/magazine/MagazineGrid"
 import type { Post } from "@/types/Post"
@@ -104,11 +105,14 @@ export default async function ArticlesPage() {
           {/* RIGHT – LATEST MAGAZINE HERO */}
           {latestMagazine && (
             <div className="relative h-[520px]">
-              <img
-                src={latestMagazine.coverImageUrl}
-                alt={latestMagazine.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+  <Image
+    src={latestMagazine.coverImageUrl}
+    alt={latestMagazine.title}
+    fill
+    className="object-cover"
+    priority
+    sizes="(max-width:1024px) 100vw, 60vw"
+  />
 
               <div className="absolute inset-0 bg-black/50" />
 
@@ -160,11 +164,15 @@ export default async function ArticlesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-14">
             {remainingIssues.map((post) => (
               <article key={post.id}>
-                <img
-                  src={getImageUrl(post.imageUrl)}
-                  alt={post.title}
-                  className="w-full aspect-[16/9] object-cover rounded mb-4"
-                />
+                <div className="relative w-full aspect-[16/9] mb-4">
+  <Image
+    src={getImageUrl(post.imageUrl)}
+    alt={post.title}
+    fill
+    className="object-cover rounded"
+    sizes="(max-width:768px) 100vw, 50vw"
+  />
+</div>
 
                 <div className="flex items-center gap-4 mb-3">
                   <span className="bg-[#0072BC] text-white text-xs font-bold px-3 py-1 uppercase">

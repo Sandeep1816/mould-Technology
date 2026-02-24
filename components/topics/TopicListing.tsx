@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { Post } from "@/types/Post"
 import SupplierAds from "@/components/SupplierAds"
@@ -59,18 +60,22 @@ export default function TopicListing({
             </p>
           </div>
 
-          {/* HERO IMAGE WITH OVERLAY CONTENT */}
-          <Link href={`/post/${hero.slug}`} className="relative block h-[420px]">
-            <img
+          {/* HERO IMAGE */}
+          <Link
+            href={`/post/${hero.slug}`}
+            className="relative block h-[420px] overflow-hidden"
+          >
+            <Image
               src={getImage(hero)}
               alt={hero.title}
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width:1024px) 100vw, 50vw"
             />
 
-            {/* Dark Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-            {/* CONTENT ON IMAGE */}
             <div className="absolute bottom-6 left-6 right-6 text-white">
               {hero.badge && (
                 <span className="inline-block bg-[#0072BC] text-xs font-bold px-3 py-1 mb-3 uppercase">
@@ -95,10 +100,19 @@ export default function TopicListing({
             </div>
           </Link>
 
-          {/* RIGHT ADS */}
+          {/* RIGHT STATIC AD */}
           <aside className="space-y-6">
-            <img src="/images/PTXPO26_RegNow.png" className="w-full " />
+            <div className="relative w-full h-[420px]">
+              <Image
+                src="/images/PTXPO26_RegNow.png"
+                alt="Advertisement"
+                fill
+                className="object-contain"
+                sizes="300px"
+              />
+            </div>
           </aside>
+
         </div>
       </div>
 
@@ -128,11 +142,15 @@ export default function TopicListing({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {gridPosts.map((post) => (
                 <article key={post.id}>
-                  <img
-                    src={getImage(post)}
-                    alt={post.title}
-                    className="w-full h-[180px] object-cover border mb-3"
-                  />
+                  <div className="relative w-full h-[180px] mb-3">
+                    <Image
+                      src={getImage(post)}
+                      alt={post.title}
+                      fill
+                      className="object-cover border"
+                      sizes="(max-width:768px) 100vw, 33vw"
+                    />
+                  </div>
 
                   <span className="block text-xs text-gray-500 mb-1">
                     {formatDate(post.publishedAt ?? undefined)}
@@ -164,6 +182,7 @@ export default function TopicListing({
           <aside className="space-y-6 sticky top-24">
             <SupplierAds />
           </aside>
+
         </div>
       </div>
     </section>

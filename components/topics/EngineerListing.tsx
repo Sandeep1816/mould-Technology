@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Post } from "@/types/Post"
 import SupplierAds from "@/components/SupplierAds"
 
@@ -56,11 +57,14 @@ export default function EngineerListing({ posts }: Props) {
 
           {/* HERO IMAGE WITH OVERLAY CONTENT */}
           <Link href={`/post/${hero.slug}`} className="relative block h-[420px]">
-            <img
-              src={getImage(hero)}
-              alt={hero.title}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
+  <Image
+    src={getImage(hero)}
+    alt={hero.title}
+    fill
+    priority
+    className="object-cover"
+    sizes="(max-width:1024px) 100vw, 800px"
+  />
 
             {/* Dark Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
@@ -92,10 +96,16 @@ export default function EngineerListing({ posts }: Props) {
 
           {/* RIGHT ADS */}
           <aside className="space-y-6">
-            <img src="/advertisement-banner.jpg" className="w-full border" />
-            {/* <img src="/advertisement-banner.jpg" className="w-full border" /> */}
-           
-          </aside>
+  <div className="relative w-full h-[200px] border">
+    <Image
+      src="/advertisement-banner.jpg"
+      alt="Advertisement"
+      fill
+      className="object-cover"
+      sizes="300px"
+    />
+  </div>
+</aside>
         </div>
       </div>
 
@@ -125,11 +135,15 @@ export default function EngineerListing({ posts }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {gridPosts.map((post) => (
                 <article key={post.id}>
-                  <img
-                    src={getImage(post)}
-                    alt={post.title}
-                    className="w-full h-[180px] object-cover border mb-3"
-                  />
+                  <div className="relative w-full h-[180px] mb-3 border">
+  <Image
+    src={getImage(post)}
+    alt={post.title}
+    fill
+    className="object-cover"
+    sizes="(max-width:768px) 100vw, 33vw"
+  />
+</div>
 
                   <span className="block text-xs text-gray-500 mb-1">
                     {formatDate(post.publishedAt ?? undefined)}

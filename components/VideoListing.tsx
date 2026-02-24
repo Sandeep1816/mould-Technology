@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import type { Post } from "@/types/Post"
+import Image from "next/image"
 import SupplierAds from "@/components/SupplierAds"
 
 type Props = {
@@ -14,11 +15,14 @@ export default function VideoListing({ posts }: Props) {
       {/* ================= HERO BANNER ================= */}
       <section className="w-full bg-black">
         <div className="relative w-full h-[330px] md:h-[330px] lg:h-[420px] overflow-hidden">
-          <img
-            src="/artificial-intelligence-technology.png"
-            alt="Videos Banner"
-            className="w-full h-full object-cover"
-          />
+           <Image
+    src="/artificial-intelligence-technology.png"
+    alt="Videos Banner"
+    fill
+    priority
+    className="object-cover"
+    sizes="100vw"
+  />
           <div className="absolute inset-0 bg-black/40 flex items-center">
             <div className="max-w-7xl mx-auto px-6" />
           </div>
@@ -52,20 +56,23 @@ export default function VideoListing({ posts }: Props) {
                   key={post.id}
                   className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 pb-14 border-b border-gray-200"
                 >
-                  {/* THUMBNAIL */}
-                  <div className="relative">
-                    <img
-                      src={imageUrl}
-                      alt={post.title}
-                      className="w-full h-[220px] md:h-[240px] object-cover rounded-sm"
-                    />
+                {/* THUMBNAIL */}
+<div className="relative w-full h-[220px] md:h-[240px]">
+  <Image
+    src={imageUrl}
+    alt={post.title}
+    fill
+    className="object-cover rounded-sm"
+    sizes="(max-width: 768px) 100vw, 300px"
+  />
 
-                    <span className="absolute inset-0 flex items-center justify-center">
-                      <span className="w-16 h-16 bg-black/70 rounded-full flex items-center justify-center text-white text-2xl">
-                        ▶
-                      </span>
-                    </span>
-                  </div>
+  {/* Play Button Overlay */}
+  <span className="absolute inset-0 flex items-center justify-center">
+    <span className="w-16 h-16 bg-black/70 rounded-full flex items-center justify-center text-white text-2xl">
+      ▶
+    </span>
+  </span>
+</div>
 
                   {/* CONTENT */}
                   <div className="flex flex-col justify-between">

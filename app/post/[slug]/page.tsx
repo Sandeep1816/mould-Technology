@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import { useParams } from "next/navigation"
 
 import ShareSection from "@/components/share-section"
@@ -145,21 +146,28 @@ export default function PostDetailsPage() {
               </p>
             )}
 
-            <div className="w-full max-h-[420px] overflow-hidden">
-              <img
-                src={imageUrl}
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <div className="relative w-full h-[420px] mb-0">
+  <Image
+    src={imageUrl}
+    alt={post.title}
+    fill
+    className="object-cover"
+    sizes="(max-width: 768px) 100vw, 1200px"
+    priority
+  />
+</div>
 
             {post.author && (
               <div className="flex items-center gap-3 mt-6">
-                <img
-                  src={post.author.avatarUrl || "/avatar-placeholder.png"}
-                  className="w-10 h-10 rounded-full border"
-                  alt={post.author.name}
-                />
+                <div className="relative w-10 h-10">
+  <Image
+    src={post.author.avatarUrl || "/avatar-placeholder.png"}
+    alt={post.author.name}
+    fill
+    className="rounded-full border object-cover"
+    sizes="40px"
+  />
+</div>
                 <div>
                   <p className="text-sm font-semibold">{post.author.name}</p>
                   <p className="text-xs text-gray-500">{post.author.bio}</p>

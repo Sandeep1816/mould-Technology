@@ -20,7 +20,7 @@ export type Post = {
   content: string
   imageUrl?: string | null
   publishedAt?: string | null
-  views?: number
+  views?: number | null
   author?: Author
-  category?: Category
+  category?: Category 
 }

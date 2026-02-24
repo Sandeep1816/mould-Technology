@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import Link from "next/link"
 
 type FeaturedArticleProps = {
@@ -42,11 +42,16 @@ export default function FeaturedArticle({ post }: FeaturedArticleProps) {
 
         {/* Right Column - Featured Image */}
         <div className="w-full">
-          <img
-            src={imageUrl || "/placeholder.svg"}
-            alt={post.title}
-            className="w-full h-80 object-cover border border-gray-300"
-          />
+         <div className="relative w-full h-80">
+  <Image
+    src={imageUrl || "/placeholder.svg"}
+    alt={post.title}
+    fill
+    className="object-cover border border-gray-300"
+    priority
+    sizes="(max-width:1024px) 100vw, 50vw"
+  />
+</div>
         </div>
       </div>
 

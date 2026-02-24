@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import Link from "next/link"
 import { Post } from "@/types/Post"
 
@@ -17,10 +17,15 @@ export default function ArticlesIssueGrid({ posts }: { posts: Post[] }) {
 
           return (
             <article key={post.id}>
-              <img
-                src={imageUrl}
-                className="w-full h-56 object-cover mb-4"
-              />
+             <div className="relative w-full h-56 mb-4">
+  <Image
+    src={imageUrl}
+    alt={post.title}
+    fill
+    className="object-cover"
+    sizes="(max-width:1024px) 100vw, 50vw"
+  />
+</div>
 
               <div className="flex items-center gap-3 mb-2">
                 <span className="bg-blue-600 text-white text-xs px-2 py-1 font-bold uppercase">
@@ -50,11 +55,19 @@ export default function ArticlesIssueGrid({ posts }: { posts: Post[] }) {
         })}
 
         {/* ADS */}
-        <aside className="space-y-6">
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-          <img src="/advertisement-banner.jpg" className="w-full border" />
-        </aside>
+     <aside className="space-y-6">
+  {[1, 2, 3].map((_, i) => (
+    <div key={i} className="relative w-full h-[200px] border">
+      <Image
+        src="/advertisement-banner.jpg"
+        alt="Advertisement"
+        fill
+        className="object-cover"
+        sizes="300px"
+      />
+    </div>
+  ))}
+</aside>
       </div>
     </section>
   )

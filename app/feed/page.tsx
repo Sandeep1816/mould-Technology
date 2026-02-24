@@ -1,3 +1,4 @@
+import Image from "next/image"
 import JobFeed from "@/components/job/JobFeed"
 import Link from "next/link"
 import CursorBall from "@/components/ui/CursorBall"
@@ -11,12 +12,15 @@ export default function PublicFeedPage() {
       {/* ================= HERO ================= */}
       <section className="relative bg-[#0F5B78]">
         <div className="absolute inset-0">
-          <img
-            src="/images/hirings.png"
-            alt="Tooling Trends Hiring Platform"
-            className="w-full h-full object-cover opacity-55"
-          />
-        </div>
+  <Image
+    src="/images/hirings.png"
+    alt="Tooling Trends Hiring Platform"
+    fill
+    priority
+    className="object-cover opacity-55"
+    sizes="100vw"
+  />
+</div>
 
         <div className="relative max-w-[1200px] mx-auto px-6 py-20">
           <h1 className="text-4xl md:text-5xl font-bold text-white max-w-3xl leading-tight">

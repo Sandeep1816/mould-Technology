@@ -1,16 +1,23 @@
 "use client"
 
+import Image from "next/image"
+
 export default function AdBanner() {
   return (
     <div className="w-full bg-gray-50 flex justify-center py-3 border-b border-gray-300">
       <div className="w-full max-w-4xl px-3">
         <div className="bg-white border border-gray-300 p-4 flex items-center gap-4">
+
           {/* Left Image */}
-          <img
-            src="/american-flag-military.jpg"
-            alt="Charity Advertisement"
-            className="h-16 w-auto shrink-0 object-contain"
-          />
+          <div className="relative h-16 w-24 shrink-0">
+            <Image
+              src="/american-flag-military.jpg"
+              alt="Charity Advertisement"
+              fill
+              className="object-contain"
+              sizes="96px"
+            />
+          </div>
 
           {/* Text Section */}
           <div className="flex-1">
@@ -27,11 +34,16 @@ export default function AdBanner() {
           </div>
 
           {/* Right Image */}
-          <img
-            src="/warriors-logo.jpg"
-            alt="Warriors"
-            className="h-14 w-auto shrink-0 object-contain"
-          />
+          <div className="relative h-14 w-20 shrink-0">
+            <Image
+              src="/warriors-logo.jpg"
+              alt="Warriors"
+              fill
+              className="object-contain"
+              sizes="80px"
+            />
+          </div>
+
         </div>
       </div>
     </div>

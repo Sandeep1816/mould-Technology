@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -71,9 +72,18 @@ export default function SubscribePage() {
         </div>
 
         {/* RIGHT SIDE IMAGE */}
-        <div className="flex justify-center items-start pt-10">
-          <img src="/recycled-materials-manufacturing.jpg" className="w-[450px]" />
-        </div>
+       <div className="flex justify-center items-start pt-10">
+  <div className="relative w-[450px] h-[550px]">
+    <Image
+      src="/recycled-materials-manufacturing.jpg"
+      alt="Mold manufacturing process"
+      fill
+      className="object-contain"
+      priority
+      sizes="(max-width:768px) 100vw, 450px"
+    />
+  </div>
+</div>
 
       </div>
 

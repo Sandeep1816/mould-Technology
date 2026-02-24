@@ -1,4 +1,7 @@
+"use client"
+
 import Link from "next/link"
+import Image from "next/image"
 import { Post } from "@/types/Post"
 
 type Props = {
@@ -20,7 +23,6 @@ export default function TopicsListing({
   return (
     <section className="bg-[#003B5C] text-white">
       <div className="max-w-[1320px] mx-auto px-[15px] py-10">
-
         <div className="grid grid-cols-[260px_1fr] gap-8">
 
           {/* ================= LEFT MENU ================= */}
@@ -44,7 +46,6 @@ export default function TopicsListing({
                 </li>
               ))}
 
-              {/* ALL TOPICS */}
               <li>
                 <Link
                   href="/topics/engineer"
@@ -90,11 +91,15 @@ export default function TopicsListing({
                 return (
                   <article key={post.id}>
                     <Link href={`/articles/${post.slug}`}>
-                      <img
-                        src={imageUrl}
-                        alt={post.title}
-                        className="w-full h-40 object-cover mb-3"
-                      />
+                      <div className="relative w-full h-40 mb-3">
+                        <Image
+                          src={imageUrl}
+                          alt={post.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                      </div>
                     </Link>
 
                     <p className="text-xs uppercase text-[#6EC1E4] font-bold mb-1">
@@ -112,8 +117,9 @@ export default function TopicsListing({
 
                     <p className="text-sm text-white/80">
                       {post.excerpt ||
-                        post.content?.replace(/<[^>]+>/g, "").slice(0, 120) +
-                          "..."}
+                        post.content
+                          ?.replace(/<[^>]+>/g, "")
+                          .slice(0, 120) + "..."}
                     </p>
                   </article>
                 )
@@ -125,6 +131,7 @@ export default function TopicsListing({
                 </p>
               )}
             </div>
+
           </div>
         </div>
       </div>

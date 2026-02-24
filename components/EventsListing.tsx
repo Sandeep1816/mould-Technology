@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { Post } from "@/types/Post"
 
@@ -15,6 +16,7 @@ export default function EventsListing({ posts }: { posts: Post[] }) {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10">
+
         {/* LEFT – EVENTS LIST */}
         <div className="space-y-10">
           {posts.map((post) => {
@@ -39,11 +41,15 @@ export default function EventsListing({ posts }: { posts: Post[] }) {
                 className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 pb-10 border-b border-gray-200"
               >
                 {/* IMAGE */}
-                <img
-                  src={imageUrl}
-                  alt={post.title}
-                  className="w-full h-[180px] object-contain border"
-                />
+                <div className="relative w-full h-[180px] border bg-white">
+                  <Image
+                    src={imageUrl}
+                    alt={post.title}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width:768px) 100vw, 260px"
+                  />
+                </div>
 
                 {/* CONTENT */}
                 <div>
@@ -81,13 +87,23 @@ export default function EventsListing({ posts }: { posts: Post[] }) {
           })}
         </div>
 
-        {/* RIGHT – ADS (UNCHANGED) */}
+        {/* RIGHT – ADS */}
         <aside className="space-y-6 sticky top-24 h-fit">
-          <img src="/ads/ad1.jpg" className="w-full border" />
-          <img src="/ads/ad2.jpg" className="w-full border" />
-          <img src="/ads/ad3.jpg" className="w-full border" />
-          <img src="/ads/ad4.jpg" className="w-full border" />
+          {["/ads/ad1.jpg", "/ads/ad2.jpg", "/ads/ad3.jpg", "/ads/ad4.jpg"].map(
+            (src, i) => (
+              <div key={i} className="relative w-full h-[200px] border">
+                <Image
+                  src={src}
+                  alt="Advertisement"
+                  fill
+                  className="object-cover"
+                  sizes="300px"
+                />
+              </div>
+            )
+          )}
         </aside>
+
       </div>
     </section>
   )
