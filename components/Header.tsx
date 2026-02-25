@@ -17,21 +17,21 @@ type User = {
 
 /* ================= MENUS ================= */
 const TOPICS = [
-  { label: "Machining", slug: "engineer" },
-  { label: "Cutting Tools ", slug: "build" },
-  { label: "Surface Engineering", slug: "maintain" },
-  { label: "Smart Manufacturing", slug: "manage" },
-  { label: "Advanced Manufacturing", slug: "maintain" },
-  { label: "Maintenance & Operations", slug: "manage" },
+  { label: "Machining", slug: "machining" },
+  { label: "Cutting Tools ", slug: "cuttingtools" },
+  { label: "Surface Engineering", slug: "surfaceengineering" },
+  { label: "Smart Manufacturing", slug: "smartmanufacturing" },
+  { label: "Advanced Manufacturing", slug: "advancedmanufacturing" },
+  { label: "Maintenance & Operations", slug: "maintenance&operations" },
 ]
 
 const RESOURCES = [
   { label: "Webinars", slug: "webinars" },
-  { label: "Videos", slug: "videos" },
+  { label: "Videos", slug: "video" },
   { label: "Events", slug: "events" },
   { label: "Suppliers", slug: "suppliers" },
   // { label: "Basics", slug: "basics" },
-  { label: "ToolingDesign & Optimization", slug: "mold-design-optimization" },
+  { label: "ToolingDesign & Optimization", slug: "molddesign&optimization" },
 ]
 
 export default function Header() {
@@ -41,7 +41,7 @@ export default function Header() {
   const [openUserMenu, setOpenUserMenu] = useState(false)
 
   const [allPosts, setAllPosts] = useState<Post[]>([])
-  const [activeSlug, setActiveSlug] = useState("engineer")
+  const [activeSlug, setActiveSlug] = useState("machining")
 
   const container = "max-w-[1320px] mx-auto px-4 md:px-6 lg:px-[15px]"
 
@@ -113,7 +113,7 @@ export default function Header() {
       <button
         onMouseEnter={() => {
           setOpenMega("topics")
-          setActiveSlug("engineer")
+          setActiveSlug("machining")
         }}
         className="group relative flex items-center gap-1"
       >
@@ -252,11 +252,11 @@ export default function Header() {
       {openMega && (
         <div
           onMouseLeave={() => setOpenMega(null)}
-          className="hidden lg:block bg-[#0A4A6A] border-t border-white/10"
+          className="hidden lg:block bg-[#0F5B78] border-t border-white/10"
         >
-          <div className={`${container} py-10 grid grid-cols-[240px_1fr] gap-10`}>
+          <div className={`${container} py-10 grid grid-cols-[260px_1fr] gap-10 items-stretch`}>
 
-            <aside className="bg-[#083A54] rounded-lg overflow-hidden shadow-xl">
+            <aside className="bg-[#083A54] rounded-lg overflow-hidden shadow-xl h-full">
               {(openMega === "topics" ? TOPICS : RESOURCES).map(item => (
                 <button
                   key={item.slug}
@@ -272,27 +272,35 @@ export default function Header() {
               ))}
             </aside>
 
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-4 gap-6 h-full content-start">
               {filteredPosts.map(post => (
                 <article key={post.id}>
-                  <Link href={`/post/${post.slug}`}>
-                    <div className="relative w-full h-40 mb-3">
-  <Image
-    src={post.imageUrl || "/placeholder.svg"}
-    alt={post.title}
-    fill
-    className="object-cover rounded hover:opacity-90 transition-opacity"
-    sizes="(max-width:1024px) 100vw, 25vw"
-  />
-</div>
-                  </Link>
+  <Link href={`/post/${post.slug}`}>
+    <div className="relative w-full h-40 mb-3">
+      <Image
+        src={post.imageUrl || "/placeholder.svg"}
+        alt={post.title}
+        fill
+        className="object-cover rounded hover:opacity-90 transition-opacity"
+        sizes="(max-width:1024px) 100vw, 25vw"
+      />
+    </div>
+  </Link>
 
-                  <h4 className="text-sm font-semibold text-white leading-snug hover:text-[#E11D2E]">
-                    <Link href={`/post/${post.slug}`}>
-                      {post.title}
-                    </Link>
-                  </h4>
-                </article>
+  <h5 className="text-[10px] uppercase text-red-500 font-bold tracking-wide mb-1">
+    {post.badge}
+  </h5>
+
+  <h4 className="text-sm font-semibold text-white leading-snug hover:text-[#E11D2E]">
+    <Link href={`/post/${post.slug}`}>
+      {post.title}
+    </Link>
+  </h4>
+
+  <p className="text-xs text-gray-300 mt-2 leading-relaxed line-clamp-2">
+    {post.excerpt}
+  </p>
+</article>
               ))}
             </div>
 
