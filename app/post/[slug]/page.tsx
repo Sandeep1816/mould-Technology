@@ -96,7 +96,11 @@ export default function PostDetailsPage() {
   if (!post) return <Loader />
 
   const embedUrl = getYoutubeEmbed(post.youtubeUrl)
-  const isVideo = post.category?.slug === "video"
+
+  // ✅ UPDATED: Allow YouTube for industry-talks also
+  const allowYoutube =
+    post.category?.slug === "video" ||
+    post.category?.slug === "industry-talks"
 
   const imageUrl =
     post.imageUrl?.startsWith("http")
@@ -126,7 +130,7 @@ export default function PostDetailsPage() {
       />
 
       <main className="bg-[#f9f9f9] overflow-x-hidden">
-        {/* ✅ VIEW COUNT (INCREMENTS ON LOAD) */}
+        {/* VIEW COUNT */}
         {slugValue && <PostViewCounter slug={slugValue} />}
 
         {/* ================= HERO ================= */}
@@ -147,27 +151,27 @@ export default function PostDetailsPage() {
             )}
 
             <div className="relative w-full h-[420px] mb-0">
-  <Image
-    src={imageUrl}
-    alt={post.title}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 1200px"
-    priority
-  />
-</div>
+              <Image
+                src={imageUrl}
+                alt={post.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 1200px"
+                priority
+              />
+            </div>
 
             {post.author && (
               <div className="flex items-center gap-3 mt-6">
                 <div className="relative w-10 h-10">
-  <Image
-    src={post.author.avatarUrl || "/avatar-placeholder.png"}
-    alt={post.author.name}
-    fill
-    className="rounded-full border object-cover"
-    sizes="40px"
-  />
-</div>
+                  <Image
+                    src={post.author.avatarUrl || "/avatar-placeholder.png"}
+                    alt={post.author.name}
+                    fill
+                    className="rounded-full border object-cover"
+                    sizes="40px"
+                  />
+                </div>
                 <div>
                   <p className="text-sm font-semibold">{post.author.name}</p>
                   <p className="text-xs text-gray-500">{post.author.bio}</p>
@@ -179,9 +183,11 @@ export default function PostDetailsPage() {
 
         {/* ================= CONTENT + SIDEBAR ================= */}
         <section className="grid grid-cols-1 lg:grid-cols-[8fr_4fr] gap-10 px-6 md:px-10 lg:px-[80px] py-10">
-          
+
           {/* CONTENT */}
           <article className="max-w-3xl overflow-hidden">
+
+            {/* CONTENT BODY */}
             <div
               className="prose prose-lg max-w-none break-words overflow-hidden"
               dangerouslySetInnerHTML={{ __html: post.content || "" }}
@@ -189,9 +195,9 @@ export default function PostDetailsPage() {
 
             <ShareSection post={post} />
 
-            {/* ================= VIDEO BLOCK ================= */}
-            {isVideo && post.youtubeUrl && (
-              <div className="mt-10">
+            {/* ================= YOUTUBE BLOCK ================= */}
+            {allowYoutube && post.youtubeUrl && (
+              <div className="mt-12">
                 {embedUrl ? (
                   <div className="aspect-video w-full rounded-lg overflow-hidden border shadow">
                     <iframe
@@ -204,7 +210,7 @@ export default function PostDetailsPage() {
                 ) : (
                   <div className="w-full rounded-lg border bg-black text-white flex flex-col items-center justify-center py-16">
                     <p className="text-lg font-semibold mb-4">
-                      Watch more videos on YouTube
+                      Watch on YouTube
                     </p>
                     <a
                       href={post.youtubeUrl}
@@ -212,7 +218,7 @@ export default function PostDetailsPage() {
                       rel="noopener noreferrer"
                       className="bg-red-600 px-6 py-3 rounded font-bold hover:bg-red-700"
                     >
-                      Open YouTube Channel →
+                      Open YouTube →
                     </a>
                   </div>
                 )}

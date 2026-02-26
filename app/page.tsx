@@ -223,6 +223,7 @@ import Footer from "../components/Footer"
 import type { Post } from "../types/Post"
 import TrendingSection from "@/components/TrendingSection"
 import CompanyArticles from "@/components/company/CompanyArticles"
+import HomeCompanyArticles from "@/components/HomeCompanyArticles"
 
 export default async function Home() {
   /* ================= FETCH POSTS ================= */
@@ -300,9 +301,12 @@ export default async function Home() {
       <VideosSection posts={posts} />
 
       {/* 🏭 Manufacturing */}
-      <ManufacturingConnected
+      {/* <ManufacturingConnected
         posts={manufacturingPosts.slice(0, 4)}
-      />
+      /> */}
+
+
+      <HomeCompanyArticles />
     </>
   )
 }

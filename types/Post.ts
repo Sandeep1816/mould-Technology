@@ -19,8 +19,11 @@ export type Post = {
   badge?: string | null
   content: string
   imageUrl?: string | null
-  publishedAt?: string | null
+   createdAt?: string      // ✅ ADD THIS
+   updatedAt?: string      // ✅ ADD THIS
+   publishedAt?: string | null
   views?: number | null
+  
   author?: Author
   category?: Category 
 }

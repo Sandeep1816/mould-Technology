@@ -179,6 +179,13 @@ if (user?.role !== "admin") {
       icon={<Folder size={18} />}
       active={pathname === "/admin/magazines"}
     />
+
+     <SidebarLink
+      href="/admin/mmt-chats"
+      label="Industary Talks"
+      icon={<Folder size={18} />}
+      active={pathname === "/admin/mmt-chats"}
+    />
   </nav>
 
   {/* FOOTER */}

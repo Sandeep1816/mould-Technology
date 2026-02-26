@@ -142,7 +142,7 @@ export default function Header() {
         <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
       </Link>
 
-      <Link href="/mmtchats" className="group relative">
+      <Link href="/industry-talks" className="group relative">
         Industry Talks
         <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
       </Link>
@@ -261,7 +261,7 @@ export default function Header() {
                 <button
                   key={item.slug}
                   onMouseEnter={() => setActiveSlug(item.slug)}
-                  className={`w-full px-5 py-4 text-left  font-bold transition-colors ${
+                  className={`w-full px-5 py-4 text-left  font-medium transition-colors ${
                     activeSlug === item.slug
                       ? "bg-[#062E45] text-white"
                       : "text-white hover:bg-[#0F5D86]"

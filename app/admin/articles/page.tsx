@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { FileText, Eye, Share2 } from "lucide-react"
+import { FileText, Eye, Share2, Check, X } from "lucide-react"
 
 /* ================= TYPES ================= */
 
@@ -24,6 +24,8 @@ export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(null)
   const [status, setStatus] = useState<"PENDING" | "APPROVED">("APPROVED")
+  const [loadingId, setLoadingId] = useState<number | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const token =
     typeof window !== "undefined"
@@ -32,24 +34,85 @@ export default function AdminArticlesPage() {
 
   /* ================= FETCH ================= */
 
-  useEffect(() => {
+  const fetchArticles = async () => {
     if (!token) return
 
-    const endpoint =
-      status === "PENDING"
-        ? "/api/admin/articles/pending"
-        : "/api/admin/articles/adminapproved"
+    try {
+      setLoading(true)
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(res => res.json())
-      .then(data => {
-        setArticles(data)
-        setSelectedCompanyId(null)
-      })
-      .catch(console.error)
-  }, [token, status])
+      const endpoint =
+        status === "PENDING"
+          ? "/api/admin/articles/pending"
+          : "/api/admin/articles/adminapproved"
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+
+      const data = await res.json()
+      setArticles(data)
+      setSelectedCompanyId(null)
+    } catch (err) {
+      console.error("Fetch error:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchArticles()
+  }, [status])
+
+  /* ================= APPROVE ================= */
+
+  const handleApprove = async (id: number) => {
+    if (!token) return
+
+    try {
+      setLoadingId(id)
+
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/articles/${id}/approve`,
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+
+      await fetchArticles()
+    } catch (error) {
+      console.error("Approval failed", error)
+    } finally {
+      setLoadingId(null)
+    }
+  }
+
+  /* ================= REJECT ================= */
+
+  const handleReject = async (id: number) => {
+    if (!token) return
+
+    try {
+      setLoadingId(id)
+
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/articles/${id}/reject`,
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+
+      await fetchArticles()
+    } catch (error) {
+      console.error("Reject failed", error)
+    } finally {
+      setLoadingId(null)
+    }
+  }
 
   /* ================= STATS ================= */
 
@@ -61,10 +124,9 @@ export default function AdminArticlesPage() {
   )
 
   const totalShares = useMemo(
-  () => articles.reduce((sum, a) => sum + (a.shares ?? 0), 0),
-  [articles]
-)
-
+    () => articles.reduce((sum, a) => sum + (a.shares ?? 0), 0),
+    [articles]
+  )
 
   /* ================= GROUP BY COMPANY ================= */
 
@@ -97,7 +159,7 @@ export default function AdminArticlesPage() {
   return (
     <div className="min-h-screen bg-[#F4F6FA] p-8 space-y-8">
 
-      {/* ================= HEADER ================= */}
+      {/* HEADER */}
       <div>
         <h1 className="text-2xl font-bold text-[#0A2B57]">
           Article Moderation
@@ -107,29 +169,14 @@ export default function AdminArticlesPage() {
         </p>
       </div>
 
-      {/* ================= STATS ================= */}
+      {/* STATS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <StatCard
-          label="Articles Posted"
-          value={totalArticles}
-          icon={<FileText />}
-          color="bg-blue-600"
-        />
-        <StatCard
-          label="Articles Viewed"
-          value={totalViews}
-          icon={<Eye />}
-          color="bg-green-600"
-        />
-        <StatCard
-          label="Articles Shared"
-          value={totalShares}
-          icon={<Share2 />}
-          color="bg-purple-600"
-        />
+        <StatCard label="Articles Posted" value={totalArticles} icon={<FileText />} color="bg-blue-600" />
+        <StatCard label="Articles Viewed" value={totalViews} icon={<Eye />} color="bg-green-600" />
+        <StatCard label="Articles Shared" value={totalShares} icon={<Share2 />} color="bg-purple-600" />
       </div>
 
-      {/* ================= TABS ================= */}
+      {/* TABS */}
       <div className="flex gap-3">
         {["PENDING", "APPROVED"].map(tab => (
           <button
@@ -148,15 +195,12 @@ export default function AdminArticlesPage() {
         ))}
       </div>
 
-      {/* ================= CONTENT ================= */}
+      {/* CONTENT */}
       <div className="grid grid-cols-12 gap-6">
 
         {/* COMPANIES */}
         <aside className="col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <h2 className="font-semibold text-[#0A2B57] mb-4">
-            Companies
-          </h2>
-
+          <h2 className="font-semibold text-[#0A2B57] mb-4">Companies</h2>
           <ul className="space-y-2">
             {companies.map(({ company, count }) => (
               <li
@@ -170,9 +214,7 @@ export default function AdminArticlesPage() {
                   }`}
               >
                 <span>{company.name}</span>
-                <span className="text-xs bg-gray-200 px-2 py-0.5 rounded">
-                  {count}
-                </span>
+                <span className="text-xs bg-gray-200 px-2 py-0.5 rounded">{count}</span>
               </li>
             ))}
           </ul>
@@ -180,10 +222,10 @@ export default function AdminArticlesPage() {
 
         {/* ARTICLES */}
         <main className="col-span-9 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          {!selectedCompanyId && (
-            <p className="text-gray-500">
-              Select a company to view articles
-            </p>
+          {loading && <p className="text-gray-500">Loading articles...</p>}
+
+          {!selectedCompanyId && !loading && (
+            <p className="text-gray-500">Select a company to view articles</p>
           )}
 
           <ul className="space-y-4">
@@ -192,15 +234,36 @@ export default function AdminArticlesPage() {
                 key={article.id}
                 className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition"
               >
-                <h3 className="font-semibold text-[#0A2B57]">
-                  {article.title}
-                </h3>
-                <p className="text-xs text-gray-500 mt-1">
-                  👁 {article.views} views
-                </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                  👁 {article.shares} views
-                </p>
+                <h3 className="font-semibold text-[#0A2B57]">{article.title}</h3>
+
+                <div className="flex items-center justify-between mt-3">
+                  <div className="text-xs text-gray-500 space-y-1">
+                    <p>👁 {article.views} views</p>
+                    <p>🔁 {article.shares} shares</p>
+                  </div>
+
+                  {status === "PENDING" && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleApprove(article.id)}
+                        disabled={loadingId === article.id}
+                        className="flex items-center gap-1 px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
+                      >
+                        <Check size={14} />
+                        {loadingId === article.id ? "..." : "Approve"}
+                      </button>
+
+                      <button
+                        onClick={() => handleReject(article.id)}
+                        disabled={loadingId === article.id}
+                        className="flex items-center gap-1 px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50"
+                      >
+                        <X size={14} />
+                        Reject
+                      </button>
+                    </div>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
@@ -229,9 +292,7 @@ function StatCard({
         <p className="text-sm text-gray-500">{label}</p>
         <h3 className="text-2xl font-bold">{value}</h3>
       </div>
-      <div
-        className={`w-12 h-12 ${color} text-white rounded-lg flex items-center justify-center`}
-      >
+      <div className={`w-12 h-12 ${color} text-white rounded-lg flex items-center justify-center`}>
         {icon}
       </div>
     </div>
