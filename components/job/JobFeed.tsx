@@ -36,6 +36,13 @@ export default function JobFeed({ isPublic = false }: { isPublic?: boolean }) {
     loadJobs()
   }, [])
 
+  // ✅ ADD THIS HERE
+  function stripHtml(html: string) {
+    const temp = document.createElement("div")
+    temp.innerHTML = html
+    return temp.textContent || temp.innerText || ""
+  }
+
   /** 🔐 Apply is protected */
   function handleApply(slug: string) {
     const user = JSON.parse(localStorage.getItem("user") || "{}")
@@ -94,8 +101,8 @@ export default function JobFeed({ isPublic = false }: { isPublic?: boolean }) {
           </div>
 
           {/* DESCRIPTION */}
-         <p className="text-sm text-gray-700 line-clamp-3 mb-4">
-  {job.description?.replace(/<[^>]+>/g, "")}
+    <p className="text-sm text-gray-700 line-clamp-3 mb-4">
+  {stripHtml(job.description || "")}
 </p>
 
           {/* ACTIONS */}

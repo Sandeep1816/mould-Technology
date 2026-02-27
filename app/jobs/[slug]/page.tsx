@@ -28,14 +28,17 @@ export default function JobDetailPage() {
   useEffect(() => {
     if (!slug) return
 
+    // increment views
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${slug}/view`, {
       method: "POST",
     }).catch(() => {})
 
+    // job detail
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${slug}`)
       .then((res) => res.json())
       .then((data) => setJob(data))
 
+    // similar jobs
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`)
       .then((res) => res.json())
       .then((jobs) => {
@@ -53,7 +56,7 @@ export default function JobDetailPage() {
       router.push("/login")
       return
     }
-    router.push(`/login`)
+    router.push(`/signup`)
   }
 
   if (loading)
@@ -61,7 +64,9 @@ export default function JobDetailPage() {
       <div className="min-h-screen bg-[#F4F2EE] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 rounded-full border-4 border-blue-600 border-t-transparent animate-spin" />
-          <p className="text-sm text-gray-500 font-medium">Loading job details...</p>
+          <p className="text-sm text-gray-500 font-medium">
+            Loading job details...
+          </p>
         </div>
       </div>
     )
@@ -70,8 +75,12 @@ export default function JobDetailPage() {
     return (
       <div className="min-h-screen bg-[#F4F2EE] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-2xl font-semibold text-gray-700">Job not found</p>
-          <p className="text-sm text-gray-400 mt-1">This listing may have been removed.</p>
+          <p className="text-2xl font-semibold text-gray-700">
+            Job not found
+          </p>
+          <p className="text-sm text-gray-400 mt-1">
+            This listing may have been removed.
+          </p>
         </div>
       </div>
     )
@@ -82,9 +91,11 @@ export default function JobDetailPage() {
   )
 
   return (
-    <div className="min-h-screen bg-[#F4F2EE]" style={{ fontFamily: "'DM Sans', 'Segoe UI', sans-serif" }}>
-
-      {/* Top nav breadcrumb */}
+    <div
+      className="min-h-screen bg-[#F4F2EE]"
+      style={{ fontFamily: "'DM Sans', 'Segoe UI', sans-serif" }}
+    >
+      {/* Breadcrumb */}
       <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-2 text-sm text-gray-500">
           <button
@@ -95,19 +106,19 @@ export default function JobDetailPage() {
             Back to Jobs
           </button>
           <ChevronRight size={13} className="text-gray-300" />
-          <span className="text-gray-800 font-medium truncate">{job.title}</span>
+          <span className="text-gray-800 font-medium truncate">
+            {job.title}
+          </span>
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-        {/* ===== LEFT / MAIN ===== */}
+        {/* LEFT */}
         <div className="lg:col-span-2 space-y-4 min-w-0">
 
           {/* Hero Card */}
           <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.07)] overflow-hidden">
-
-            {/* Color accent bar */}
             <div className="h-1.5 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500" />
 
             <div className="p-6">
@@ -120,7 +131,7 @@ export default function JobDetailPage() {
                   <div className="flex items-center gap-2 mt-2">
                     <span className="flex items-center gap-1.5 text-sm font-semibold text-blue-700">
                       <Building2 size={14} />
-                      {job.company?.name}
+                      {job.company?.name || job.companyName || "N/A"}
                     </span>
                     <span className="text-gray-300">•</span>
                     <span className="text-xs text-gray-400">
@@ -133,13 +144,12 @@ export default function JobDetailPage() {
                   </div>
                 </div>
 
-                {/* Company logo placeholder */}
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center shadow-sm flex-shrink-0">
                   <Building2 size={22} className="text-blue-500" />
                 </div>
               </div>
 
-              {/* Tags row */}
+              {/* Tags */}
               <div className="flex flex-wrap gap-2 mt-5">
                 <Tag icon={<MapPin size={12} />} label={job.location} />
                 <Tag icon={<Briefcase size={12} />} label={job.employmentType} />
@@ -155,68 +165,70 @@ export default function JobDetailPage() {
                   variant="muted"
                 />
               </div>
-
-              {/* Actions */}
-              {/* <div className="flex items-center gap-3 mt-6">
-                <button
-                  onClick={handleApply}
-                  className="bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-semibold px-7 py-2.5 rounded-full transition-all duration-150 shadow-[0_2px_8px_rgba(37,99,235,0.35)]"
-                >
-                  Apply Now
-                </button>
-
-                <button
-                  onClick={() => setSaved(!saved)}
-                  className={`flex items-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-full transition-all duration-150 ${
-                    saved
-                      ? "bg-blue-50 text-blue-600"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
-                >
-                  <Bookmark size={14} fill={saved ? "currentColor" : "none"} />
-                  {saved ? "Saved" : "Save"}
-                </button>
-
-                <button className="ml-auto flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                  <Share2 size={14} />
-                  Share
-                </button>
-              </div> */}
             </div>
           </div>
 
-          {/* Description Card */}
+          {/* Description */}
           <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.07)] p-6">
             <h2 className="text-base font-bold text-gray-900 mb-4">
               Job Description
             </h2>
 
-  <div
-  className="prose max-w-none prose-sm text-gray-700
-             prose-h1:text-lg prose-h2:text-base
-             prose-h1:font-bold prose-h2:font-semibold
-             prose-ul:list-disc prose-ul:pl-5
-             prose-strong:text-gray-900
-             break-words overflow-hidden"
-  dangerouslySetInnerHTML={{ __html: job.description }}
-/>
+            <div
+              className="prose max-w-none prose-sm text-gray-700
+                         prose-h1:text-lg prose-h2:text-base
+                         prose-h1:font-bold prose-h2:font-semibold
+                         prose-ul:list-disc prose-ul:pl-5
+                         prose-strong:text-gray-900
+                         break-words overflow-hidden"
+              dangerouslySetInnerHTML={{ __html: job.description }}
+            />
 
             <div className="mt-8 pt-5 border-t border-gray-100">
-              <button
-                onClick={handleApply}
-                className="bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-semibold px-7 py-2.5 rounded-full transition-all duration-150 shadow-[0_2px_8px_rgba(37,99,235,0.35)]"
-              >
-                Apply for this position
-              </button>
+
+              {job.isExternal ? (
+                <div className="flex flex-wrap gap-3">
+
+                  {job.applyUrl && (
+                    <a
+                      href={job.applyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-7 py-2.5 rounded-full transition-all shadow-[0_2px_8px_rgba(37,99,235,0.35)]"
+                    >
+                      Apply on Company Website
+                    </a>
+                  )}
+
+                  {job.linkedinUrl && (
+                    <a
+                      href={job.linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#0A66C2] hover:bg-[#004182] text-white text-sm font-semibold px-7 py-2.5 rounded-full transition-all shadow"
+                    >
+                      Apply on LinkedIn
+                    </a>
+                  )}
+
+                </div>
+              ) : (
+                <button
+                  onClick={handleApply}
+                  className="bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-semibold px-7 py-2.5 rounded-full transition-all duration-150 shadow-[0_2px_8px_rgba(37,99,235,0.35)]"
+                >
+                  Apply for this position
+                </button>
+              )}
+
             </div>
           </div>
-
         </div>
 
-        {/* ===== RIGHT SIDEBAR ===== */}
+        {/* RIGHT SIDEBAR */}
         <div className="space-y-4">
 
-          {/* Job Overview */}
+          {/* Overview */}
           <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.07)] p-6">
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">
               Job Overview
@@ -253,7 +265,7 @@ export default function JobDetailPage() {
                 <Building2 size={16} className="text-blue-500" />
               </div>
               <p className="text-sm font-semibold text-gray-800">
-                {job.company?.name || "N/A"}
+                {job.company?.name || job.companyName || "N/A"}
               </p>
             </div>
 
@@ -263,7 +275,7 @@ export default function JobDetailPage() {
             </p>
           </div>
 
-          {/* More Jobs */}
+          {/* Similar Jobs */}
           {otherJobs.length > 0 && (
             <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.07)] p-6">
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">
@@ -285,7 +297,9 @@ export default function JobDetailPage() {
                       <p className="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors truncate">
                         {item.title}
                       </p>
-                      <p className="text-xs text-gray-500 mt-0.5">{item.company?.name}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {item.company?.name || item.companyName}
+                      </p>
                       <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
                         <MapPin size={10} />
                         {item.location}
@@ -308,17 +322,9 @@ export default function JobDetailPage() {
   )
 }
 
-/* ── Helper Components ── */
+/* Helpers */
 
-function Tag({
-  icon,
-  label,
-  variant = "default",
-}: {
-  icon: React.ReactNode
-  label: string
-  variant?: "default" | "muted"
-}) {
+function Tag({ icon, label, variant = "default" }: any) {
   return (
     <span
       className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full ${
@@ -333,11 +339,15 @@ function Tag({
   )
 }
 
-function OverviewRow({ label, value }: { label: string; value: string }) {
+function OverviewRow({ label, value }: any) {
   return (
     <div className="flex items-start justify-between gap-2">
-      <span className="text-xs text-gray-400 font-medium min-w-[90px]">{label}</span>
-      <span className="text-xs text-gray-800 font-semibold text-right">{value}</span>
+      <span className="text-xs text-gray-400 font-medium min-w-[90px]">
+        {label}
+      </span>
+      <span className="text-xs text-gray-800 font-semibold text-right">
+        {value}
+      </span>
     </div>
   )
 }

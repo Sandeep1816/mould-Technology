@@ -29,6 +29,13 @@ type Recruiter = {
   headline?: string
   location?: string
   avatarUrl?: string
+  company: {
+    name: string
+    slug: string
+    logoUrl?: string
+    isVerified: boolean
+
+  }
 }
 
 type Directory = {
@@ -476,14 +483,14 @@ useEffect(() => {
               </p>
             )}
 
-            {recruiter?.username && (
-              <Link
-                href={`/recruiter/${recruiter.username}`}
-                className="inline-block mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium"
-              >
-                View Public Profile →
-              </Link>
-            )}
+            {recruiter?.company?.slug && (
+  <Link
+    href={`/company/${recruiter.company.slug}`}
+    className="inline-block mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium"
+  >
+    View Company Profile →
+  </Link>
+)}
 
             <Link
   href="/recruiter/profile/edit"

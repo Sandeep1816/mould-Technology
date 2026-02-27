@@ -34,6 +34,10 @@ const nextConfig = {
       { protocol: "https", hostname: "randomuser.me" },
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "i.pravatar.cc" },
+
+      // ✅ ADD THIS
+      { protocol: "https", hostname: "ui-avatars.com" },
+
       { protocol: "http", hostname: "localhost", port: "5000" },
     ],
   },
