@@ -6,7 +6,7 @@ import "remixicon/fonts/remixicon.css"
 import "./globals.css"
 import Footer from "@/components/Footer"
 import Header from "@/components/Header"
-// import CTASection from "@/components/CTASection"
+import CTASection from "@/components/CTASection"
 import CursorBall from "@/components/ui/CursorBall"
 
 const interTight = Inter_Tight({
@@ -35,8 +35,8 @@ export default function RootLayout({
         {/* FIXED HEADER */}
         <Header />
 
-        {/* ✅ OFFSET FOR FIXED HEADER */}
-        <main className="pt-[90px]">
+        {/* ✅ OFFSET FOR FIXED HEADER  default-90*/}
+        <main className="pt-[120px]">
           {children}
         </main>
 

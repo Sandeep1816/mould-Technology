@@ -1,22 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BANNER_PLACEMENTS } from "@/lib/bannerPlacements";
 
 type BannerFormProps = {
-  initialData?: any; // for edit mode (optional)
+  initialData?: any;
   onSubmit: (data: any) => Promise<void>;
 };
 
 export default function BannerForm({ initialData, onSubmit }: BannerFormProps) {
-  const [title, setTitle] = useState(initialData?.title || "");
-  const [targetUrl, setTargetUrl] = useState(initialData?.targetUrl || "");
-  const [placement, setPlacement] = useState(
-    initialData?.placement || BANNER_PLACEMENTS[0].value
-  );
-  const [status, setStatus] = useState(initialData?.status || "ACTIVE");
-  const [imageUrl, setImageUrl] = useState(initialData?.imageUrl || "");
+  const [title, setTitle] = useState("");
+  const [targetUrl, setTargetUrl] = useState("");
+  const [placement, setPlacement] = useState(BANNER_PLACEMENTS[0].value);
+  const [status, setStatus] = useState("ACTIVE");
+  const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // ✅ FIX: Sync state when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title || "");
+      setTargetUrl(initialData.targetUrl || "");
+      setPlacement(initialData.placement || BANNER_PLACEMENTS[0].value);
+      setStatus(initialData.status || "ACTIVE");
+      setImageUrl(initialData.imageUrl || "");
+    }
+  }, [initialData]);
 
   const uploadImage = async (file: File) => {
     const formData = new FormData();

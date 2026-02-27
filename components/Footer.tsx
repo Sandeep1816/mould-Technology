@@ -32,7 +32,7 @@ text-black">
             <div className="text-center sm:text-left">
               <Link href="/" className="inline-block mb-4">
                 <Image
-                  src="/images/tooling-red.png"
+                  src="/images/tooling-white.png"
                   alt="Tooling Technology Logo"
                   width={200}
                   height={67}
@@ -190,7 +190,7 @@ text-black">
             <div className="lg:col-span-4">
               <Link href="/" className="inline-block mb-6">
                 <Image
-                  src="/images/tooling-red.png"
+                  src="/images/tooling-white.png"
                   alt="Tooling Technology Logo"
                   width={240}
                   height={80}

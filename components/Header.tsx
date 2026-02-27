@@ -42,6 +42,7 @@ export default function Header() {
 
   const [allPosts, setAllPosts] = useState<Post[]>([])
   const [activeSlug, setActiveSlug] = useState("machining")
+  const [showHighlight, setShowHighlight] = useState(true)
 
   const container = "max-w-[1320px] mx-auto px-4 md:px-6 lg:px-[15px]"
 
@@ -79,8 +80,21 @@ export default function Header() {
     window.location.href = "/login"
   }
 
+  useEffect(() => {
+  const handleScroll = () => {
+    if (window.scrollY > 80) {
+      setShowHighlight(false)
+    } else {
+      setShowHighlight(true)
+    }
+  }
+
+  window.addEventListener("scroll", handleScroll)
+  return () => window.removeEventListener("scroll", handleScroll)
+}, [])
+
   return (
-    <header className="fixed top-0 left-0 w-full z-50 shadow-lg">
+    <header className="fixed top-0 left-0 w-full z-50">
 
       {/* ================= TOP BAR ================= */}
       <div className="flex h-[90px] w-full">
@@ -89,7 +103,7 @@ export default function Header() {
         <div className="bg-white flex items-center px-[45px] shrink-0 border-r border-gray-200">
           <Link href="/" className="flex items-center">
             <Image
-              src="/images/tooling-red.png"
+              src="/images/tooling-white.png"
               alt="Tooling Technology Logo"
               width={300}
               height={127}
@@ -132,7 +146,7 @@ export default function Header() {
         <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
       </button>
 
-      <Link href="/articles" className="group relative">
+      <Link href="/magazines" className="group relative">
         Magazine
         <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all group-hover:w-full" />
       </Link>
@@ -165,7 +179,7 @@ export default function Header() {
       {!user && (
         <Link
           href="/login"
-          className="hidden md:flex h-10 px-5 bg-[#E11D2E] text-white rounded-md font-semibold items-center hover:bg-[#C41524] transition-colors shadow-md"
+          className="hidden md:flex h-10 px-5 bg-[#B30F24] text-white rounded-md font-semibold items-center hover:bg-[#C41524] transition-colors shadow-md"
         >
           Login
         </Link>
@@ -247,13 +261,31 @@ export default function Header() {
 </div>
 
       </div>
+{/* ================= RED HIGHLIGHT STRIP ================= */}
+{showHighlight && !openMega && (
+  <div className="relative h-6 w-[25%]">
+
+    {/* RED STRIP */}
+    <div className="absolute left-0 top-0 h-6 w-full bg-[#B30F24] flex items-center px-6">
+      <span className="text-white text-sm font-semibold">
+        What’s New and What Works in the World of Tooling
+      </span>
+    </div>
+
+    {/* RIGHT SLANT */}
+    <div className="absolute right-[-12px] top-0 h-6 w-6 bg-[#B30F24] skew-x-[-20deg]" />
+
+  </div>
+)}
+
+
 
       {/* ================= DESKTOP MEGA MENU ================= */}
       {openMega && (
-        <div
-          onMouseLeave={() => setOpenMega(null)}
-          className="hidden lg:block bg-[#0F5B78] border-t border-white/10"
-        >
+  <div
+    onMouseLeave={() => setOpenMega(null)}
+    className="hidden lg:block bg-[#0F5B78] border-t border-white/10 relative z-20"
+  >
           <div className={`${container} py-10 grid grid-cols-[260px_1fr] gap-10 items-stretch`}>
 
             <aside className="bg-[#083A54] rounded-lg overflow-hidden shadow-xl h-full">
@@ -291,7 +323,7 @@ export default function Header() {
     {post.badge}
   </h5>
 
-  <h4 className="text-sm font-semibold text-white leading-snug hover:text-[#E11D2E]">
+  <h4 className="text-sm font-semibold text-white leading-snug hover:text-[#B30F24]">
     <Link href={`/post/${post.slug}`}>
       {post.title}
     </Link>
@@ -329,7 +361,7 @@ export default function Header() {
                 <div className="px-6 py-5">
                   <Link
                     href="/login"
-                    className="block w-full py-3 bg-[#E11D2E] text-white rounded-md text-center font-semibold hover:bg-[#C41524]"
+                    className="block w-full py-3 bg-[#B30F24] text-white rounded-md text-center font-semibold hover:bg-[#C41524]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Login

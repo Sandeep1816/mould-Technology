@@ -1,33 +1,60 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 
+type Banner = {
+  id: number
+  title: string
+  imageUrl: string
+  targetUrl?: string
+  placement: string
+}
+
 export default function SupplierAds() {
+  const [banners, setBanners] = useState<Banner[]>([])
+
+  useEffect(() => {
+    const fetchSidebarAds = async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/banners?placement=SIDEBAR`
+      )
+      const data = await res.json()
+
+      // 🔥 CONTROL HOW MANY ADS TO SHOW
+      setBanners(data.slice(0, 3)) // show only 3 ads
+    }
+
+    fetchSidebarAds()
+  }, [])
+
   return (
     <div className="space-y-6 sticky top-6">
-
-      <Ad src="/images/mmtsub.png" />
-      <Ad src="/images/PTXPO26_RegNow.png" />
-      <Ad src="/images/MMT-progress.png" />
-
-      {/* 🔥 Recruiter Hiring Ad (with overlay + redirect) */}
-      <RecruiterAd src="/images/rec-hiring.png" />
-
+      {banners.map((ad) => (
+        <Ad key={ad.id} ad={ad} />
+      ))}
     </div>
   )
 }
 
-/* ---------- NORMAL AD ---------- */
-function Ad({ src }: { src: string }) {
+/* ---------- AD COMPONENT ---------- */
+
+function Ad({ ad }: { ad: Banner }) {
   return (
-    <div className="bg-white">
+    <Link
+      href={ad.targetUrl || "#"}
+      className="block bg-white"
+      target="_blank"
+    >
       <Image
-        src={src}
-        alt="Advertisement"
+        src={ad.imageUrl}
+        alt={ad.title}
         width={300}
         height={600}
         className="w-full object-cover"
       />
-    </div>
+    </Link>
   )
 }
 
