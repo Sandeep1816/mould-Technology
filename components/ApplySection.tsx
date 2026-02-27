@@ -51,37 +51,44 @@ export function ApplySection({ jobId }: { jobId: number }) {
     setLoading(false)
   }
 
-  return (
-    <div className="border-t pt-6">
-      <h3 className="font-semibold mb-4">
-        Apply for this job
-      </h3>
+return (
+  <div>
+    <h3 className="text-xl font-semibold mb-6">
+      Apply for this job
+    </h3>
+
+    <div className="space-y-4">
 
       <input
         placeholder="Resume URL (optional)"
         value={resumeUrl}
         onChange={(e) => setResumeUrl(e.target.value)}
-        className="w-full border rounded p-3 mb-3"
+        className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
       <textarea
         placeholder="Cover note (optional)"
         value={coverNote}
         onChange={(e) => setCoverNote(e.target.value)}
-        className="w-full border rounded p-3 mb-4"
+        rows={4}
+        className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
       <button
         onClick={apply}
         disabled={loading}
-        className="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+        className="w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition disabled:opacity-50"
       >
-        {loading ? "Applying..." : "Apply"}
+        {loading ? "Applying..." : "Apply Now"}
       </button>
 
       {message && (
-        <p className="mt-3 text-sm">{message}</p>
+        <p className="text-sm mt-3 text-center">
+          {message}
+        </p>
       )}
+
     </div>
-  )
+  </div>
+)
 }

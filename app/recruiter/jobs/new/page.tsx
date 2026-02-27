@@ -1,7 +1,13 @@
 "use client"
-
+import dynamic from "next/dynamic"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import "react-quill-new/dist/quill.snow.css"
+
+const ReactQuill = dynamic(() => import("react-quill-new"), {
+  ssr: false,
+})
+
 
 export default function CreateJobPage() {
   const router = useRouter()
@@ -33,6 +39,18 @@ export default function CreateJobPage() {
           : value,
     })
   }
+
+  function handleTitleChange(
+  e: React.ChangeEvent<HTMLInputElement>
+) {
+  const title = e.target.value
+
+  setForm(prev => ({
+    ...prev,
+    title,
+    slug: generateSlug(title),
+  }))
+}
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -73,6 +91,17 @@ export default function CreateJobPage() {
     }
   }
 
+  function generateSlug(text: string) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+}
+
+
+
   return (
     <div className="max-w-3xl mx-auto px-6 py-16">
       <h1 className="text-2xl font-bold mb-6">Create Job</h1>
@@ -85,25 +114,24 @@ export default function CreateJobPage() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
 
-        {/* Title */}
-        <input
-          name="title"
-          required
-          placeholder="Job Title"
-          className="w-full border p-3 rounded"
-          value={form.title}
-          onChange={handleChange}
-        />
+     {/* Title */}
+<input
+  name="title"
+  required
+  placeholder="Job Title"
+  className="w-full border p-3 rounded"
+  value={form.title}
+  onChange={handleTitleChange}
+/>
 
-        {/* Slug */}
-        <input
-          name="slug"
-          required
-          placeholder="Unique Slug (e.g. senior-mern-developer)"
-          className="w-full border p-3 rounded"
-          value={form.slug}
-          onChange={handleChange}
-        />
+      {/* Slug */}
+<input
+  name="slug"
+  required
+  readOnly
+  className="w-full border p-3 rounded bg-gray-100"
+  value={form.slug}
+/>
 
         {/* Employment Type */}
         <select
@@ -158,15 +186,20 @@ export default function CreateJobPage() {
         </label>
 
         {/* Description */}
-        <textarea
-          name="description"
-          required
-          placeholder="Job Description"
-          className="w-full border p-3 rounded"
-          rows={6}
-          value={form.description}
-          onChange={handleChange}
-        />
+       <div>
+  <label className="block font-semibold mb-2">
+    Job Description
+  </label>
+
+  <ReactQuill
+    theme="snow"
+    value={form.description}
+    onChange={(value) =>
+      setForm(prev => ({ ...prev, description: value }))
+    }
+    className="bg-white"
+  />
+</div>
 
         <button
           disabled={loading}

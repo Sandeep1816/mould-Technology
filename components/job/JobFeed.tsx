@@ -94,9 +94,9 @@ export default function JobFeed({ isPublic = false }: { isPublic?: boolean }) {
           </div>
 
           {/* DESCRIPTION */}
-          <p className="text-sm text-gray-700 line-clamp-3 mb-4">
-            {job.description}
-          </p>
+         <p className="text-sm text-gray-700 line-clamp-3 mb-4">
+  {job.description?.replace(/<[^>]+>/g, "")}
+</p>
 
           {/* ACTIONS */}
           <div className="flex gap-4 text-sm">
