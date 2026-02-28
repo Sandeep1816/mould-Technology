@@ -115,6 +115,24 @@ useEffect(() => {
       const recruiterData = await profileRes.json()
       setRecruiter(recruiterData)
 
+      // 🔥 ADD THIS BLOCK RIGHT HERE
+const stored = localStorage.getItem("user")
+
+if (stored) {
+  const existing = JSON.parse(stored)
+
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      ...existing,
+      avatarUrl: recruiterData.avatarUrl,
+    })
+  )
+
+  window.dispatchEvent(new Event("userChanged"))
+}
+
+
     } catch (err) {
       console.error("Dashboard load error:", err)
     } finally {

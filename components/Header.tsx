@@ -13,6 +13,7 @@ type User = {
   id: number
   email: string
   role: "admin" | "recruiter" | "candidate"
+  avatarUrl?: string
 }
 
 /* ================= MENUS ================= */
@@ -48,9 +49,25 @@ export default function Header() {
 
   /* ================= INIT ================= */
   useEffect(() => {
+  const loadUser = () => {
     const stored = localStorage.getItem("user")
-    if (stored) setUser(JSON.parse(stored))
-  }, [])
+    if (stored) {
+      setUser(JSON.parse(stored))
+    } else {
+      setUser(null)
+    }
+  }
+
+  // Load initially
+  loadUser()
+
+  // Listen for login/logout changes
+  window.addEventListener("userChanged", loadUser)
+
+  return () => {
+    window.removeEventListener("userChanged", loadUser)
+  }
+}, [])
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?limit=50`)
@@ -77,6 +94,8 @@ export default function Header() {
   function handleLogout() {
     localStorage.removeItem("token")
     localStorage.removeItem("user")
+      // 🔥 Notify header
+  window.dispatchEvent(new Event("userChanged"))
     window.location.href = "/login"
   }
 
@@ -191,14 +210,24 @@ export default function Header() {
             onClick={() => setOpenUserMenu(!openUserMenu)}
             className="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-md text-white hover:bg-white/20 transition border border-white/20"
           >
-           <div className="relative w-8 h-8">
-  <Image
-    src="https://i.pravatar.cc/40"
-    alt="User avatar"
-    fill
-    className="rounded-full object-cover border-2 border-white/30"
-    sizes="32px"
-  />
+<div className="relative w-8 h-8">
+  {user.avatarUrl ? (
+    <Image
+      src={user.avatarUrl}
+      alt="User avatar"
+      fill
+      className="rounded-full object-cover border-2 border-white/30"
+      sizes="32px"
+    />
+  ) : (
+    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-semibold border-2 border-white/30">
+      {user.email
+        .split("@")[0]
+        .replace(/[^a-zA-Z]/g, "")
+        .slice(0, 2)
+        .toUpperCase()}
+    </div>
+  )}
 </div>
 
             <div className="text-left">
@@ -263,22 +292,27 @@ export default function Header() {
       </div>
 {/* ================= RED HIGHLIGHT STRIP ================= */}
 {showHighlight && !openMega && (
-  <div className="relative h-6 w-[25%]">
+  <div className="relative h-6 w-[85%] sm:w-[60%] md:w-[50%] lg:w-[35%] xl:w-[25%]">
 
     {/* RED STRIP */}
-    <div className="absolute left-0 top-0 h-6 w-full bg-[#B30F24] flex items-center px-6">
-      <span className="text-white text-sm font-semibold">
+    <div className="absolute left-0 top-0 h-6 w-full bg-[#B30F24] flex items-center px-4 sm:px-6">
+      <span className="text-white text-xs sm:text-sm font-semibold truncate">
         What’s New and What Works in the World of Tooling
       </span>
     </div>
 
-    {/* RIGHT SLANT */}
+    {/* RIGHT SLANT (UNCHANGED) */}
     <div className="absolute right-[-12px] top-0 h-6 w-6 bg-[#B30F24] skew-x-[-20deg]" />
 
   </div>
 )}
 
-
+{/* Screen	Width
+Mobile	80%
+Small	60%
+Medium	45%
+Large	28%
+XL	22% */}
 
       {/* ================= DESKTOP MEGA MENU ================= */}
       {openMega && (

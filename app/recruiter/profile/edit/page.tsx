@@ -41,45 +41,52 @@ export default function EditRecruiterProfile() {
 
   /* ================= LOAD PROFILE ================= */
 
-  useEffect(() => {
-    async function loadData() {
-      const token = localStorage.getItem("token")
+useEffect(() => {
+  async function loadData() {
+    const token = localStorage.getItem("token")
 
-      const [profileRes, industryRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recruiters/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/industries`),
-      ])
+    console.log("TOKEN:", token)
 
-      const profile = await profileRes.json()
-      const industryData = await industryRes.json()
+    const [profileRes, industryRes] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recruiters/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/industries`),
+    ])
 
-      setIndustries(industryData || [])
+    console.log("PROFILE STATUS:", profileRes.status)
 
-      setForm({
-        fullName: profile.fullName || "",
-        headline: profile.headline || "",
-        about: profile.about || "",
-        location: profile.location || "",
-        websiteUrl: profile.websiteUrl || "",
-        avatarUrl: profile.avatarUrl || "",
+    const profile = await profileRes.json()
 
-        companyName: profile.company?.name || "",
-        companyTagline: profile.company?.tagline || "",
-        companyDescription: profile.company?.description || "",
-        companyIndustryId: profile.company?.industryId?.toString() || "",
-        companyLocation: profile.company?.location || "",
-        companyAddress: profile.company?.address || "",
-        companySize: profile.company?.companySize || "",
-        companyWebsite: profile.company?.website || "",
-        companyLogoUrl: profile.company?.logoUrl || "",
-        companyCoverImageUrl: profile.company?.coverImageUrl || "",
-      })
-    }
+    console.log("PROFILE DATA:", profile)
 
-    loadData()
-  }, [])
+    const industryData = await industryRes.json()
+
+    setIndustries(industryData || [])
+
+    setForm({
+      fullName: profile.fullName || "",
+      headline: profile.headline || "",
+      about: profile.about || "",
+      location: profile.location || "",
+      websiteUrl: profile.websiteUrl || "",
+      avatarUrl: profile.avatarUrl || "",
+
+      companyName: profile.company?.name || "",
+      companyTagline: profile.company?.tagline || "",
+      companyDescription: profile.company?.description || "",
+      companyIndustryId: profile.company?.industryId?.toString() || "",
+      companyLocation: profile.company?.location || "",
+      companyAddress: profile.company?.address || "",
+      companySize: profile.company?.companySize || "",
+      companyWebsite: profile.company?.website || "",
+      companyLogoUrl: profile.company?.logoUrl || "",
+      companyCoverImageUrl: profile.company?.coverImageUrl || "",
+    })
+  }
+
+  loadData()
+}, [])
 
   /* ================= HANDLE INPUT ================= */
 

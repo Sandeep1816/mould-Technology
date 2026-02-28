@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
@@ -144,9 +144,19 @@ export default function JobDetailPage() {
                   </div>
                 </div>
 
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center shadow-sm flex-shrink-0">
-                  <Building2 size={22} className="text-blue-500" />
-                </div>
+                <div className="w-14 h-14 rounded-xl overflow-hidden shadow-sm flex-shrink-0 bg-white border border-gray-100 flex items-center justify-center">
+  {job.company?.logoUrl ? (
+    <Image
+      src={job.company.logoUrl}
+      alt={job.company.name}
+      width={56}
+      height={56}
+      className="object-contain w-full h-full p-2"
+    />
+  ) : (
+    <Building2 size={22} className="text-gray-400" />
+  )}
+</div>
               </div>
 
               {/* Tags */}
@@ -261,9 +271,19 @@ export default function JobDetailPage() {
             </h3>
 
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-                <Building2 size={16} className="text-blue-500" />
-              </div>
+             <div className="w-10 h-10 rounded-lg overflow-hidden bg-white border border-gray-100 flex items-center justify-center">
+  {job.company?.logoUrl ? (
+    <Image
+      src={job.company.logoUrl}
+      alt={job.company.name}
+      width={40}
+      height={40}
+      className="object-contain w-full h-full p-1"
+    />
+  ) : (
+    <Building2 size={16} className="text-gray-400" />
+  )}
+</div>
               <p className="text-sm font-semibold text-gray-800">
                 {job.company?.name || job.companyName || "N/A"}
               </p>

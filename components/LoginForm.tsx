@@ -39,6 +39,7 @@ export default function LoginForm() {
       // 🔐 Save token & user
       localStorage.setItem("token", data.token)
       localStorage.setItem("user", JSON.stringify(data.user))
+      window.dispatchEvent(new Event("userChanged"))
 
       const user = data.user
 
