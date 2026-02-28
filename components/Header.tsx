@@ -122,7 +122,7 @@ export default function Header() {
         <div className="bg-white flex items-center px-[45px] shrink-0 border-r border-gray-200">
           <Link href="/" className="flex items-center">
             <Image
-              src="/images/tooling-white.png"
+              src="/images/tooling new34 (1).png"
               alt="Tooling Technology Logo"
               width={300}
               height={127}
