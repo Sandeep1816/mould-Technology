@@ -278,7 +278,7 @@ export default async function Home() {
   return (
     <>
       {/* 🏢 Company Articles */}
-      <CompanyArticles posts={posts} />
+      <CompanyArticles  />
 
       {/* 📰 Latest Hero */}
       {latestPost && (
