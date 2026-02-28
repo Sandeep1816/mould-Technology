@@ -71,7 +71,7 @@ export default function SupplierFilters({ onFilterChange }: Props) {
 
   // Fetch root industries
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/industries`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/industries`)
       .then(res => res.json())
       .then(data => {
         const list = Array.isArray(data) ? data : data.data ?? []
@@ -95,7 +95,7 @@ export default function SupplierFilters({ onFilterChange }: Props) {
         setLoadingChildren(prev => new Set(prev).add(industryId))
         try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/admin/industries/${industryId}/children`
+            `${process.env.NEXT_PUBLIC_API_URL}/api/industries/${industryId}/children`
           )
           const children = await res.json()
           setChildrenCache(prev => ({ ...prev, [industryId]: children }))
