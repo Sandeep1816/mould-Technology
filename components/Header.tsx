@@ -292,7 +292,7 @@ export default function Header() {
       </div>
 {/* ================= RED HIGHLIGHT STRIP ================= */}
 {showHighlight && !openMega && (
-  <div className="relative h-6 w-[85%] sm:w-[60%] md:w-[50%] lg:w-[35%] xl:w-[25%]">
+  <div className="relative h-7 w-[80%] sm:w-[60%] md:w-[45%] lg:w-[28%] xl:w-[26%] 2xl:w-[15%] max-w-[420px]">
 
     {/* RED STRIP */}
     <div className="absolute left-0 top-0 h-6 w-full bg-[#B30F24] flex items-center px-4 sm:px-6">
